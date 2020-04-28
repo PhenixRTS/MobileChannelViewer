@@ -20,6 +20,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "BACKEND_URL", "\"https://demo.phenixrts.com/pcast\""
         buildConfigField "String", "PCAST_URL", "\"\""
+        buildConfigField "String", "STAGING_BACKEND_URL", "\"https://demo-stg.phenixrts.com/pcast\""
+        buildConfigField "String", "STAGING_PCAST_URL", "\"https://pcast-stg.phenixrts.com/\""
     }
 
     buildTypes {

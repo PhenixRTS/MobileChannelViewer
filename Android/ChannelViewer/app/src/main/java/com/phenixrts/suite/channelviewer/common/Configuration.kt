@@ -16,15 +16,16 @@ import java.io.Serializable
 const val QUERY_URI = "uri"
 const val QUERY_BACKEND = "backend"
 const val QUERY_CHANNEL = "#"
+const val QUERY_STAGING = "https://stg.phenixrts.com"
 
 data class ChannelConfiguration(
     val uri: String = BuildConfig.PCAST_URL,
     val backend: String = BuildConfig.BACKEND_URL
 ) : Serializable
 
-fun getChannelConfiguration(channelCode: String, surface: AndroidVideoRenderSurface): JoinChannelOptions {
+fun getChannelConfiguration(channelAlias: String, surface: AndroidVideoRenderSurface): JoinChannelOptions {
     val joinRoomOptions = RoomExpressFactory.createJoinRoomOptionsBuilder()
-        .withRoomAlias(channelCode)
+        .withRoomAlias(channelAlias)
         .withCapabilities(arrayOf("real-time"))
         .buildJoinRoomOptions()
     val rendererOptions = RendererOptions()

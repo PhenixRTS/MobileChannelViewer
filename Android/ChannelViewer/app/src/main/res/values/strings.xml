@@ -7,4 +7,5 @@
     <string name="offline_title">ffline</string>
     <string name="err_network_problems">Experiencing problems connecting to Phenix. Check your network status.</string>
     <string name="err_invalid_deep_link">Invalid deep link</string>
+    <string name="popup_ok">OK</string>
 </resources>

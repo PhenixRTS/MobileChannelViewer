@@ -9,4 +9,5 @@
 
     <color name="accentColor">#ff1744</color>
     <color name="primaryTextColor">#EEE</color>
+    <color name="primaryTextDarkColor">#333</color>
 </resources>

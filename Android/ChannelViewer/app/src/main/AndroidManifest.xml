@@ -32,6 +32,10 @@
                     android:host="phenixrts.com"
                     android:pathPrefix="/channel/"
                     android:scheme="https" />
+                <data
+                    android:host="stg.phenixrts.com"
+                    android:pathPrefix="/channel/"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
 

@@ -11,7 +11,7 @@ import android.view.View
 import androidx.lifecycle.Observer
 import com.phenixrts.suite.channelviewer.ChannelViewerApplication
 import com.phenixrts.suite.channelviewer.R
-import com.phenixrts.suite.channelviewer.common.closeApp
+import com.phenixrts.suite.channelviewer.common.showInvalidDeepLinkDialog
 import com.phenixrts.suite.channelviewer.common.enums.StreamStatus
 import com.phenixrts.suite.channelviewer.common.launchMain
 import com.phenixrts.suite.channelviewer.common.lazyViewModel
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.onChannelExpressError.observe(this, Observer {
             Timber.d("Channel Express failed")
-            closeApp()
+            showInvalidDeepLinkDialog()
         })
         viewModel.onChannelState.observe(this, Observer { status ->
             Timber.d("Stream state changed: $status")
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             }
             if (status == StreamStatus.FAILED) {
                 Timber.d("Stream failed")
-                closeApp()
+                showInvalidDeepLinkDialog()
             }
         })
 
@@ -64,9 +64,9 @@ class MainActivity : AppCompatActivity() {
     private fun checkDeepLink(intent: Intent?) = launchMain {
         intent?.let { intent ->
             if (intent.hasExtra(EXTRA_DEEP_LINK_MODEL)) {
-                (intent.getStringExtra(EXTRA_DEEP_LINK_MODEL))?.let { channelCode ->
-                    Timber.d("Received channel code: $channelCode")
-                    viewModel.joinChannel(channelCode, channel_surface.holder)
+                (intent.getStringExtra(EXTRA_DEEP_LINK_MODEL))?.let { channelAlias ->
+                    Timber.d("Received channel code: $channelAlias")
+                    viewModel.joinChannel(channelAlias, channel_surface.holder)
                 }
                 intent.removeExtra(EXTRA_DEEP_LINK_MODEL)
                 return@launchMain

@@ -76,8 +76,8 @@ class ChannelExpressRepository(private val context: Application) {
         }
     }
 
-    suspend fun joinChannel(channelCode: String, surface: AndroidVideoRenderSurface) {
-        channelExpress?.joinChannel(getChannelConfiguration(channelCode, surface))?.asFlow()?.collect { status ->
+    suspend fun joinChannel(channelAlias: String, surface: AndroidVideoRenderSurface) {
+        channelExpress?.joinChannel(getChannelConfiguration(channelAlias, surface))?.asFlow()?.collect { status ->
             launchMain {
                 onChannelState.value = status
             }

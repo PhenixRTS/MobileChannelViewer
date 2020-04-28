@@ -39,7 +39,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         channelExpressRepository.onChannelExpressError.observe(this, Observer {
             Timber.d("Channel express failed")
-            closeApp()
+            showInvalidDeepLinkDialog()
         })
         checkDeepLink(intent)
     }
@@ -52,20 +52,21 @@ class SplashActivity : AppCompatActivity() {
 
     private fun checkDeepLink(intent: Intent?) {
         Timber.d("Checking deep link: ${intent?.data}")
-        var channelCode: String? = null
+        var channelAlias: String? = null
         if (intent?.data != null) {
             intent.data?.let { data ->
-                channelCode = data.toString().takeIf { it.contains(QUERY_CHANNEL) }?.substringAfterLast(QUERY_CHANNEL)
-                val uri = data.getQueryParameter(QUERY_URI) ?: BuildConfig.PCAST_URL
-                val backend = data.getQueryParameter(QUERY_BACKEND) ?: BuildConfig.BACKEND_URL
+                channelAlias = data.toString().takeIf { it.contains(QUERY_CHANNEL) }?.substringAfterLast(QUERY_CHANNEL)
+                val isStagingUri = data.toString().startsWith(QUERY_STAGING)
+                val uri = data.getQueryParameter(QUERY_URI) ?: if (isStagingUri) BuildConfig.STAGING_PCAST_URL else BuildConfig.PCAST_URL
+                val backend = data.getQueryParameter(QUERY_BACKEND) ?: if (isStagingUri) BuildConfig.STAGING_BACKEND_URL else BuildConfig.BACKEND_URL
                 val configuration = ChannelConfiguration(uri, backend)
-                Timber.d("Checking deep link: $channelCode $uri $backend")
+                Timber.d("Checking deep link: $channelAlias $uri $backend")
                 if (channelExpressRepository.hasConfigurationChanged(configuration)) {
                     reloadConfiguration(configuration)
                 }
             }
         }
-        showLandingScreen(channelCode)
+        showLandingScreen(channelAlias)
     }
 
     private fun reloadConfiguration(configuration: ChannelConfiguration) {
@@ -78,9 +79,9 @@ class SplashActivity : AppCompatActivity() {
         Snackbar.make(splash_root, message, Snackbar.LENGTH_INDEFINITE).show()
     }
 
-    private fun showLandingScreen(channelCode: String?) = launchMain {
-        if (channelCode == null) {
-            closeApp()
+    private fun showLandingScreen(channelAlias: String?) = launchMain {
+        if (channelAlias == null) {
+            showInvalidDeepLinkDialog()
             return@launchMain
         }
         Timber.d("Waiting for PCast")
@@ -89,7 +90,7 @@ class SplashActivity : AppCompatActivity() {
         timeoutHandler.removeCallbacks(timeoutRunnable)
         Timber.d("Navigating to Landing Screen")
         val intent = Intent(this@SplashActivity, MainActivity::class.java)
-        intent.putExtra(EXTRA_DEEP_LINK_MODEL, channelCode)
+        intent.putExtra(EXTRA_DEEP_LINK_MODEL, channelAlias)
         startActivity(intent)
         finish()
     }

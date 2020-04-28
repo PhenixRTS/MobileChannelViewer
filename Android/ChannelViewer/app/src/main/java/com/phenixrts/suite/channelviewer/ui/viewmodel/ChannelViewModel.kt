@@ -34,10 +34,10 @@ class ChannelViewModel(private val channelExpressRepository: ChannelExpressRepos
         }
     }
 
-    fun joinChannel(channelCode: String, surfaceHolder: SurfaceHolder) = launchMain {
-        Timber.d("Joining channel: $channelCode")
+    fun joinChannel(channelAlias: String, surfaceHolder: SurfaceHolder) = launchMain {
+        Timber.d("Joining channel: $channelAlias")
         updateSurfaceHolder(surfaceHolder)
-        channelExpressRepository.joinChannel(channelCode, androidVideoSurface)
+        channelExpressRepository.joinChannel(channelAlias, androidVideoSurface)
     }
 
     fun updateSurfaceHolder(holder: SurfaceHolder) {
