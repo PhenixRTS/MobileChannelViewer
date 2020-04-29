@@ -1,0 +1,11 @@
+<!--
+  ~ Copyright 2020 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+  -->
+
+<resources>
+    <string name="app_name">Channel Viewer</string>
+    <string name="offline_title">ffline</string>
+    <string name="err_network_problems">Experiencing problems connecting to Phenix. Check your network status.</string>
+    <string name="err_invalid_deep_link">Invalid deep link</string>
+    <string name="popup_ok">OK</string>
+</resources>

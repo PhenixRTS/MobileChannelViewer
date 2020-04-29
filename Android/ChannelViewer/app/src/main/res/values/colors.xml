@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+  -->
+
+<resources>
+    <color name="primaryColor">#212121</color>
+    <color name="primaryDarkColor">#000000</color>
+
+    <color name="accentColor">#ff1744</color>
+    <color name="primaryTextColor">#EEE</color>
+    <color name="primaryTextDarkColor">#333</color>
+</resources>
