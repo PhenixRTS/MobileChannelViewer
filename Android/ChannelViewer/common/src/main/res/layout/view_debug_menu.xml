@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+  -->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/debug_background_color"
+    android:elevation="5dp"
+    android:id="@+id/debug_menu"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="0dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:fontFamily="sans-serif-medium"
+            android:background="@drawable/bg_debug_item_selector"
+            android:textColor="@color/debug_text_color"
+            android:text="@string/debug_about" />
+
+        <TextView
+            android:id="@+id/debug_app_version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:background="@drawable/bg_debug_item_selector"
+            android:textColor="@color/debug_text_color"
+            android:text="@string/debug_app_version" />
+
+        <TextView
+            android:id="@+id/debug_sdk_version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_debug_item_selector"
+            android:textColor="@color/debug_text_color"
+            android:text="@string/debug_sdk_version" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:background="@color/debug_divider_color" />
+
+        <TextView
+            android:id="@+id/debug_share"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:background="@drawable/bg_debug_item_selector"
+            android:textColor="@color/debug_accent_color"
+            android:drawableStart="@drawable/ic_share"
+            android:drawablePadding="12dp"
+            android:text="@string/debug_share_app_logs" />
+
+        <TextView
+            android:id="@+id/debug_close"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:background="@drawable/bg_debug_item_selector"
+            android:textColor="@color/debug_text_color"
+            android:drawableStart="@drawable/ic_cancel"
+            android:drawablePadding="12dp"
+            android:text="@string/debug_close" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

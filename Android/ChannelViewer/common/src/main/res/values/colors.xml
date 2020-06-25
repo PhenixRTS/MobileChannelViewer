@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2020 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+  -->
+
+<resources>
+    <color name="debug_text_color">#333</color>
+    <color name="debug_accent_color">#ff1744</color>
+    <color name="debug_background_color">#fff</color>
+    <color name="debug_divider_color">#808080</color>
+    <color name="debug_translucent_color">#80000000</color>
+</resources>

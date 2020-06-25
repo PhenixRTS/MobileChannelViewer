@@ -9,10 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
 import com.phenixrts.common.RequestStatus
 import com.phenixrts.environment.android.AndroidContext
-import com.phenixrts.express.ChannelExpress
-import com.phenixrts.express.ChannelExpressFactory
-import com.phenixrts.express.PCastExpressFactory
-import com.phenixrts.express.RoomExpressFactory
+import com.phenixrts.express.*
 import com.phenixrts.pcast.android.AndroidVideoRenderSurface
 import com.phenixrts.suite.channelviewer.common.*
 import kotlinx.coroutines.delay
@@ -29,6 +26,7 @@ class ChannelExpressRepository(private val context: Application) {
     private var currentConfiguration = ChannelConfiguration()
     val onChannelExpressError = MutableLiveData<Unit>()
     val onChannelState = MutableLiveData<ChannelJoinedState>()
+    var roomExpress: RoomExpress? = null
 
     private fun initializeChannelExpress() {
         Timber.d("Creating Channel Express: $currentConfiguration")
@@ -51,6 +49,7 @@ class ChannelExpressRepository(private val context: Application) {
             .buildChannelExpressOptions()
 
         channelExpress = ChannelExpressFactory.createChannelExpress(channelExpressOptions)
+        roomExpress = channelExpress?.roomExpress
     }
 
     suspend fun setupChannelExpress(configuration: ChannelConfiguration) {
