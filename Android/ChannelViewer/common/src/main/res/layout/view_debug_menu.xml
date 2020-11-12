@@ -69,9 +69,9 @@
             android:paddingEnd="16dp"
             android:background="@drawable/bg_debug_item_selector"
             android:textColor="@color/debug_accent_color"
-            android:drawableStart="@drawable/ic_share"
             android:drawablePadding="12dp"
-            android:text="@string/debug_share_app_logs" />
+            android:text="@string/debug_share_app_logs"
+            app:drawableStartCompat="@drawable/ic_share" />
 
         <TextView
             android:id="@+id/debug_close"
@@ -82,9 +82,9 @@
             android:paddingEnd="16dp"
             android:background="@drawable/bg_debug_item_selector"
             android:textColor="@color/debug_text_color"
-            android:drawableStart="@drawable/ic_cancel"
             android:drawablePadding="12dp"
-            android:text="@string/debug_close" />
+            android:text="@string/debug_close"
+            app:drawableStartCompat="@drawable/ic_cancel" />
 
     </LinearLayout>
 

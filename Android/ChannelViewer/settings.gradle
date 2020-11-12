@@ -1,3 +1,9 @@
+/*
+ * Copyright 2020 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+ */
+
+include ':phenixdeeplink'
+include ':phenixclosedcaption'
 include ':common'
-rootProject.name='Channel Viewer'
 include ':app'
+rootProject.name='Channel Viewer'

@@ -92,16 +92,14 @@ class DebugMenu(
         } ?: continuation.resume("")
     }
 
-    fun showAppChooser(activity: FragmentActivity, files: ArrayList<Uri>) {
+    fun showAppChooser(activity: FragmentActivity, files: ArrayList<Uri>) = launchMain {
         val intent = Intent().apply {
             action = Intent.ACTION_SEND_MULTIPLE
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             putParcelableArrayListExtra(Intent.EXTRA_STREAM, files)
             type = INTENT_CHOOSER_TYPE
         }
-        intent.resolveActivity(activity.packageManager)?.run {
-            activity.startActivity(Intent.createChooser(intent, activity.getString(R.string.debug_share_app_logs)))
-        }
+        activity.startActivity(Intent.createChooser(intent, activity.getString(R.string.debug_share_app_logs)))
     }
 
     fun onStart(appVersion: String, sdkVersion: String) {

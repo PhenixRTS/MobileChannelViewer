@@ -7,6 +7,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.phenixrts.suite.channelviewer">
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SEND_MULTIPLE" />
+            <data android:mimeType="text/plain" />
+        </intent>
+    </queries>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

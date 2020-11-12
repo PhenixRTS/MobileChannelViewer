@@ -25,6 +25,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.phenixrts.suite.phenixclosedcaption.PhenixClosedCaptionView
+            android:id="@+id/closed_caption_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/channel_surface"
+            app:layout_constraintEnd_toEndOf="@id/channel_surface"
+            app:layout_constraintStart_toStartOf="@id/channel_surface"
+            app:layout_constraintTop_toTopOf="@id/channel_surface" />
+
         <include
             android:id="@+id/offline_view"
             layout="@layout/offline_state"
@@ -40,6 +49,7 @@
             android:id="@+id/menu_overlay"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="64dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,4 +58,3 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-

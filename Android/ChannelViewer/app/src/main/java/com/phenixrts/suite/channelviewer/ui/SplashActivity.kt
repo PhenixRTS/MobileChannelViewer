@@ -5,93 +5,82 @@
 package com.phenixrts.suite.channelviewer.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
-import com.phenixrts.suite.channelviewer.BuildConfig
+import android.os.Looper
 import com.phenixrts.suite.channelviewer.ChannelViewerApplication
 import com.phenixrts.suite.channelviewer.R
 import com.phenixrts.suite.channelviewer.common.*
+import com.phenixrts.suite.channelviewer.common.enums.ConnectionStatus
+import com.phenixrts.suite.channelviewer.common.enums.ExpressError
 import com.phenixrts.suite.channelviewer.repositories.ChannelExpressRepository
+import com.phenixrts.suite.channelviewer.ui.viewmodel.ChannelViewModel
+import com.phenixrts.suite.phenixcommon.common.launchMain
+import com.phenixrts.suite.phenixdeeplink.DeepLinkActivity
+import com.phenixrts.suite.phenixdeeplink.DeepLinkStatus
 import kotlinx.android.synthetic.main.activity_splash.*
 import timber.log.Timber
 import javax.inject.Inject
 
-private const val TIMEOUT_DELAY = 5000L
+private const val TIMEOUT_DELAY = 10000L
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : DeepLinkActivity() {
 
     @Inject
-    lateinit var channelExpressRepository: ChannelExpressRepository
+    lateinit var channelExpress: ChannelExpressRepository
 
-    private val timeoutHandler = Handler()
+    private val viewModel: ChannelViewModel by lazyViewModel({ application as ChannelViewerApplication }) {
+        ChannelViewModel(channelExpress)
+    }
+
+    private val timeoutHandler = Handler(Looper.getMainLooper())
     private val timeoutRunnable = Runnable {
         launchMain {
-            showSnackBar(getString(R.string.err_network_problems))
+            splash_root.showSnackBar(getString(R.string.err_network_problems))
         }
     }
+
+    override val additionalConfiguration: HashMap<String, String>
+        get() = hashMapOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         ChannelViewerApplication.component.inject(this)
         setContentView(R.layout.activity_splash)
-        channelExpressRepository.onChannelExpressError.observe(this, Observer {
-            Timber.d("Channel express failed")
-            showInvalidDeepLinkDialog()
+        channelExpress.onChannelExpressError.observe(this, { error ->
+            Timber.d("Room express failed")
+            showErrorDialog(error)
         })
-        checkDeepLink(intent)
+        Timber.d("Splash activity created")
+        super.onCreate(savedInstanceState)
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        Timber.d("On new intent $intent")
-        checkDeepLink(intent)
-    }
-
-    private fun checkDeepLink(intent: Intent?) {
-        Timber.d("Checking deep link: ${intent?.data}")
-        var channelAlias: String? = null
-        if (intent?.data != null) {
-            intent.data?.let { data ->
-                channelAlias = data.toString().takeIf { it.contains(QUERY_CHANNEL) }?.substringAfterLast(QUERY_CHANNEL)
-                val isStagingUri = data.toString().startsWith(QUERY_STAGING)
-                val uri = data.getQueryParameter(QUERY_URI) ?: if (isStagingUri) BuildConfig.STAGING_PCAST_URL else BuildConfig.PCAST_URL
-                val backend = data.getQueryParameter(QUERY_BACKEND) ?: if (isStagingUri) BuildConfig.STAGING_BACKEND_URL else BuildConfig.BACKEND_URL
-                val configuration = ChannelConfiguration(uri, backend)
-                Timber.d("Checking deep link: $channelAlias $uri $backend")
-                if (channelExpressRepository.hasConfigurationChanged(configuration)) {
-                    reloadConfiguration(configuration)
-                }
+    override fun onDeepLinkQueried(status: DeepLinkStatus) {
+        launchMain {
+            when (status) {
+                DeepLinkStatus.RELOAD -> showErrorDialog(ExpressError.CONFIGURATION_CHANGED_ERROR)
+                DeepLinkStatus.READY -> showLandingScreen()
             }
         }
-        showLandingScreen(channelAlias)
     }
 
-    private fun reloadConfiguration(configuration: ChannelConfiguration) {
-        launchMain{
-            channelExpressRepository.setupChannelExpress(configuration)
+    override fun isAlreadyInitialized(): Boolean = channelExpress.isRoomExpressInitialized()
+
+    private suspend fun showLandingScreen() {
+        val config = configuration.asConfigurationModel()
+        if (config == null || config.channelAlias.isNullOrBlank()) {
+            showErrorDialog(ExpressError.DEEP_LINK_ERROR)
+            return
         }
-    }
-
-    private fun showSnackBar(message: String) = launchMain {
-        Snackbar.make(splash_root, message, Snackbar.LENGTH_INDEFINITE).show()
-    }
-
-    private fun showLandingScreen(channelAlias: String?) = launchMain {
-        if (channelAlias == null) {
-            showInvalidDeepLinkDialog()
-            return@launchMain
-        }
-        Timber.d("Waiting for PCast")
         timeoutHandler.postDelayed(timeoutRunnable, TIMEOUT_DELAY)
-        channelExpressRepository.waitForPCast()
+        channelExpress.setupChannelExpress(config)
+        channelExpress.waitForPCast()
+        Timber.d("Joining channel: ${config.channelAlias}")
+        val status = viewModel.joinChannel(config.channelAlias)
         timeoutHandler.removeCallbacks(timeoutRunnable)
-        Timber.d("Navigating to Landing Screen")
-        val intent = Intent(this@SplashActivity, MainActivity::class.java)
-        intent.putExtra(EXTRA_DEEP_LINK_MODEL, channelAlias)
-        startActivity(intent)
-        finish()
+        if (status == ConnectionStatus.CONNECTED) {
+            Timber.d("Navigating to Landing Screen")
+            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            finish()
+        }
     }
 }

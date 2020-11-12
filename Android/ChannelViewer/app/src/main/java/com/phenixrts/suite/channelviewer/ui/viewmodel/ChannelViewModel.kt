@@ -10,34 +10,36 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import com.phenixrts.pcast.android.AndroidVideoRenderSurface
 import com.phenixrts.room.RoomService
-import com.phenixrts.suite.channelviewer.common.enums.StreamStatus
-import com.phenixrts.suite.channelviewer.common.launchMain
+import com.phenixrts.suite.channelviewer.common.enums.ConnectionStatus
 import com.phenixrts.suite.channelviewer.repositories.ChannelExpressRepository
+import com.phenixrts.suite.phenixcommon.common.launchMain
 import kotlinx.coroutines.flow.collect
-import timber.log.Timber
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class ChannelViewModel(private val channelExpressRepository: ChannelExpressRepository) : ViewModel() {
 
     private val androidVideoSurface = AndroidVideoRenderSurface()
     private var roomService: RoomService? = null
     val onChannelExpressError = channelExpressRepository.onChannelExpressError
-    val onChannelState = MutableLiveData<StreamStatus>()
+    val mimeTypes = channelExpressRepository.mimeTypes
+    val onChannelState = MutableLiveData<ConnectionStatus>()
 
     init {
         launchMain {
             channelExpressRepository.onChannelState.asFlow().collect { state ->
-                if (state.streamStatus == StreamStatus.CONNECTED) {
+                if (state.connectionStatus == ConnectionStatus.CONNECTED) {
                     roomService = state.roomService
                 }
-                onChannelState.value = state.streamStatus
+                onChannelState.value = state.connectionStatus
             }
         }
     }
 
-    fun joinChannel(channelAlias: String, surfaceHolder: SurfaceHolder) = launchMain {
-        Timber.d("Joining channel: $channelAlias")
-        updateSurfaceHolder(surfaceHolder)
-        channelExpressRepository.joinChannel(channelAlias, androidVideoSurface)
+    suspend fun joinChannel(channelAlias: String): ConnectionStatus = suspendCoroutine { continuation ->
+        launchMain {
+            continuation.resume(channelExpressRepository.joinChannel(channelAlias, androidVideoSurface))
+        }
     }
 
     fun updateSurfaceHolder(holder: SurfaceHolder) {

@@ -4,15 +4,18 @@
 
 package com.phenixrts.suite.channelviewer.common
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.phenixrts.suite.channelviewer.ChannelViewerApplication
 
-inline fun <reified T : ViewModel> AppCompatActivity.lazyViewModel(noinline creator: (() -> T)? = null) = lazy {
+inline fun <reified T : ViewModel> lazyViewModel(
+    noinline owner: () -> ChannelViewerApplication,
+    noinline creator: (() -> T)? = null
+) = lazy {
     if (creator == null)
-        ViewModelProvider(this).get(T::class.java)
+        ViewModelProvider(owner()).get(T::class.java)
     else
-        ViewModelProvider(this, BaseViewModelFactory(creator)).get(T::class.java)
+        ViewModelProvider(owner(), BaseViewModelFactory(creator)).get(T::class.java)
 }
 
 class BaseViewModelFactory<T>(val creator: () -> T) : ViewModelProvider.Factory {

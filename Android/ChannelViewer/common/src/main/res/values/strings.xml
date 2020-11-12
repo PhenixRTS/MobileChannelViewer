@@ -10,5 +10,4 @@
     <string name="debug_sdk_version">SDK version: %1$s build: %2$d</string>
     <string name="debug_share_app_logs">Share App logs</string>
     <string name="debug_close">Close</string>
-    <string name="debug_ok">OK</string>
 </resources>

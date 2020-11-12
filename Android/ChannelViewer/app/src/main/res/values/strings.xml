@@ -7,5 +7,7 @@
     <string name="offline_title">ffline</string>
     <string name="err_network_problems">Experiencing problems connecting to Phenix. Check your network status.</string>
     <string name="err_invalid_deep_link">Invalid deep link</string>
+    <string name="err_unrecoverable_error">Encountered an unexpected error, please start the application again.</string>
+    <string name="err_configuration_changed">Configuration has changed. Please start the app again to apply the changes.</string>
     <string name="popup_ok">OK</string>
 </resources>

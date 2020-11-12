@@ -10,18 +10,28 @@ import com.phenixrts.express.RoomExpressFactory
 import com.phenixrts.pcast.AspectRatioMode
 import com.phenixrts.pcast.RendererOptions
 import com.phenixrts.pcast.android.AndroidVideoRenderSurface
-import com.phenixrts.suite.channelviewer.BuildConfig
-import java.io.Serializable
+import com.phenixrts.suite.phenixdeeplink.*
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import org.json.JSONObject
 
-const val QUERY_URI = "uri"
-const val QUERY_BACKEND = "backend"
-const val QUERY_CHANNEL = "#"
-const val QUERY_STAGING = "https://stg.phenixrts.com"
-
-data class ChannelConfiguration(
-    val uri: String = BuildConfig.PCAST_URL,
-    val backend: String = BuildConfig.BACKEND_URL
-) : Serializable
+@Serializable
+data class ChannelExpressConfiguration(
+    @SerialName(QUERY_URI)
+    val uri: String? = null,
+    @SerialName(QUERY_BACKEND)
+    val backend: String? = null,
+    @SerialName(QUERY_EDGE_AUTH)
+    val edgeAuth: String? = null,
+    @SerialName(QUERY_CHANNEL_ALIAS)
+    val channelAlias: String? = null,
+    @SerialName(QUERY_MIME_TYPES)
+    private val rawMimeTypes: String? = null
+) {
+    val mimeTypes: List<String> = rawMimeTypes?.split(",") ?: listOf()
+}
 
 fun getChannelConfiguration(channelAlias: String, surface: AndroidVideoRenderSurface): JoinChannelOptions {
     val joinRoomOptions = RoomExpressFactory.createJoinRoomOptionsBuilder()
@@ -36,4 +46,10 @@ fun getChannelConfiguration(channelAlias: String, surface: AndroidVideoRenderSur
         .withRenderer(surface)
         .withRendererOptions(rendererOptions)
         .buildJoinChannelOptions()
+}
+
+fun HashMap<String, String>.asConfigurationModel(): ChannelExpressConfiguration? = try {
+    Json { ignoreUnknownKeys = true }.decodeFromString<ChannelExpressConfiguration>(JSONObject(this as Map<*, *>).toString())
+} catch (e: Exception) {
+    null
 }

@@ -4,7 +4,7 @@
 
 package com.phenixrts.suite.channelviewer.common.enums
 
-enum class StreamStatus {
+enum class ConnectionStatus {
     FAILED,
     CONNECTED,
     OFFLINE,

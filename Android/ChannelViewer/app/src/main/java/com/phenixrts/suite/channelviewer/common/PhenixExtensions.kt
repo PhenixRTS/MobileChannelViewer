@@ -12,28 +12,11 @@ import com.phenixrts.express.JoinChannelOptions
 import com.phenixrts.express.PCastExpress
 import com.phenixrts.pcast.Renderer
 import com.phenixrts.room.RoomService
-import com.phenixrts.suite.channelviewer.common.enums.StreamStatus
-import kotlinx.coroutines.*
+import com.phenixrts.suite.channelviewer.common.enums.ConnectionStatus
+import com.phenixrts.suite.phenixcommon.common.launchMain
 import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-
-private val mainScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-private val ioScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-
-fun launchMain(block: suspend CoroutineScope.() -> Unit) = mainScope.launch(
-    context = CoroutineExceptionHandler { _, e ->
-        Timber.w(e, "Coroutine failed: ${e.localizedMessage}")
-    },
-    block = block
-)
-
-fun launchIO(block: suspend CoroutineScope.() -> Unit) = ioScope.launch(
-    context = CoroutineExceptionHandler { _, e ->
-        Timber.w(e, "Coroutine failed: ${e.localizedMessage}")
-    },
-    block = block
-)
 
 suspend fun PCastExpress.waitForOnline() = suspendCoroutine<Unit> { continuation ->
     waitForOnline {
@@ -45,23 +28,24 @@ fun ChannelExpress.joinChannel(options: JoinChannelOptions): MutableLiveData<Cha
     val status = MutableLiveData<ChannelJoinedState>()
     joinChannel(options, { requestStatus: RequestStatus?, roomService: RoomService? ->
         launchMain {
+            Timber.d("Channel status: $requestStatus")
             if (requestStatus == RequestStatus.OK) {
-                status.value = ChannelJoinedState(StreamStatus.CONNECTED, roomService)
+                status.value = ChannelJoinedState(ConnectionStatus.CONNECTED, roomService)
             } else {
-                status.value = ChannelJoinedState(StreamStatus.FAILED)
+                status.value = ChannelJoinedState(ConnectionStatus.FAILED)
             }
         }
     }, { requestStatus: RequestStatus?, _: ExpressSubscriber?, _: Renderer? ->
         launchMain{
             Timber.d("Stream status: $requestStatus")
             when (requestStatus) {
-                RequestStatus.OK -> status.value = ChannelJoinedState(StreamStatus.ONLINE)
-                RequestStatus.NO_STREAM_PLAYING -> status.value = ChannelJoinedState(StreamStatus.OFFLINE)
-                else -> status.value = ChannelJoinedState(StreamStatus.FAILED)
+                RequestStatus.OK -> status.value = ChannelJoinedState(ConnectionStatus.ONLINE)
+                RequestStatus.NO_STREAM_PLAYING -> status.value = ChannelJoinedState(ConnectionStatus.OFFLINE)
+                else -> status.value = ChannelJoinedState(ConnectionStatus.FAILED)
             }
         }
     })
     return status
 }
 
-data class ChannelJoinedState(val streamStatus: StreamStatus, val roomService: RoomService? = null)
+data class ChannelJoinedState(val connectionStatus: ConnectionStatus, val roomService: RoomService? = null)

@@ -11,79 +11,113 @@ import com.phenixrts.common.RequestStatus
 import com.phenixrts.environment.android.AndroidContext
 import com.phenixrts.express.*
 import com.phenixrts.pcast.android.AndroidVideoRenderSurface
+import com.phenixrts.room.RoomService
 import com.phenixrts.suite.channelviewer.common.*
+import com.phenixrts.suite.channelviewer.common.enums.ConnectionStatus
+import com.phenixrts.suite.channelviewer.common.enums.ExpressError
+import com.phenixrts.suite.phenixcommon.common.launchMain
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 private const val REINITIALIZATION_DELAY = 1000L
 
 class ChannelExpressRepository(private val context: Application) {
 
+    private var expressConfiguration = ChannelExpressConfiguration()
     private var channelExpress: ChannelExpress? = null
-    private var currentConfiguration = ChannelConfiguration()
-    val onChannelExpressError = MutableLiveData<Unit>()
-    val onChannelState = MutableLiveData<ChannelJoinedState>()
     var roomExpress: RoomExpress? = null
+    val onChannelExpressError = MutableLiveData<ExpressError>()
+    val onChannelState = MutableLiveData<ChannelJoinedState>()
+    val mimeTypes = MutableLiveData<List<String>>()
+    var roomService: RoomService? = null
+
+    private fun hasConfigurationChanged(configuration: ChannelExpressConfiguration): Boolean = expressConfiguration != configuration
 
     private fun initializeChannelExpress() {
-        Timber.d("Creating Channel Express: $currentConfiguration")
+        Timber.d("Creating Channel Express: $expressConfiguration")
         AndroidContext.setContext(context)
-        val pcastExpressOptions = PCastExpressFactory.createPCastExpressOptionsBuilder()
-            .withBackendUri(currentConfiguration.backend)
-            .withPCastUri(currentConfiguration.uri)
+        var pcastBuilder = PCastExpressFactory.createPCastExpressOptionsBuilder()
+            .withMinimumConsoleLogLevel("info")
+            .withBackendUri(expressConfiguration.backend)
+            .withPCastUri(expressConfiguration.uri)
             .withUnrecoverableErrorCallback { status: RequestStatus?, description: String ->
-                Timber.e("Unrecoverable error in PhenixSDK. Error status: [$status]. Description: [$description]")
-                onChannelExpressError.value = Unit
+                launchMain {
+                    Timber.e("Unrecoverable error in PhenixSDK. Error status: [$status]. Description: [$description]")
+                    onChannelExpressError.value = ExpressError.UNRECOVERABLE_ERROR
+                }
             }
-            .buildPCastExpressOptions()
-
+        if (expressConfiguration.edgeAuth?.isNotBlank() == true) {
+            pcastBuilder = pcastBuilder.withAuthenticationToken(expressConfiguration.edgeAuth)
+        }
         val roomExpressOptions = RoomExpressFactory.createRoomExpressOptionsBuilder()
-            .withPCastExpressOptions(pcastExpressOptions)
+            .withPCastExpressOptions(pcastBuilder.buildPCastExpressOptions())
             .buildRoomExpressOptions()
 
         val channelExpressOptions = ChannelExpressFactory.createChannelExpressOptionsBuilder()
             .withRoomExpressOptions(roomExpressOptions)
             .buildChannelExpressOptions()
 
-        channelExpress = ChannelExpressFactory.createChannelExpress(channelExpressOptions)
-        roomExpress = channelExpress?.roomExpress
+        ChannelExpressFactory.createChannelExpress(channelExpressOptions)?.let { express ->
+            channelExpress = express
+            roomExpress = express.roomExpress
+            Timber.d("Channel express initialized")
+        } ?: run {
+            Timber.e("Unrecoverable error in PhenixSDK")
+            onChannelExpressError.value = ExpressError.UNRECOVERABLE_ERROR
+        }
     }
 
-    suspend fun setupChannelExpress(configuration: ChannelConfiguration) {
+    suspend fun setupChannelExpress(configuration: ChannelExpressConfiguration) {
         if (hasConfigurationChanged(configuration)) {
             Timber.d("Channel Express configuration has changed: $configuration")
-            currentConfiguration = configuration
-            channelExpress?.dispose()
+            expressConfiguration = configuration
+            channelExpress?.run {
+                dispose()
+                Timber.d("Channel Express disposed")
+            }
             channelExpress = null
-            Timber.d("Channel Express disposed")
             delay(REINITIALIZATION_DELAY)
             initializeChannelExpress()
         }
     }
 
-    suspend fun waitForPCast(): Unit = suspendCoroutine {
+    suspend fun waitForPCast() {
+        Timber.d("Waiting for pCast")
+        if (channelExpress == null) {
+            initializeChannelExpress()
+        }
+        channelExpress?.pCastExpress?.waitForOnline()
+    }
+
+    suspend fun joinChannel(channelAlias: String, surface: AndroidVideoRenderSurface): ConnectionStatus = suspendCancellableCoroutine { continuation ->
         launchMain {
-            Timber.d("Waiting for pCast")
-            if (channelExpress == null) {
-                initializeChannelExpress()
+            Timber.d("Joining room: $channelAlias")
+            channelExpress?.let { express ->
+                express.joinChannel(getChannelConfiguration(channelAlias, surface)).asFlow().collect { status ->
+                    launchMain {
+                        Timber.d("Channel status: $status")
+                        onChannelState.value = status
+                        if (status.connectionStatus == ConnectionStatus.CONNECTED) {
+                            status.roomService?.let { service ->
+                                mimeTypes.value = expressConfiguration.mimeTypes
+                                roomService = service
+                                if (continuation.isActive) continuation.resume(ConnectionStatus.CONNECTED)
+                            } ?: if (continuation.isActive) continuation.resume(ConnectionStatus.FAILED)
+                        } else if (status.connectionStatus == ConnectionStatus.FAILED) {
+                            onChannelExpressError.value = ExpressError.UNRECOVERABLE_ERROR
+                            if (continuation.isActive) continuation.resume(ConnectionStatus.FAILED)
+                        }
+                    }
+                }
+            } ?: launchMain {
+                onChannelExpressError.value = ExpressError.UNRECOVERABLE_ERROR
+                if (continuation.isActive) continuation.resume(ConnectionStatus.FAILED)
             }
-            channelExpress?.pCastExpress?.waitForOnline()
-            it.resume(Unit)
         }
     }
 
-    suspend fun joinChannel(channelAlias: String, surface: AndroidVideoRenderSurface) {
-        channelExpress?.joinChannel(getChannelConfiguration(channelAlias, surface))?.asFlow()?.collect { status ->
-            launchMain {
-                onChannelState.value = status
-            }
-        } ?: launchMain {
-            onChannelExpressError.value = Unit
-        }
-    }
-
-    fun hasConfigurationChanged(configuration: ChannelConfiguration): Boolean = currentConfiguration != configuration
+    fun isRoomExpressInitialized(): Boolean = roomExpress != null
 }
