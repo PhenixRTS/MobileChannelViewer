@@ -4,13 +4,12 @@
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: "kotlin-kapt"
 apply plugin: 'kotlinx-serialization'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.1"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 23
@@ -27,6 +26,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -47,9 +50,8 @@ android {
 
 dependencies {
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.0"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC"
 
     // Android
@@ -58,7 +60,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
 
     // Phenix
-    implementation "com.phenixrts.android:phenix-sdk-android:2020.1.67"
+    implementation "com.phenixrts.android:phenix-sdk-android:2021.0.0"
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'

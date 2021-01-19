@@ -13,7 +13,8 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.phenixrts.express.RoomExpress
 import com.phenixrts.suite.phenixcommon.common.*
-import kotlinx.android.synthetic.main.view_debug_menu.view.*
+import com.phenixrts.suite.phenixcommon.databinding.ViewDebugBackgroundBinding
+import com.phenixrts.suite.phenixcommon.databinding.ViewDebugMenuBinding
 import timber.log.Timber
 import java.lang.Exception
 import kotlin.coroutines.resume
@@ -29,26 +30,26 @@ class DebugMenu(
 
     private var lastTapTime = System.currentTimeMillis()
     private var tapCount = 0
-    private var background: View = LayoutInflater.from(rootView.context).inflate(R.layout.view_debug_background, rootView, false)
-    private var menu: View = LayoutInflater.from(rootView.context).inflate(R.layout.view_debug_menu, rootView, false)
+    private var background = ViewDebugBackgroundBinding.inflate(LayoutInflater.from(rootView.context), rootView, false)
+    private var menuBinding = ViewDebugMenuBinding.inflate(LayoutInflater.from(rootView.context), rootView, false)
     private val debugMenu: BottomSheetBehavior<View>
 
     init {
-        rootView.addView(background)
-        rootView.addView(menu)
-        debugMenu = BottomSheetBehavior.from(menu.debug_menu)
+        rootView.addView(background.root)
+        rootView.addView(menuBinding.root)
+        debugMenu = BottomSheetBehavior.from(menuBinding.debugMenu)
     }
 
     private val menuStateListener = object : BottomSheetBehavior.BottomSheetCallback() {
         override fun onSlide(bottomSheet: View, slideOffset: Float) {
-            background.visibility = View.VISIBLE
-            background.alpha = slideOffset
+            background.root.visibility = View.VISIBLE
+            background.root.alpha = slideOffset
         }
 
         override fun onStateChanged(bottomSheet: View, newState: Int) {
             if (newState == BottomSheetBehavior.STATE_HIDDEN || newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                background.visibility = View.GONE
-                background.alpha = 0f
+                background.root.visibility = View.GONE
+                background.root.alpha = 0f
             }
         }
     }
@@ -104,10 +105,10 @@ class DebugMenu(
 
     fun onStart(appVersion: String, sdkVersion: String) {
         debugMenu.addBottomSheetCallback(menuStateListener)
-        menu.debug_close.setOnClickListener { hideDebugMenu() }
-        menu.debug_app_version.text = appVersion
-        menu.debug_sdk_version.text = sdkVersion
-        menu.debug_share.setOnClickListener { shareLogs() }
+        menuBinding.debugClose.setOnClickListener { hideDebugMenu() }
+        menuBinding.debugAppVersion.text = appVersion
+        menuBinding.debugSdkVersion.text = sdkVersion
+        menuBinding.debugShare.setOnClickListener { shareLogs() }
     }
 
     fun onStop() {

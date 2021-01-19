@@ -13,12 +13,12 @@ import com.phenixrts.suite.channelviewer.R
 import com.phenixrts.suite.channelviewer.common.*
 import com.phenixrts.suite.channelviewer.common.enums.ConnectionStatus
 import com.phenixrts.suite.channelviewer.common.enums.ExpressError
+import com.phenixrts.suite.channelviewer.databinding.ActivitySplashBinding
 import com.phenixrts.suite.channelviewer.repositories.ChannelExpressRepository
 import com.phenixrts.suite.channelviewer.ui.viewmodel.ChannelViewModel
 import com.phenixrts.suite.phenixcommon.common.launchMain
 import com.phenixrts.suite.phenixdeeplink.DeepLinkActivity
 import com.phenixrts.suite.phenixdeeplink.DeepLinkStatus
-import kotlinx.android.synthetic.main.activity_splash.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -26,8 +26,8 @@ private const val TIMEOUT_DELAY = 10000L
 
 class SplashActivity : DeepLinkActivity() {
 
-    @Inject
-    lateinit var channelExpress: ChannelExpressRepository
+    @Inject lateinit var channelExpress: ChannelExpressRepository
+    private lateinit var binding: ActivitySplashBinding
 
     private val viewModel: ChannelViewModel by lazyViewModel({ application as ChannelViewerApplication }) {
         ChannelViewModel(channelExpress)
@@ -36,7 +36,7 @@ class SplashActivity : DeepLinkActivity() {
     private val timeoutHandler = Handler(Looper.getMainLooper())
     private val timeoutRunnable = Runnable {
         launchMain {
-            splash_root.showSnackBar(getString(R.string.err_network_problems))
+            binding.root.showSnackBar(getString(R.string.err_network_problems))
         }
     }
 
@@ -45,7 +45,8 @@ class SplashActivity : DeepLinkActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ChannelViewerApplication.component.inject(this)
-        setContentView(R.layout.activity_splash)
+        binding = ActivitySplashBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         channelExpress.onChannelExpressError.observe(this, { error ->
             Timber.d("Room express failed")
             showErrorDialog(error)

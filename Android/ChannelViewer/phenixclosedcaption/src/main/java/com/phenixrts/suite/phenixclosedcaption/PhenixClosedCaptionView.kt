@@ -6,24 +6,19 @@ package com.phenixrts.suite.phenixclosedcaption
 
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Color
-import android.graphics.Typeface
-import android.text.StaticLayout
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
-import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageButton
-import android.widget.TextView
-import androidx.core.graphics.ColorUtils
 import androidx.core.view.setMargins
-import androidx.core.view.setPadding
 import com.phenixrts.chat.RoomChatService
 import com.phenixrts.chat.RoomChatServiceFactory
 import com.phenixrts.common.Disposable
 import com.phenixrts.room.RoomService
-import com.phenixrts.suite.phenixclosedcaption.ClosedCaptionMessage.*
+import com.phenixrts.suite.phenixclosedcaption.ClosedCaptionMessage.AnchorPosition
+import com.phenixrts.suite.phenixclosedcaption.ClosedCaptionMessage.WindowUpdate
+import com.phenixrts.suite.phenixclosedcaption.common.drawClosedCaptions
 import kotlinx.coroutines.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
@@ -32,10 +27,12 @@ import timber.log.Timber
 
 private const val MESSAGE_BATCH_SIZE = 0
 private const val DEFAULT_MIME_TYPE = "application/Phenix-CC"
-private const val MEASURABLE_CHARACTER = "W"
 
 val Int.px: Int
-    get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+    get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
+
+val Int.sp: Float
+    get() =  TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this.toFloat(), Resources.getSystem().displayMetrics)
 
 class PhenixClosedCaptionView : FrameLayout {
 
@@ -65,26 +62,11 @@ class PhenixClosedCaptionView : FrameLayout {
         block = block
     )
 
-    private fun getTextGravity(mode: JustificationMode): Int = when(mode) {
-        JustificationMode.LEFT -> Gravity.START or Gravity.CENTER_VERTICAL
-        JustificationMode.CENTER -> Gravity.CENTER
-        JustificationMode.RIGHT -> Gravity.END or Gravity.CENTER_VERTICAL
-        // Android doesn't support full justification out of the box
-        JustificationMode.FULL -> Gravity.FILL_HORIZONTAL or Gravity.CENTER_VERTICAL
-    }
-
     private fun String.fromJson(): ClosedCaptionMessage = try {
         Json { ignoreUnknownKeys = true }.decodeFromString(this)
     } catch (e: Exception) {
         Timber.d(e, "Failed to parse: $this")
         ClosedCaptionMessage()
-    }
-
-    private fun View.setVisible(condition: Boolean) {
-        val newVisibility = if (condition) View.VISIBLE else View.GONE
-        if (visibility != newVisibility) {
-            visibility = newVisibility
-        }
     }
 
     private fun addClosedCaptionButton() {
@@ -111,7 +93,7 @@ class PhenixClosedCaptionView : FrameLayout {
 
     private fun showClosedCaptions(rawMessage: String) = launch {
         val closedCaptionMessage = rawMessage.fromJson()
-        Timber.d("Showing closed captions:: ${defaultConfiguration.isEnabled}, $closedCaptionMessage")
+        Timber.d("Showing closed captions:: ${defaultConfiguration.isEnabled}")
         if (!defaultConfiguration.isEnabled) return@launch
         removeAllViews()
         val caption = closedCaptionMessage.textUpdates.joinToString(separator = "") { it.caption }
@@ -122,54 +104,36 @@ class PhenixClosedCaptionView : FrameLayout {
         val windowUpdate = lastWindowUpdates.find {
             it.windowIndex == closedCaptionMessage.windowIndex
         } ?: WindowUpdate()
-        val textView = TextView(context)
 
         // Values from CC message are applied or defaults are used
-        val layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-        var backgroundColor = Color.parseColor(
-            windowUpdate.backgroundColor ?: defaultConfiguration.backgroundColor
-        )
-        val alpha = (255 * (windowUpdate.backgroundAlpha ?: defaultConfiguration.backgroundAlpha)).toInt()
-        backgroundColor = ColorUtils.setAlphaComponent(backgroundColor, alpha)
-
-        textView.layoutParams = layoutParams
-        if (windowUpdate.wordWrap == false) {
-            textView.maxLines = windowUpdate.heightInTextLines ?: defaultConfiguration.heightInTextLines
-        }
-        textView.typeface = Typeface.MONOSPACE
-        textView.setVisible(windowUpdate.visible ?: defaultConfiguration.visible && caption.isNotBlank())
-        textView.setBackgroundColor(backgroundColor)
-        textView.setTextColor(Color.parseColor(defaultConfiguration.textColor))
-        textView.setPadding(defaultConfiguration.textPadding)
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, defaultConfiguration.textSize)
-        textView.gravity = getTextGravity(
-            JustificationMode.fromString(
-                windowUpdate.justify ?: defaultConfiguration.justify
-            )
-        )
-        val textViewWidth = StaticLayout.getDesiredWidth(MEASURABLE_CHARACTER, textView.paint).toInt() *
-                (windowUpdate.widthInCharacters ?: defaultConfiguration.widthInCharacters)
-        val textViewHeight = textView.lineHeight *
-                (windowUpdate.heightInTextLines ?: defaultConfiguration.heightInTextLines)
-        textView.minWidth = textViewWidth
-        textView.maxWidth = textViewWidth + defaultConfiguration.textPadding * 2
-        textView.minHeight = textViewHeight
-        textView.text = caption
-
-        // Measure text view size and apply position
-        textView.measure(
-            MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST),
-            MeasureSpec.makeMeasureSpec(height, MeasureSpec.AT_MOST)
-        )
-        val locationX = width *( windowUpdate.positionOfTextWindow ?: defaultConfiguration.positionOfTextWindow).x -
-                textView.measuredWidth * (windowUpdate.anchorPointOnTextWindow ?: defaultConfiguration.anchorPointOnTextWindow).x
-        val locationY = height * (windowUpdate.positionOfTextWindow ?: defaultConfiguration.positionOfTextWindow).y -
-                textView.measuredHeight * (windowUpdate.anchorPointOnTextWindow ?: defaultConfiguration.anchorPointOnTextWindow).y
-        textView.x = locationX
-        textView.y = locationY
-        addView(textView, windowUpdate.zOrder ?: defaultConfiguration.zOrder)
+        drawClosedCaptions(caption, defaultConfiguration.getConfiguration(windowUpdate))
         addClosedCaptionButton()
     }
+
+    private fun ClosedCaptionConfiguration.getConfiguration(windowUpdate: WindowUpdate): ClosedCaptionConfiguration = ClosedCaptionConfiguration(
+        anchorPointOnTextWindow = (windowUpdate.anchorPointOnTextWindow ?: anchorPointOnTextWindow),
+        positionOfTextWindow = windowUpdate.positionOfTextWindow ?: positionOfTextWindow,
+        widthInCharacters = windowUpdate.widthInCharacters ?: widthInCharacters,
+        heightInTextLines = windowUpdate.heightInTextLines ?: heightInTextLines,
+        backgroundColor = windowUpdate.backgroundColor ?: backgroundColor,
+        backgroundAlpha = windowUpdate.backgroundAlpha ?: backgroundAlpha,
+        backgroundFlashing = windowUpdate.backgroundFlashing ?: backgroundFlashing,
+        visible = windowUpdate.visible ?: visible,
+        zOrder = windowUpdate.zOrder ?: zOrder,
+        printDirection = windowUpdate.printDirection ?: printDirection,
+        scrollDirection = windowUpdate.scrollDirection ?: scrollDirection,
+        justify = windowUpdate.justify ?: justify,
+        wordWrap = windowUpdate.wordWrap ?: wordWrap,
+        effectType = windowUpdate.effectType ?: effectType,
+        effectDurationInSeconds = windowUpdate.effectDurationInSeconds ?: effectDurationInSeconds,
+        paddingStart = paddingStart,
+        paddingTop = paddingTop,
+        paddingEnd = paddingEnd,
+        paddingBottom = paddingBottom,
+        textColor = textColor,
+        isEnabled = isEnabled,
+        isButtonVisible = isButtonVisible
+    )
 
     fun subscribe(
         roomService: RoomService,
@@ -247,7 +211,7 @@ data class ClosedCaptionConfiguration(
     var anchorPointOnTextWindow: AnchorPosition = AnchorPosition(0.5f, 1f),
     var positionOfTextWindow: AnchorPosition = AnchorPosition(0.5f, 0.95f),
     var widthInCharacters: Int = 32,
-    var heightInTextLines: Int = 1,
+    var heightInTextLines: Int = 15,
     var backgroundColor: String = "#000000",
     var backgroundAlpha: Float = 1f,
     var backgroundFlashing: Boolean = false,
@@ -259,9 +223,11 @@ data class ClosedCaptionConfiguration(
     var wordWrap: Boolean = true,
     var effectType: String = "pop-on",
     var effectDurationInSeconds: Int = 1,
-    var textPadding: Int = 8.px,
+    var paddingStart: Int = 4.px,
+    var paddingEnd: Int = 4.px,
+    val paddingTop: Int = 1.px,
+    val paddingBottom: Int = 1.px,
     var textColor: String = "#f4f4f4",
-    var textSize: Float = 14f,
     var isEnabled: Boolean = true,
     var isButtonVisible: Boolean = true
 )
