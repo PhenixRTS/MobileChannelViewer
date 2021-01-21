@@ -1,0 +1,10 @@
+source 'https://cdn.cocoapods.org/'
+source 'git@github.com:PhenixRTS/CocoaPodsSpecs.git' # Phenix private repository
+
+platform :ios, '12.0'
+use_frameworks!
+inhibit_all_warnings!
+
+target 'ChannelViewer' do
+  pod 'PhenixSdk', '2021.0.0-beta'
+end

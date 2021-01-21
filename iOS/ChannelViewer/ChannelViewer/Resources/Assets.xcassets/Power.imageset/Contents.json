@@ -1,0 +1,16 @@
+{
+  "images" : [
+    {
+      "idiom" : "universal",
+      "filename" : "noun_Power_714772_ffffff.png"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  },
+  "properties" : {
+    "compression-type" : "automatic",
+    "auto-scaling" : "auto"
+  }
+}

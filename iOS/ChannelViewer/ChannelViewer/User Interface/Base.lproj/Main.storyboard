@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="ChannelViewer" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DA3-hD-vjl">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LYQ-1k-GD4" userLabel="Offline View">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="sFY-fS-8nu">
+                                        <rect key="frame" x="70.5" y="388" width="273" height="120"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y6f-fR-Fz9" userLabel="offline text">
+                                                <rect key="frame" x="0.0" y="0.0" width="273" height="48"/>
+                                                <subviews>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Power" translatesAutoresizingMaskIntoConstraints="NO" id="O8j-ES-O5r" userLabel="power">
+                                                        <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
+                                                        <accessibility key="accessibilityConfiguration">
+                                                            <accessibilityTraits key="traits" image="YES" notEnabled="YES"/>
+                                                        </accessibility>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="48" id="BPv-FS-mpn"/>
+                                                            <constraint firstAttribute="width" constant="48" id="x3r-tM-4gB"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="FFLINE" borderStyle="roundedRect" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bME-At-OXt">
+                                                        <rect key="frame" x="48" y="0.0" width="225" height="48"/>
+                                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" id="Ugl-yS-MML"/>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" id="rty-jL-PRP"/>
+                                                        </constraints>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="64"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
+                                                </subviews>
+                                            </stackView>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="PhenixLogo" translatesAutoresizingMaskIntoConstraints="NO" id="bYU-IY-DgO">
+                                                <rect key="frame" x="104.5" y="56" width="64" height="64"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="64" id="ob4-Ma-KIm"/>
+                                                    <constraint firstAttribute="width" constant="64" id="y0J-3x-LqX"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="250" id="PZT-Lc-kln"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" priority="250" id="Sbh-tM-pbZ"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="sFY-fS-8nu" firstAttribute="centerY" secondItem="LYQ-1k-GD4" secondAttribute="centerY" id="9mw-2a-h6K"/>
+                                    <constraint firstItem="sFY-fS-8nu" firstAttribute="centerX" secondItem="LYQ-1k-GD4" secondAttribute="centerX" id="kLJ-s5-kDw"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="DA3-hD-vjl" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="1EV-1g-TLA"/>
+                            <constraint firstItem="LYQ-1k-GD4" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="2eg-lL-REZ"/>
+                            <constraint firstItem="LYQ-1k-GD4" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="4UD-4H-Ril"/>
+                            <constraint firstItem="LYQ-1k-GD4" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="AUk-tW-cZm"/>
+                            <constraint firstItem="DA3-hD-vjl" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Huv-db-cIm"/>
+                            <constraint firstAttribute="bottom" secondItem="DA3-hD-vjl" secondAttribute="bottom" id="QKC-2d-ca8"/>
+                            <constraint firstAttribute="trailing" secondItem="DA3-hD-vjl" secondAttribute="trailing" id="bU7-44-b17"/>
+                            <constraint firstItem="LYQ-1k-GD4" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="dqm-Ie-JCk"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="offlineView" destination="LYQ-1k-GD4" id="qD3-2k-QDj"/>
+                        <outlet property="surfaceView" destination="DA3-hD-vjl" id="j8O-Tg-ZE5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-197" y="131"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="PhenixLogo" width="100" height="100"/>
+        <image name="Power" width="256" height="256"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

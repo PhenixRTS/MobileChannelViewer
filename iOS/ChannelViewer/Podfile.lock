@@ -1,0 +1,16 @@
+PODS:
+  - PhenixSdk (2021.0.0-beta)
+
+DEPENDENCIES:
+  - PhenixSdk (= 2021.0.0-beta)
+
+SPEC REPOS:
+  "git@github.com:PhenixRTS/CocoaPodsSpecs.git":
+    - PhenixSdk
+
+SPEC CHECKSUMS:
+  PhenixSdk: 04a2b6a6bf3316ad9a3cca816809385bb56c80a8
+
+PODFILE CHECKSUM: 381089099b4c72783c204b2e18966af1e41d69db
+
+COCOAPODS: 1.10.1

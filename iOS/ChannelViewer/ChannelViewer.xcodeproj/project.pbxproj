@@ -1,0 +1,514 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5B088843A97DBD1A9F3D6EB3 /* Pods_ChannelViewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C521EE5DA312F969187FA2FD /* Pods_ChannelViewer.framework */; };
+		B59097AF25B5C885003D5323 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59097AE25B5C885003D5323 /* AppDelegate.swift */; };
+		B59097B625B5C885003D5323 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B59097B425B5C885003D5323 /* Main.storyboard */; };
+		B59097B825B5C886003D5323 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B59097B725B5C886003D5323 /* Assets.xcassets */; };
+		B59097BB25B5C886003D5323 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B59097B925B5C886003D5323 /* LaunchScreen.storyboard */; };
+		B59097DC25B5D5CB003D5323 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59097DB25B5D5CB003D5323 /* ViewController.swift */; };
+		B59097E625B5D72F003D5323 /* PhenixConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59097E525B5D72F003D5323 /* PhenixConfiguration.swift */; };
+		B59097ED25B5DA43003D5323 /* DeeplinkModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59097EA25B5DA43003D5323 /* DeeplinkModelProvider.swift */; };
+		B59097EE25B5DA43003D5323 /* DeeplinkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59097EB25B5DA43003D5323 /* DeeplinkService.swift */; };
+		B59097EF25B5DA43003D5323 /* DeeplinkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59097EC25B5DA43003D5323 /* DeeplinkModel.swift */; };
+		B590982525B71BDC003D5323 /* PhenixChannelViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B590982425B71BDC003D5323 /* PhenixChannelViewer.swift */; };
+		B590982925B72C36003D5323 /* PhenixChannelViewerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B590982825B72C36003D5323 /* PhenixChannelViewerDelegate.swift */; };
+		B5A0B8EF25C00346004E1C6D /* PhenixRequestStatusLocalized.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A0B8EE25C00345004E1C6D /* PhenixRequestStatusLocalized.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B59097AB25B5C885003D5323 /* ChannelViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChannelViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B59097AE25B5C885003D5323 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B59097B525B5C885003D5323 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		B59097B725B5C886003D5323 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B59097BA25B5C886003D5323 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		B59097BC25B5C886003D5323 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B59097DB25B5D5CB003D5323 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B59097E525B5D72F003D5323 /* PhenixConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixConfiguration.swift; sourceTree = "<group>"; };
+		B59097EA25B5DA43003D5323 /* DeeplinkModelProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeeplinkModelProvider.swift; sourceTree = "<group>"; };
+		B59097EB25B5DA43003D5323 /* DeeplinkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeeplinkService.swift; sourceTree = "<group>"; };
+		B59097EC25B5DA43003D5323 /* DeeplinkModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeeplinkModel.swift; sourceTree = "<group>"; };
+		B590982425B71BDC003D5323 /* PhenixChannelViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixChannelViewer.swift; sourceTree = "<group>"; };
+		B590982825B72C36003D5323 /* PhenixChannelViewerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixChannelViewerDelegate.swift; sourceTree = "<group>"; };
+		B59098E325B85B29003D5323 /* ChannelViewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChannelViewer.entitlements; sourceTree = "<group>"; };
+		B5A0B8EE25C00345004E1C6D /* PhenixRequestStatusLocalized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixRequestStatusLocalized.swift; sourceTree = "<group>"; };
+		C521EE5DA312F969187FA2FD /* Pods_ChannelViewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChannelViewer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C8A03354AE29B0EC0F7B44C6 /* Pods-ChannelViewer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChannelViewer.release.xcconfig"; path = "Target Support Files/Pods-ChannelViewer/Pods-ChannelViewer.release.xcconfig"; sourceTree = "<group>"; };
+		EE073E8D3146ADBB65B2DDDF /* Pods-ChannelViewer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChannelViewer.debug.xcconfig"; path = "Target Support Files/Pods-ChannelViewer/Pods-ChannelViewer.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B59097A825B5C885003D5323 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B088843A97DBD1A9F3D6EB3 /* Pods_ChannelViewer.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		077FE4D517A018920B4A621D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C521EE5DA312F969187FA2FD /* Pods_ChannelViewer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6BA4082C42D627466CAB8FFD /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EE073E8D3146ADBB65B2DDDF /* Pods-ChannelViewer.debug.xcconfig */,
+				C8A03354AE29B0EC0F7B44C6 /* Pods-ChannelViewer.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		B59097A225B5C885003D5323 = {
+			isa = PBXGroup;
+			children = (
+				B59097AD25B5C885003D5323 /* ChannelViewer */,
+				B59097AC25B5C885003D5323 /* Products */,
+				6BA4082C42D627466CAB8FFD /* Pods */,
+				077FE4D517A018920B4A621D /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		B59097AC25B5C885003D5323 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B59097AB25B5C885003D5323 /* ChannelViewer.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B59097AD25B5C885003D5323 /* ChannelViewer */ = {
+			isa = PBXGroup;
+			children = (
+				B59098E325B85B29003D5323 /* ChannelViewer.entitlements */,
+				B59097AE25B5C885003D5323 /* AppDelegate.swift */,
+				B59097DB25B5D5CB003D5323 /* ViewController.swift */,
+				B59097E425B5D70E003D5323 /* Phenix */,
+				B59097C625B5CA03003D5323 /* Resources */,
+				B59097C325B5C99C003D5323 /* Supporting Files */,
+				B59097C425B5C9C4003D5323 /* User Interface */,
+			);
+			path = ChannelViewer;
+			sourceTree = "<group>";
+		};
+		B59097C325B5C99C003D5323 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B59097BC25B5C886003D5323 /* Info.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B59097C425B5C9C4003D5323 /* User Interface */ = {
+			isa = PBXGroup;
+			children = (
+				B59097B925B5C886003D5323 /* LaunchScreen.storyboard */,
+				B59097B425B5C885003D5323 /* Main.storyboard */,
+			);
+			path = "User Interface";
+			sourceTree = "<group>";
+		};
+		B59097C625B5CA03003D5323 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B59097B725B5C886003D5323 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		B59097E425B5D70E003D5323 /* Phenix */ = {
+			isa = PBXGroup;
+			children = (
+				B59097E525B5D72F003D5323 /* PhenixConfiguration.swift */,
+				B5A0B8EE25C00345004E1C6D /* PhenixRequestStatusLocalized.swift */,
+				B59097E925B5DA15003D5323 /* Deeplink */,
+				B590983425B7356E003D5323 /* Viewer */,
+			);
+			path = Phenix;
+			sourceTree = "<group>";
+		};
+		B59097E925B5DA15003D5323 /* Deeplink */ = {
+			isa = PBXGroup;
+			children = (
+				B59097EC25B5DA43003D5323 /* DeeplinkModel.swift */,
+				B59097EA25B5DA43003D5323 /* DeeplinkModelProvider.swift */,
+				B59097EB25B5DA43003D5323 /* DeeplinkService.swift */,
+			);
+			path = Deeplink;
+			sourceTree = "<group>";
+		};
+		B590983425B7356E003D5323 /* Viewer */ = {
+			isa = PBXGroup;
+			children = (
+				B590982425B71BDC003D5323 /* PhenixChannelViewer.swift */,
+				B590982825B72C36003D5323 /* PhenixChannelViewerDelegate.swift */,
+			);
+			path = Viewer;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B59097AA25B5C885003D5323 /* ChannelViewer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B59097BF25B5C886003D5323 /* Build configuration list for PBXNativeTarget "ChannelViewer" */;
+			buildPhases = (
+				C2BB290734B54109CFE5F634 /* [CP] Check Pods Manifest.lock */,
+				B59097A725B5C885003D5323 /* Sources */,
+				B59097A825B5C885003D5323 /* Frameworks */,
+				B59097A925B5C885003D5323 /* Resources */,
+				42BF0E4F540E9E32DD42F12B /* [CP] Embed Pods Frameworks */,
+				B5C8F34325B9AA10001C2FE1 /* Catch bad copyrights */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ChannelViewer;
+			productName = ChannelViewer;
+			productReference = B59097AB25B5C885003D5323 /* ChannelViewer.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B59097A325B5C885003D5323 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1230;
+				LastUpgradeCheck = 1230;
+				ORGANIZATIONNAME = "Phenix Real Time Solutions, Inc";
+				TargetAttributes = {
+					B59097AA25B5C885003D5323 = {
+						CreatedOnToolsVersion = 12.3;
+					};
+				};
+			};
+			buildConfigurationList = B59097A625B5C885003D5323 /* Build configuration list for PBXProject "ChannelViewer" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B59097A225B5C885003D5323;
+			productRefGroup = B59097AC25B5C885003D5323 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B59097AA25B5C885003D5323 /* ChannelViewer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B59097A925B5C885003D5323 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B59097BB25B5C886003D5323 /* LaunchScreen.storyboard in Resources */,
+				B59097B825B5C886003D5323 /* Assets.xcassets in Resources */,
+				B59097B625B5C885003D5323 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		42BF0E4F540E9E32DD42F12B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChannelViewer/Pods-ChannelViewer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChannelViewer/Pods-ChannelViewer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChannelViewer/Pods-ChannelViewer-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B5C8F34325B9AA10001C2FE1 /* Catch bad copyrights */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Catch bad copyrights";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "COPYRIGHT=\"Copyright $(date +\"%Y\") Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.\"\n\n# Paths which contains files, which needs to be checked.\nPATH1=\"${SRCROOT}/ChannelViewer\"\n\nPATHS=(${PATH1})\n\nfor i in \"${PATHS[@]}\"\ndo\n   echo \"searching ${i} for ${COPYRIGHT}\"\n   find \"${i}\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 \\\n       | xargs -0 egrep --with-filename --files-without-match \"($COPYRIGHT)\" \\\n       | perl -p -e \"s/(.*)$/\\$1: warning: Incorrect or no copyright \\$1/\"\ndone\n";
+		};
+		C2BB290734B54109CFE5F634 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChannelViewer-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B59097A725B5C885003D5323 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B59097AF25B5C885003D5323 /* AppDelegate.swift in Sources */,
+				B59097EF25B5DA43003D5323 /* DeeplinkModel.swift in Sources */,
+				B5A0B8EF25C00346004E1C6D /* PhenixRequestStatusLocalized.swift in Sources */,
+				B59097EE25B5DA43003D5323 /* DeeplinkService.swift in Sources */,
+				B590982925B72C36003D5323 /* PhenixChannelViewerDelegate.swift in Sources */,
+				B59097ED25B5DA43003D5323 /* DeeplinkModelProvider.swift in Sources */,
+				B59097DC25B5D5CB003D5323 /* ViewController.swift in Sources */,
+				B59097E625B5D72F003D5323 /* PhenixConfiguration.swift in Sources */,
+				B590982525B71BDC003D5323 /* PhenixChannelViewer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		B59097B425B5C885003D5323 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B59097B525B5C885003D5323 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		B59097B925B5C886003D5323 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B59097BA25B5C886003D5323 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		B59097BD25B5C886003D5323 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B59097BE25B5C886003D5323 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B59097C025B5C886003D5323 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EE073E8D3146ADBB65B2DDDF /* Pods-ChannelViewer.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ChannelViewer/ChannelViewer.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LU4S6LX25U;
+				INFOPLIST_FILE = "ChannelViewer/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.phenixrts.suite.ChannelViewer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B59097C125B5C886003D5323 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8A03354AE29B0EC0F7B44C6 /* Pods-ChannelViewer.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ChannelViewer/ChannelViewer.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LU4S6LX25U;
+				INFOPLIST_FILE = "ChannelViewer/Supporting Files/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.phenixrts.suite.ChannelViewer;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B59097A625B5C885003D5323 /* Build configuration list for PBXProject "ChannelViewer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B59097BD25B5C886003D5323 /* Debug */,
+				B59097BE25B5C886003D5323 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B59097BF25B5C886003D5323 /* Build configuration list for PBXNativeTarget "ChannelViewer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B59097C025B5C886003D5323 /* Debug */,
+				B59097C125B5C886003D5323 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B59097A325B5C885003D5323 /* Project object */;
+}
