@@ -21,6 +21,21 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aW7-ls-0Wi" customClass="PhenixClosedCaptionsView" customModule="PhenixClosedCaptions">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3AE-XO-dNj">
+                                <rect key="frame" x="354" y="802" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="ORO-IY-7ri"/>
+                                    <constraint firstAttribute="height" constant="44" id="muV-l9-bl6"/>
+                                </constraints>
+                                <state key="normal" image="ClosedCaptionsEnabled"/>
+                                <connections>
+                                    <action selector="closedCaptionsToggleButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dSn-3m-qp1"/>
+                                </connections>
+                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LYQ-1k-GD4" userLabel="Offline View">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
@@ -78,16 +93,24 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="DA3-hD-vjl" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="1EV-1g-TLA"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="3AE-XO-dNj" secondAttribute="bottom" constant="16" id="1vG-oF-xww"/>
                             <constraint firstItem="LYQ-1k-GD4" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="2eg-lL-REZ"/>
                             <constraint firstItem="LYQ-1k-GD4" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="4UD-4H-Ril"/>
                             <constraint firstItem="LYQ-1k-GD4" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="AUk-tW-cZm"/>
+                            <constraint firstItem="aW7-ls-0Wi" firstAttribute="bottom" secondItem="DA3-hD-vjl" secondAttribute="bottom" id="BZI-XE-Hrz"/>
+                            <constraint firstItem="aW7-ls-0Wi" firstAttribute="leading" secondItem="DA3-hD-vjl" secondAttribute="leading" id="Elz-Ql-8JW"/>
                             <constraint firstItem="DA3-hD-vjl" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Huv-db-cIm"/>
+                            <constraint firstItem="aW7-ls-0Wi" firstAttribute="trailing" secondItem="DA3-hD-vjl" secondAttribute="trailing" id="Iaf-9Z-u6E"/>
                             <constraint firstAttribute="bottom" secondItem="DA3-hD-vjl" secondAttribute="bottom" id="QKC-2d-ca8"/>
                             <constraint firstAttribute="trailing" secondItem="DA3-hD-vjl" secondAttribute="trailing" id="bU7-44-b17"/>
                             <constraint firstItem="LYQ-1k-GD4" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="dqm-Ie-JCk"/>
+                            <constraint firstItem="aW7-ls-0Wi" firstAttribute="top" secondItem="DA3-hD-vjl" secondAttribute="top" id="hve-wu-K29"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="3AE-XO-dNj" secondAttribute="trailing" constant="16" id="xQ2-Vk-3an"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="closedCaptionsToggleButton" destination="3AE-XO-dNj" id="kIO-XL-iJp"/>
+                        <outlet property="closedCaptionsView" destination="aW7-ls-0Wi" id="OlB-pb-Ezw"/>
                         <outlet property="offlineView" destination="LYQ-1k-GD4" id="qD3-2k-QDj"/>
                         <outlet property="surfaceView" destination="DA3-hD-vjl" id="j8O-Tg-ZE5"/>
                     </connections>
@@ -98,6 +121,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="ClosedCaptionsEnabled" width="24" height="24"/>
         <image name="PhenixLogo" width="100" height="100"/>
         <image name="Power" width="256" height="256"/>
         <systemColor name="systemBackgroundColor">
