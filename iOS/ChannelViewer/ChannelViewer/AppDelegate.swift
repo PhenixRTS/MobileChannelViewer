@@ -76,18 +76,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if let edgeToken = deeplink.edgeToken, edgeToken != PhenixConfiguration.edgeToken {
             terminate()
+            return false
         }
 
         if let backend = deeplink.backend, backend != PhenixConfiguration.backendUri {
             terminate()
+            return false
         }
 
         if let uri = deeplink.uri, uri != PhenixConfiguration.pcastUri {
             terminate()
+            return false
         }
 
         if let alias = deeplink.alias, alias != channelAlias {
             terminate()
+            return false
         }
 
         return false
