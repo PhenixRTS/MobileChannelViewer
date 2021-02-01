@@ -2,6 +2,7 @@
 //  Copyright 2021 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
 //
 
+import PhenixDebug
 import PhenixClosedCaptions
 import PhenixSdk
 import UIKit
@@ -58,6 +59,11 @@ class ViewController: UIViewController {
             return
         }
 
+        // Configure tap gesture to open debug menu, when user taps 5 times on the video surface view.
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(surfaceViewTappedMultipleTimes))
+        tapGesture.numberOfTapsRequired = 5
+        surfaceView.addGestureRecognizer(tapGesture)
+
         channelViewer.join(channelAlias: channelAlias, videoLayer: surfaceView.layer)
     }
 
@@ -66,6 +72,11 @@ class ViewController: UIViewController {
         closedCaptionsService.isEnabled.toggle()
         let image = closedCaptionsService.isEnabled == true ? UIImage(named: "ClosedCaptionsEnabled") : UIImage(named: "ClosedCaptionsDisabled")
         closedCaptionsToggleButton.setImage(image, for: .normal)
+    }
+
+    @objc func surfaceViewTappedMultipleTimes() {
+        let vc = PhenixDebugViewController(roomExpress: AppDelegate.channelExpress.roomExpress)
+        present(vc, animated: true)
     }
 }
 

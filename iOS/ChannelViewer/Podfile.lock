@@ -1,10 +1,13 @@
 PODS:
   - PhenixClosedCaptions (0.1.0):
     - PhenixSdk (= 2021.0.0-beta)
+  - PhenixDebug (0.1.0):
+    - PhenixSdk (= 2021.0.0-beta)
   - PhenixSdk (2021.0.0-beta)
 
 DEPENDENCIES:
   - PhenixClosedCaptions (from `../PhenixClosedCaptions`)
+  - PhenixDebug (from `../PhenixDebug`)
   - PhenixSdk (= 2021.0.0-beta)
 
 SPEC REPOS:
@@ -14,11 +17,14 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   PhenixClosedCaptions:
     :path: "../PhenixClosedCaptions"
+  PhenixDebug:
+    :path: "../PhenixDebug"
 
 SPEC CHECKSUMS:
   PhenixClosedCaptions: 6dd120c849f091c7e42a9d00b71405f5a2f75012
+  PhenixDebug: 6ce5ba1602fee544611a254f0ad2eee61c4d9bed
   PhenixSdk: 04a2b6a6bf3316ad9a3cca816809385bb56c80a8
 
-PODFILE CHECKSUM: f3466648c0845410353c666854a97d52f0d9f093
+PODFILE CHECKSUM: 9463aafb9c39e87468dd6f10764b3290f2fb35d6
 
 COCOAPODS: 1.10.1
