@@ -5,7 +5,9 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:phenixrts.com</string>
-		<string>applinks:stg.phenixrts.com?mode=developer</string>
+		<string>applinks:stg.phenixrts.com</string>
+		<string>applinks:pcast.phenixrts.com</string>
+		<string>applinks:pcast-stg.phenixrts.com</string>
 	</array>
 </dict>
 </plist>
