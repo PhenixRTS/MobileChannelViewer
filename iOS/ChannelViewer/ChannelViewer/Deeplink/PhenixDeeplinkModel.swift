@@ -2,9 +2,9 @@
 //  Copyright 2021 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
 //
 
-import Foundation
+import PhenixDeeplink
 
-public struct DeeplinkModel: DeeplinkModelProvider {
+public struct PhenixDeeplinkModel: PhenixDeeplinkModelProvider {
     var alias: String?
     var uri: URL?
     var backend: URL?

@@ -5,5 +5,6 @@ platform :ios, '12.0'
 use_frameworks!
 
 target 'PhenixClosedCaptionsTests' do
+  pod 'PhenixSdk', '2021.0.0-beta'
   pod 'PhenixClosedCaptions', :path => '../'
 end

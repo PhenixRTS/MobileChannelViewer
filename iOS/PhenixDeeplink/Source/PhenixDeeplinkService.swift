@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct DeeplinkService<T: DeeplinkModelProvider> {
+public struct PhenixDeeplinkService<Model: PhenixDeeplinkModelProvider> {
     private let components: URLComponents
 
     public init?(url: URL) {
@@ -15,7 +15,7 @@ public struct DeeplinkService<T: DeeplinkModelProvider> {
         self.components = components
     }
 
-    public func decode() -> T? {
-        T(components: components)
+    public func decode() -> Model? {
+        Model(components: components)
     }
 }

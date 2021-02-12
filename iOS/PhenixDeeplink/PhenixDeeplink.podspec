@@ -1,11 +1,11 @@
 Pod::Spec.new do |spec|
   spec.version          = '0.1.0'
 
-  spec.name             = 'PhenixDebug'
+  spec.name             = 'PhenixDeeplink'
   spec.homepage         = "https://phenixrts.com"
   spec.summary          = 'A short description of PhenixDebug.'
   spec.description      = <<-DESC
-  Support framework providing necessary functionality to show debug view which displays the app and the `PhenixSdk` versions and shares run-time logs from the SDK.
+  Support framework providing necessary functionality to parse deep-links.
                        DESC
   spec.homepage         = 'https://phenixrts.com'
   spec.license          = { :type => "Proprietary", :text => <<-LICENSE
@@ -19,8 +19,5 @@ Pod::Spec.new do |spec|
   spec.source           = { :git => '{LINK TO CLOSED CAPTIONS GIT REPO}', :tag => spec.version.to_s }
   spec.ios.deployment_target = '12.0'
 
-  spec.source_files     = 'Source/*.swift', 'Source/Utils/*.swift'
-
-  spec.xcconfig         = { "ENABLE_BITCODE" => "NO" }
-  spec.dependency 'PhenixSdk', '2021.0.0-beta'
+  spec.source_files     = 'Source/*.swift'
 end

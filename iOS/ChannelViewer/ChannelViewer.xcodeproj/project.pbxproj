@@ -14,12 +14,11 @@
 		B59097BB25B5C886003D5323 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B59097B925B5C886003D5323 /* LaunchScreen.storyboard */; };
 		B59097DC25B5D5CB003D5323 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59097DB25B5D5CB003D5323 /* ViewController.swift */; };
 		B59097E625B5D72F003D5323 /* PhenixConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59097E525B5D72F003D5323 /* PhenixConfiguration.swift */; };
-		B59097ED25B5DA43003D5323 /* DeeplinkModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59097EA25B5DA43003D5323 /* DeeplinkModelProvider.swift */; };
-		B59097EE25B5DA43003D5323 /* DeeplinkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59097EB25B5DA43003D5323 /* DeeplinkService.swift */; };
-		B59097EF25B5DA43003D5323 /* DeeplinkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59097EC25B5DA43003D5323 /* DeeplinkModel.swift */; };
 		B590982525B71BDC003D5323 /* PhenixChannelViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B590982425B71BDC003D5323 /* PhenixChannelViewer.swift */; };
 		B590982925B72C36003D5323 /* PhenixChannelViewerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B590982825B72C36003D5323 /* PhenixChannelViewerDelegate.swift */; };
 		B5A0B8EF25C00346004E1C6D /* PhenixRequestStatusLocalized.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A0B8EE25C00345004E1C6D /* PhenixRequestStatusLocalized.swift */; };
+		B5F704F825D6AC2100CD4504 /* ValidationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F704F725D6AC2100CD4504 /* ValidationProvider.swift */; };
+		B5F704FC25D6ACEF00CD4504 /* PhenixDeeplinkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F704FB25D6ACEF00CD4504 /* PhenixDeeplinkModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,13 +30,12 @@
 		B59097BC25B5C886003D5323 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B59097DB25B5D5CB003D5323 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		B59097E525B5D72F003D5323 /* PhenixConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixConfiguration.swift; sourceTree = "<group>"; };
-		B59097EA25B5DA43003D5323 /* DeeplinkModelProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeeplinkModelProvider.swift; sourceTree = "<group>"; };
-		B59097EB25B5DA43003D5323 /* DeeplinkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeeplinkService.swift; sourceTree = "<group>"; };
-		B59097EC25B5DA43003D5323 /* DeeplinkModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeeplinkModel.swift; sourceTree = "<group>"; };
 		B590982425B71BDC003D5323 /* PhenixChannelViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixChannelViewer.swift; sourceTree = "<group>"; };
 		B590982825B72C36003D5323 /* PhenixChannelViewerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixChannelViewerDelegate.swift; sourceTree = "<group>"; };
 		B59098E325B85B29003D5323 /* ChannelViewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChannelViewer.entitlements; sourceTree = "<group>"; };
 		B5A0B8EE25C00345004E1C6D /* PhenixRequestStatusLocalized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixRequestStatusLocalized.swift; sourceTree = "<group>"; };
+		B5F704F725D6AC2100CD4504 /* ValidationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationProvider.swift; sourceTree = "<group>"; };
+		B5F704FB25D6ACEF00CD4504 /* PhenixDeeplinkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixDeeplinkModel.swift; sourceTree = "<group>"; };
 		C521EE5DA312F969187FA2FD /* Pods_ChannelViewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChannelViewer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8A03354AE29B0EC0F7B44C6 /* Pods-ChannelViewer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChannelViewer.release.xcconfig"; path = "Target Support Files/Pods-ChannelViewer/Pods-ChannelViewer.release.xcconfig"; sourceTree = "<group>"; };
 		EE073E8D3146ADBB65B2DDDF /* Pods-ChannelViewer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChannelViewer.debug.xcconfig"; path = "Target Support Files/Pods-ChannelViewer/Pods-ChannelViewer.debug.xcconfig"; sourceTree = "<group>"; };
@@ -96,6 +94,7 @@
 				B59098E325B85B29003D5323 /* ChannelViewer.entitlements */,
 				B59097AE25B5C885003D5323 /* AppDelegate.swift */,
 				B59097DB25B5D5CB003D5323 /* ViewController.swift */,
+				B5F704FA25D6ACDC00CD4504 /* Deeplink */,
 				B59097E425B5D70E003D5323 /* Phenix */,
 				B59097C625B5CA03003D5323 /* Resources */,
 				B59097C325B5C99C003D5323 /* Supporting Files */,
@@ -134,20 +133,10 @@
 			children = (
 				B59097E525B5D72F003D5323 /* PhenixConfiguration.swift */,
 				B5A0B8EE25C00345004E1C6D /* PhenixRequestStatusLocalized.swift */,
-				B59097E925B5DA15003D5323 /* Deeplink */,
+				B5F704F725D6AC2100CD4504 /* ValidationProvider.swift */,
 				B590983425B7356E003D5323 /* Viewer */,
 			);
 			path = Phenix;
-			sourceTree = "<group>";
-		};
-		B59097E925B5DA15003D5323 /* Deeplink */ = {
-			isa = PBXGroup;
-			children = (
-				B59097EC25B5DA43003D5323 /* DeeplinkModel.swift */,
-				B59097EA25B5DA43003D5323 /* DeeplinkModelProvider.swift */,
-				B59097EB25B5DA43003D5323 /* DeeplinkService.swift */,
-			);
-			path = Deeplink;
 			sourceTree = "<group>";
 		};
 		B590983425B7356E003D5323 /* Viewer */ = {
@@ -157,6 +146,14 @@
 				B590982825B72C36003D5323 /* PhenixChannelViewerDelegate.swift */,
 			);
 			path = Viewer;
+			sourceTree = "<group>";
+		};
+		B5F704FA25D6ACDC00CD4504 /* Deeplink */ = {
+			isa = PBXGroup;
+			children = (
+				B5F704FB25D6ACEF00CD4504 /* PhenixDeeplinkModel.swift */,
+			);
+			path = Deeplink;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -294,14 +291,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				B59097AF25B5C885003D5323 /* AppDelegate.swift in Sources */,
-				B59097EF25B5DA43003D5323 /* DeeplinkModel.swift in Sources */,
 				B5A0B8EF25C00346004E1C6D /* PhenixRequestStatusLocalized.swift in Sources */,
-				B59097EE25B5DA43003D5323 /* DeeplinkService.swift in Sources */,
 				B590982925B72C36003D5323 /* PhenixChannelViewerDelegate.swift in Sources */,
-				B59097ED25B5DA43003D5323 /* DeeplinkModelProvider.swift in Sources */,
+				B5F704FC25D6ACEF00CD4504 /* PhenixDeeplinkModel.swift in Sources */,
 				B59097DC25B5D5CB003D5323 /* ViewController.swift in Sources */,
 				B59097E625B5D72F003D5323 /* PhenixConfiguration.swift in Sources */,
 				B590982525B71BDC003D5323 /* PhenixChannelViewer.swift in Sources */,
+				B5F704F825D6AC2100CD4504 /* ValidationProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

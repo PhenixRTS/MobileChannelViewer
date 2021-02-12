@@ -38,7 +38,6 @@
 		B51D86382521CA18005CE7B7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B51D863B2521CA18005CE7B7 /* PhenixTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhenixTextView.swift; sourceTree = "<group>"; };
 		B583231C2521BB8E00FF368F /* PhenixClosedCaptions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhenixClosedCaptions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B583235E2521BC1700FF368F /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		B586C8AC25C81A8E00ED5757 /* PhenixWindowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhenixWindowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -117,7 +116,6 @@
 		B58323122521BB8E00FF368F = {
 			isa = PBXGroup;
 			children = (
-				B583235E2521BC1700FF368F /* README.md */,
 				B51D862A2521CA18005CE7B7 /* Source */,
 				B583231D2521BB8E00FF368F /* Products */,
 				2FDF711A37A38737D3FFD188 /* Frameworks */,
@@ -371,6 +369,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.phenixrts.suite.closed-captions";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -398,6 +397,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.phenixrts.suite.closed-captions";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;

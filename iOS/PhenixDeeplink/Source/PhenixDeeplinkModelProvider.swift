@@ -4,6 +4,6 @@
 
 import Foundation
 
-public protocol DeeplinkModelProvider {
+public protocol PhenixDeeplinkModelProvider {
     init?(components: URLComponents)
 }

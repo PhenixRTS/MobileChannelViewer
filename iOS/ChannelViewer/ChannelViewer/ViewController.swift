@@ -2,8 +2,8 @@
 //  Copyright 2021 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
 //
 
-import PhenixDebug
 import PhenixClosedCaptions
+import PhenixDebug
 import PhenixSdk
 import UIKit
 
@@ -29,31 +29,18 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         offlineView.backgroundColor = UIColor(patternImage: UIImage(named: "OfflineNoise")!)
 
-        if PhenixConfiguration.backendUri == nil && PhenixConfiguration.edgeToken == nil {
+        // Validate configuration
+        do {
+            try ValidationProvider.validate(
+                backend: PhenixConfiguration.backendUri,
+                edgeToken: PhenixConfiguration.edgeToken,
+                channelAlias: channelAlias
+            )
+        } catch {
             DispatchQueue.main.async {
                 AppDelegate.terminate(
-                    afterDisplayingAlertWithTitle: "Incorrect configuration.",
-                    message: "No configuration provided."
-                )
-            }
-            return
-        }
-
-        if PhenixConfiguration.backendUri != nil && PhenixConfiguration.edgeToken != nil {
-            DispatchQueue.main.async {
-                AppDelegate.terminate(
-                    afterDisplayingAlertWithTitle: "Incorrect configuration.",
-                    message: "You must provide EdgeToken or the backend url, both cannot be simultaneously provided."
-                )
-            }
-            return
-        }
-
-        if PhenixConfiguration.edgeToken == nil && channelAlias == nil {
-            DispatchQueue.main.async {
-                AppDelegate.terminate(
-                    afterDisplayingAlertWithTitle: "Incorrect configuration.",
-                    message: "You must provide the channel alias."
+                    afterDisplayingAlertWithTitle: "Incorrect configuration",
+                    message: error.localizedDescription
                 )
             }
             return

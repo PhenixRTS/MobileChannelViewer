@@ -7,27 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B577F0FA25C3EB0400F59DD2 /* PhenixDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = B577F0F825C3EB0400F59DD2 /* PhenixDebug.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B577F10225C3EB7900F59DD2 /* PhenixDebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B577F10125C3EB7900F59DD2 /* PhenixDebugViewController.swift */; };
-		B577F10525C3EC5300F59DD2 /* PhenixDebugViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B577F10425C3EC5300F59DD2 /* PhenixDebugViewModel.swift */; };
-		B577F10825C3ECD800F59DD2 /* PhenixFrameworkInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B577F10725C3ECD700F59DD2 /* PhenixFrameworkInformation.swift */; };
-		B577F10D25C3ED4500F59DD2 /* Bundle+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B577F10C25C3ED4500F59DD2 /* Bundle+Extension.swift */; };
-		B577F11025C3EDE200F59DD2 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B577F10F25C3EDE200F59DD2 /* UIApplication+Extension.swift */; };
+		B586C8FF25C9633800ED5757 /* PhenixDeeplink.h in Headers */ = {isa = PBXBuildFile; fileRef = B586C8FD25C9633800ED5757 /* PhenixDeeplink.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B586C90925C9635F00ED5757 /* PhenixDeeplinkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B586C90625C9635F00ED5757 /* PhenixDeeplinkService.swift */; };
+		B586C90B25C9635F00ED5757 /* PhenixDeeplinkModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B586C90825C9635F00ED5757 /* PhenixDeeplinkModelProvider.swift */; };
+		B5BED78F25C964A300B734F0 /* PhenixDeeplinkService+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BED78E25C964A300B734F0 /* PhenixDeeplinkService+Factory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B577F0F525C3EB0400F59DD2 /* PhenixDebug.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhenixDebug.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B577F0F825C3EB0400F59DD2 /* PhenixDebug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhenixDebug.h; sourceTree = "<group>"; };
-		B577F0F925C3EB0400F59DD2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B577F10125C3EB7900F59DD2 /* PhenixDebugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixDebugViewController.swift; sourceTree = "<group>"; };
-		B577F10425C3EC5300F59DD2 /* PhenixDebugViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixDebugViewModel.swift; sourceTree = "<group>"; };
-		B577F10725C3ECD700F59DD2 /* PhenixFrameworkInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixFrameworkInformation.swift; sourceTree = "<group>"; };
-		B577F10C25C3ED4500F59DD2 /* Bundle+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extension.swift"; sourceTree = "<group>"; };
-		B577F10F25C3EDE200F59DD2 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
+		B586C8FA25C9633800ED5757 /* PhenixDeeplink.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhenixDeeplink.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B586C8FD25C9633800ED5757 /* PhenixDeeplink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhenixDeeplink.h; sourceTree = "<group>"; };
+		B586C8FE25C9633800ED5757 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B586C90625C9635F00ED5757 /* PhenixDeeplinkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhenixDeeplinkService.swift; sourceTree = "<group>"; };
+		B586C90825C9635F00ED5757 /* PhenixDeeplinkModelProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhenixDeeplinkModelProvider.swift; sourceTree = "<group>"; };
+		B5BED78E25C964A300B734F0 /* PhenixDeeplinkService+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhenixDeeplinkService+Factory.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		B577F0F225C3EB0400F59DD2 /* Frameworks */ = {
+		B586C8F725C9633800ED5757 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -37,100 +33,90 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B577F0EB25C3EB0400F59DD2 = {
+		B586C8F025C9633800ED5757 = {
 			isa = PBXGroup;
 			children = (
-				B577F0F725C3EB0400F59DD2 /* Source */,
-				B577F0F625C3EB0400F59DD2 /* Products */,
+				B586C8FC25C9633800ED5757 /* Source */,
+				B586C8FB25C9633800ED5757 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		B577F0F625C3EB0400F59DD2 /* Products */ = {
+		B586C8FB25C9633800ED5757 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B577F0F525C3EB0400F59DD2 /* PhenixDebug.framework */,
+				B586C8FA25C9633800ED5757 /* PhenixDeeplink.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B577F0F725C3EB0400F59DD2 /* Source */ = {
+		B586C8FC25C9633800ED5757 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				B577F10125C3EB7900F59DD2 /* PhenixDebugViewController.swift */,
-				B577F10425C3EC5300F59DD2 /* PhenixDebugViewModel.swift */,
-				B577F10725C3ECD700F59DD2 /* PhenixFrameworkInformation.swift */,
-				B577F11325C3EF0000F59DD2 /* Supporting Files */,
-				B577F11525C3EF1B00F59DD2 /* Utils */,
+				B586C90825C9635F00ED5757 /* PhenixDeeplinkModelProvider.swift */,
+				B586C90625C9635F00ED5757 /* PhenixDeeplinkService.swift */,
+				B5BED78E25C964A300B734F0 /* PhenixDeeplinkService+Factory.swift */,
+				B5BED78C25C963CC00B734F0 /* Supporting Files */,
 			);
 			path = Source;
 			sourceTree = "<group>";
 		};
-		B577F11325C3EF0000F59DD2 /* Supporting Files */ = {
+		B5BED78C25C963CC00B734F0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				B577F0F825C3EB0400F59DD2 /* PhenixDebug.h */,
-				B577F0F925C3EB0400F59DD2 /* Info.plist */,
+				B586C8FD25C9633800ED5757 /* PhenixDeeplink.h */,
+				B586C8FE25C9633800ED5757 /* Info.plist */,
 			);
 			path = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		B577F11525C3EF1B00F59DD2 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				B577F10C25C3ED4500F59DD2 /* Bundle+Extension.swift */,
-				B577F10F25C3EDE200F59DD2 /* UIApplication+Extension.swift */,
-			);
-			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		B577F0F025C3EB0400F59DD2 /* Headers */ = {
+		B586C8F525C9633800ED5757 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B577F0FA25C3EB0400F59DD2 /* PhenixDebug.h in Headers */,
+				B586C8FF25C9633800ED5757 /* PhenixDeeplink.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		B577F0F425C3EB0400F59DD2 /* PhenixDebug */ = {
+		B586C8F925C9633800ED5757 /* PhenixDeeplink */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B577F0FD25C3EB0400F59DD2 /* Build configuration list for PBXNativeTarget "PhenixDebug" */;
+			buildConfigurationList = B586C90225C9633800ED5757 /* Build configuration list for PBXNativeTarget "PhenixDeeplink" */;
 			buildPhases = (
-				B577F0F025C3EB0400F59DD2 /* Headers */,
-				B577F0F125C3EB0400F59DD2 /* Sources */,
-				B577F0F225C3EB0400F59DD2 /* Frameworks */,
-				B577F0F325C3EB0400F59DD2 /* Resources */,
+				B586C8F525C9633800ED5757 /* Headers */,
+				B586C8F625C9633800ED5757 /* Sources */,
+				B586C8F725C9633800ED5757 /* Frameworks */,
+				B586C8F825C9633800ED5757 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = PhenixDebug;
-			productName = PhenixDebug;
-			productReference = B577F0F525C3EB0400F59DD2 /* PhenixDebug.framework */;
+			name = PhenixDeeplink;
+			productName = PhenixDeeplink;
+			productReference = B586C8FA25C9633800ED5757 /* PhenixDeeplink.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		B577F0EC25C3EB0400F59DD2 /* Project object */ = {
+		B586C8F125C9633800ED5757 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 1230;
-				ORGANIZATIONNAME = "Phenix Real Time Solutions, Inc";
+				ORGANIZATIONNAME = "Phenix Real Time Solutions, Inc.";
 				TargetAttributes = {
-					B577F0F425C3EB0400F59DD2 = {
+					B586C8F925C9633800ED5757 = {
 						CreatedOnToolsVersion = 12.3;
 						LastSwiftMigration = 1230;
 					};
 				};
 			};
-			buildConfigurationList = B577F0EF25C3EB0400F59DD2 /* Build configuration list for PBXProject "PhenixDebug" */;
+			buildConfigurationList = B586C8F425C9633800ED5757 /* Build configuration list for PBXProject "PhenixDeeplink" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -138,18 +124,18 @@
 				en,
 				Base,
 			);
-			mainGroup = B577F0EB25C3EB0400F59DD2;
-			productRefGroup = B577F0F625C3EB0400F59DD2 /* Products */;
+			mainGroup = B586C8F025C9633800ED5757;
+			productRefGroup = B586C8FB25C9633800ED5757 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B577F0F425C3EB0400F59DD2 /* PhenixDebug */,
+				B586C8F925C9633800ED5757 /* PhenixDeeplink */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		B577F0F325C3EB0400F59DD2 /* Resources */ = {
+		B586C8F825C9633800ED5757 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -159,22 +145,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		B577F0F125C3EB0400F59DD2 /* Sources */ = {
+		B586C8F625C9633800ED5757 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B577F10525C3EC5300F59DD2 /* PhenixDebugViewModel.swift in Sources */,
-				B577F10825C3ECD800F59DD2 /* PhenixFrameworkInformation.swift in Sources */,
-				B577F10225C3EB7900F59DD2 /* PhenixDebugViewController.swift in Sources */,
-				B577F11025C3EDE200F59DD2 /* UIApplication+Extension.swift in Sources */,
-				B577F10D25C3ED4500F59DD2 /* Bundle+Extension.swift in Sources */,
+				B5BED78F25C964A300B734F0 /* PhenixDeeplinkService+Factory.swift in Sources */,
+				B586C90925C9635F00ED5757 /* PhenixDeeplinkService.swift in Sources */,
+				B586C90B25C9635F00ED5757 /* PhenixDeeplinkModelProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		B577F0FB25C3EB0400F59DD2 /* Debug */ = {
+		B586C90025C9633800ED5757 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -238,7 +222,7 @@
 			};
 			name = Debug;
 		};
-		B577F0FC25C3EB0400F59DD2 /* Release */ = {
+		B586C90125C9633800ED5757 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -296,7 +280,7 @@
 			};
 			name = Release;
 		};
-		B577F0FE25C3EB0400F59DD2 /* Debug */ = {
+		B586C90325C9633800ED5757 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
@@ -315,7 +299,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.phenixrts.suite.debug;
+				PRODUCT_BUNDLE_IDENTIFIER = com.phenixrts.suite.deeplink;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -324,7 +308,7 @@
 			};
 			name = Debug;
 		};
-		B577F0FF25C3EB0400F59DD2 /* Release */ = {
+		B586C90425C9633800ED5757 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
@@ -343,7 +327,7 @@
 					"@loader_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.phenixrts.suite.debug;
+				PRODUCT_BUNDLE_IDENTIFIER = com.phenixrts.suite.deeplink;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -354,25 +338,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B577F0EF25C3EB0400F59DD2 /* Build configuration list for PBXProject "PhenixDebug" */ = {
+		B586C8F425C9633800ED5757 /* Build configuration list for PBXProject "PhenixDeeplink" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B577F0FB25C3EB0400F59DD2 /* Debug */,
-				B577F0FC25C3EB0400F59DD2 /* Release */,
+				B586C90025C9633800ED5757 /* Debug */,
+				B586C90125C9633800ED5757 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B577F0FD25C3EB0400F59DD2 /* Build configuration list for PBXNativeTarget "PhenixDebug" */ = {
+		B586C90225C9633800ED5757 /* Build configuration list for PBXNativeTarget "PhenixDeeplink" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B577F0FE25C3EB0400F59DD2 /* Debug */,
-				B577F0FF25C3EB0400F59DD2 /* Release */,
+				B586C90325C9633800ED5757 /* Debug */,
+				B586C90425C9633800ED5757 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = B577F0EC25C3EB0400F59DD2 /* Project object */;
+	rootObject = B586C8F125C9633800ED5757 /* Project object */;
 }

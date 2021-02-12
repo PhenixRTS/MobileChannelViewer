@@ -2,6 +2,7 @@
 //  Copyright 2021 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
 //
 
+import PhenixDeeplink
 import PhenixSdk
 import UIKit
 
@@ -37,11 +38,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         // Setup deeplink
-        if let deeplink = PhenixConfiguration.makeDeeplink(launchOptions) {
-            if let edgeToken = deeplink.edgeToken {
-                PhenixConfiguration.edgeToken = edgeToken
+        if let deeplink = PhenixDeeplinkService<PhenixDeeplinkModel>.makeDeeplink(launchOptions) {
+            if deeplink.edgeToken != nil {
                 // Clear the default backend uri.
                 PhenixConfiguration.backendUri = nil
+            }
+
+            if let edgeToken = deeplink.edgeToken {
+                PhenixConfiguration.edgeToken = edgeToken
             }
 
             if let backend = deeplink.backend {
@@ -63,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Deeplink handling
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        guard let deeplink = PhenixConfiguration.makeDeeplink(userActivity) else {
+        guard let deeplink = PhenixDeeplinkService<PhenixDeeplinkModel>.makeDeeplink(userActivity) else {
             return false
         }
 

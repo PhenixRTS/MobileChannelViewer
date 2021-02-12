@@ -64,7 +64,8 @@ public final class PhenixChannelViewer {
 
 // MARK: - PhenixChannelViewer.Error
 extension PhenixChannelViewer {
-    public struct Error: Swift.Error {
-        let reason: String
+    public struct Error: Swift.Error, LocalizedError {
+        public let reason: String
+        public var errorDescription: String? { reason }
     }
 }

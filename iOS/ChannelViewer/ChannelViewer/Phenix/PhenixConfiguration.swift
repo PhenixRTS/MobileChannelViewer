@@ -79,23 +79,4 @@ public enum PhenixConfiguration {
 
         return joinChannelOptions
     }
-
-    public static func makeDeeplink(_ launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> DeeplinkModel? {
-        guard let options = launchOptions?[.userActivityDictionary] as? [AnyHashable: Any] else { return nil }
-        guard let userActivity = options[UIApplication.LaunchOptionsKey.userActivityKey] as? NSUserActivity else { return nil }
-        return makeDeeplink(userActivity)
-    }
-
-    public static func makeDeeplink(_ userActivity: NSUserActivity) -> DeeplinkModel? {
-        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb else { return nil }
-        guard let url = userActivity.webpageURL else { return nil }
-
-        let service = DeeplinkService<DeeplinkModel>(url: url)
-        let deeplink = service?.decode()
-        return deeplink
-    }
-}
-
-private extension UIApplication.LaunchOptionsKey {
-    static let userActivityKey = "UIApplicationLaunchOptionsUserActivityKey"
 }
