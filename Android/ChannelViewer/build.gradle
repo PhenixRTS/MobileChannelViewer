@@ -4,12 +4,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.4.30-RC'
-    ext.lifecycle_version = '2.2.0'
+    ext.kotlin_version = '1.4.30'
+    ext.lifecycle_version = '2.3.0'
     ext.arch_version = '2.1.0'
+    ext.dagger_version = '2.32'
     ext.kotlinx_coroutines_version = '1.4.1'
-    ext.kotlinx_serialization_version = '1.0.0-RC'
-    ext.phenix_version = '2021.0.0'
+    ext.phenix_version = '2021.0.1'
 
     repositories {
         google()

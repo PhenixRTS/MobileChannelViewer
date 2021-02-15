@@ -10,46 +10,30 @@ import com.phenixrts.express.RoomExpressFactory
 import com.phenixrts.pcast.AspectRatioMode
 import com.phenixrts.pcast.RendererOptions
 import com.phenixrts.pcast.android.AndroidVideoRenderSurface
-import com.phenixrts.suite.phenixdeeplink.*
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import org.json.JSONObject
+import com.phenixrts.suite.phenixdeeplink.common.ChannelConfiguration
+import timber.log.Timber
 
-@Serializable
-data class ChannelExpressConfiguration(
-    @SerialName(QUERY_URI)
-    val uri: String? = null,
-    @SerialName(QUERY_BACKEND)
-    val backend: String? = null,
-    @SerialName(QUERY_EDGE_AUTH)
-    val edgeAuth: String? = null,
-    @SerialName(QUERY_CHANNEL_ALIAS)
-    val channelAlias: String? = null,
-    @SerialName(QUERY_MIME_TYPES)
-    private val rawMimeTypes: String? = null
-) {
-    val mimeTypes: List<String> = rawMimeTypes?.split(",") ?: listOf()
-}
-
-fun getChannelConfiguration(channelAlias: String, surface: AndroidVideoRenderSurface): JoinChannelOptions {
-    val joinRoomOptions = RoomExpressFactory.createJoinRoomOptionsBuilder()
+fun getChannelConfiguration(channelAlias: String, surface: AndroidVideoRenderSurface,
+                            channelConfig: ChannelConfiguration): JoinChannelOptions {
+    var joinRoomBuilder = RoomExpressFactory.createJoinRoomOptionsBuilder()
         .withRoomAlias(channelAlias)
-        .withCapabilities(arrayOf("real-time"))
-        .buildJoinRoomOptions()
-    val rendererOptions = RendererOptions()
-    rendererOptions.aspectRatioMode = AspectRatioMode.LETTERBOX
-    return ChannelExpressFactory
+    if (channelConfig.edgeToken.isNullOrBlank()) {
+        joinRoomBuilder = joinRoomBuilder.withCapabilities(arrayOf("real-time"))
+    }
+    val joinRoomOptions = joinRoomBuilder.buildJoinRoomOptions()
+    val rendererOptions = RendererOptions().apply {
+        aspectRatioMode = AspectRatioMode.LETTERBOX
+    }
+    var joinChannelBuilder = ChannelExpressFactory
         .createJoinChannelOptionsBuilder()
         .withJoinRoomOptions(joinRoomOptions)
         .withRenderer(surface)
         .withRendererOptions(rendererOptions)
-        .buildJoinChannelOptions()
-}
-
-fun HashMap<String, String>.asConfigurationModel(): ChannelExpressConfiguration? = try {
-    Json { ignoreUnknownKeys = true }.decodeFromString<ChannelExpressConfiguration>(JSONObject(this as Map<*, *>).toString())
-} catch (e: Exception) {
-    null
+    if (!channelConfig.edgeToken.isNullOrBlank()) {
+        Timber.d("Joining with edge token: ${channelConfig.edgeToken}")
+        joinChannelBuilder = joinChannelBuilder
+                .withStreamToken(channelConfig.edgeToken)
+                .withSkipRetryOnUnauthorized()
+    }
+    return joinChannelBuilder.buildJoinChannelOptions()
 }

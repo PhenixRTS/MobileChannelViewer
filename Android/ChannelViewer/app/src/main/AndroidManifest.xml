@@ -43,6 +43,14 @@
                     android:host="stg.phenixrts.com"
                     android:pathPrefix="/channel/"
                     android:scheme="https" />
+                <data
+                    android:host="pcast.phenixrts.com"
+                    android:pathPrefix="/channel/"
+                    android:scheme="https" />
+                <data
+                    android:host="pcast-stg.phenixrts.com"
+                    android:pathPrefix="/channel/"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
 

@@ -8,16 +8,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.phenixrts.suite.phenixdeeplink.cache.ConfigurationProvider
+import com.phenixrts.suite.phenixdeeplink.common.*
 import org.json.JSONObject
 import timber.log.Timber
-
-private const val QUERY_STAGING = "https://stg.phenixrts.com"
-private const val QUERY_CHANNEL = "#"
-const val QUERY_URI = "uri"
-const val QUERY_BACKEND = "backend"
-const val QUERY_EDGE_AUTH = "edgeauth"
-const val QUERY_MIME_TYPES = "mimetypes"
-const val QUERY_CHANNEL_ALIAS = "channelalias"
 
 abstract class DeepLinkActivity : AppCompatActivity() {
 
@@ -28,7 +21,9 @@ abstract class DeepLinkActivity : AppCompatActivity() {
     val configuration: HashMap<String, String> = hashMapOf(
         QUERY_URI to BuildConfig.PCAST_URL,
         QUERY_BACKEND to BuildConfig.BACKEND_URL,
-        QUERY_EDGE_AUTH to "",
+        QUERY_EDGE_TOKEN to "",
+        QUERY_AUTH_TOKEN to "",
+        QUERY_PUBLISH_TOKEN to "",
         QUERY_MIME_TYPES to BuildConfig.MIME_TYPES,
         QUERY_CHANNEL_ALIAS to ""
     )
@@ -61,7 +56,7 @@ abstract class DeepLinkActivity : AppCompatActivity() {
             }
         } else {
             intent.data?.let { deepLink ->
-                val isStagingUri = deepLink.toString().startsWith(QUERY_STAGING)
+                val isStagingUri = deepLink.toString().contains(QUERY_STAGING)
                 Timber.d("Loading configuration from deep link: $deepLink")
                 deepLink.toString().takeIf { it.contains(QUERY_CHANNEL) }?.substringAfterLast(QUERY_CHANNEL)?.run {
                     configuration[QUERY_CHANNEL_ALIAS] = this

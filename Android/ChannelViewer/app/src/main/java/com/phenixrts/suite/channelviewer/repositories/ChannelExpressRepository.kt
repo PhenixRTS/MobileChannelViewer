@@ -16,6 +16,7 @@ import com.phenixrts.suite.channelviewer.common.*
 import com.phenixrts.suite.channelviewer.common.enums.ConnectionStatus
 import com.phenixrts.suite.channelviewer.common.enums.ExpressError
 import com.phenixrts.suite.phenixcommon.common.launchMain
+import com.phenixrts.suite.phenixdeeplink.common.ChannelConfiguration
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -26,7 +27,7 @@ private const val REINITIALIZATION_DELAY = 1000L
 
 class ChannelExpressRepository(private val context: Application) {
 
-    private var expressConfiguration = ChannelExpressConfiguration()
+    private var expressConfiguration = ChannelConfiguration()
     private var channelExpress: ChannelExpress? = null
     var roomExpress: RoomExpress? = null
     val onChannelExpressError = MutableLiveData<ExpressError>()
@@ -34,14 +35,13 @@ class ChannelExpressRepository(private val context: Application) {
     val mimeTypes = MutableLiveData<List<String>>()
     var roomService: RoomService? = null
 
-    private fun hasConfigurationChanged(configuration: ChannelExpressConfiguration): Boolean = expressConfiguration != configuration
+    private fun hasConfigurationChanged(configuration: ChannelConfiguration): Boolean = expressConfiguration != configuration
 
     private fun initializeChannelExpress() {
         Timber.d("Creating Channel Express: $expressConfiguration")
         AndroidContext.setContext(context)
         var pcastBuilder = PCastExpressFactory.createPCastExpressOptionsBuilder()
             .withMinimumConsoleLogLevel("info")
-            .withBackendUri(expressConfiguration.backend)
             .withPCastUri(expressConfiguration.uri)
             .withUnrecoverableErrorCallback { status: RequestStatus?, description: String ->
                 launchMain {
@@ -49,8 +49,10 @@ class ChannelExpressRepository(private val context: Application) {
                     onChannelExpressError.value = ExpressError.UNRECOVERABLE_ERROR
                 }
             }
-        if (expressConfiguration.edgeAuth?.isNotBlank() == true) {
-            pcastBuilder = pcastBuilder.withAuthenticationToken(expressConfiguration.edgeAuth)
+        pcastBuilder = if (expressConfiguration.edgeToken?.isNotBlank() == true) {
+            pcastBuilder.withAuthenticationToken(expressConfiguration.edgeToken)
+        } else {
+            pcastBuilder.withBackendUri(expressConfiguration.backend)
         }
         val roomExpressOptions = RoomExpressFactory.createRoomExpressOptionsBuilder()
             .withPCastExpressOptions(pcastBuilder.buildPCastExpressOptions())
@@ -70,7 +72,7 @@ class ChannelExpressRepository(private val context: Application) {
         }
     }
 
-    suspend fun setupChannelExpress(configuration: ChannelExpressConfiguration) {
+    suspend fun setupChannelExpress(configuration: ChannelConfiguration) {
         if (hasConfigurationChanged(configuration)) {
             Timber.d("Channel Express configuration has changed: $configuration")
             expressConfiguration = configuration
@@ -96,7 +98,7 @@ class ChannelExpressRepository(private val context: Application) {
         launchMain {
             Timber.d("Joining room: $channelAlias")
             channelExpress?.let { express ->
-                express.joinChannel(getChannelConfiguration(channelAlias, surface)).asFlow().collect { status ->
+                express.joinChannel(getChannelConfiguration(channelAlias, surface, expressConfiguration)).asFlow().collect { status ->
                     launchMain {
                         Timber.d("Channel status: $status")
                         onChannelState.value = status

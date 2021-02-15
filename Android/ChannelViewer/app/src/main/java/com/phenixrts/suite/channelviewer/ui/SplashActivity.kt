@@ -19,6 +19,7 @@ import com.phenixrts.suite.channelviewer.ui.viewmodel.ChannelViewModel
 import com.phenixrts.suite.phenixcommon.common.launchMain
 import com.phenixrts.suite.phenixdeeplink.DeepLinkActivity
 import com.phenixrts.suite.phenixdeeplink.DeepLinkStatus
+import com.phenixrts.suite.phenixdeeplink.common.asConfigurationModel
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -76,7 +77,7 @@ class SplashActivity : DeepLinkActivity() {
         channelExpress.setupChannelExpress(config)
         channelExpress.waitForPCast()
         Timber.d("Joining channel: ${config.channelAlias}")
-        val status = viewModel.joinChannel(config.channelAlias)
+        val status = viewModel.joinChannel(config.channelAlias!!)
         timeoutHandler.removeCallbacks(timeoutRunnable)
         if (status == ConnectionStatus.CONNECTED) {
             Timber.d("Navigating to Landing Screen")
