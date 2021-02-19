@@ -12,8 +12,8 @@ public class PhenixDebugViewController: UIViewController {
 
     private let viewModel: PhenixDebugViewModel
 
-    public init(roomExpress: PhenixRoomExpress) {
-        self.viewModel = PhenixDebugViewModel(roomExpress: roomExpress)
+    public init(viewModel: PhenixDebugViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 

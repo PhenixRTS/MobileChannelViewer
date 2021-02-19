@@ -104,8 +104,9 @@ class ViewController: UIViewController {
     ...
 
     @objc func surfaceViewTappedMultipleTimes() {
-        let roomExpress: PhenixRoomExpress = ...  // previously obtained
-        let vc = PhenixDebugViewController(roomExpress: roomExpress)
+        let pcast: PhenixPCast = ...  // previously obtained
+        let viewModel = PhenixDebugViewModel(pcast: pcast)
+        let vc = PhenixDebugViewController(viewModel: viewModel)
         present(vc, animated: true)
     }
 }

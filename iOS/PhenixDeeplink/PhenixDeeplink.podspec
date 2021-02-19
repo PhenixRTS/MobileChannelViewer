@@ -3,7 +3,7 @@ Pod::Spec.new do |spec|
 
   spec.name             = 'PhenixDeeplink'
   spec.homepage         = "https://phenixrts.com"
-  spec.summary          = 'A short description of PhenixDebug.'
+  spec.summary          = 'A short description of PhenixDeeplink.'
   spec.description      = <<-DESC
   Support framework providing necessary functionality to parse deep-links.
                        DESC
@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
                         LICENSE
                         }
   spec.author           = "Phenix Real Time Solutions, Inc."
-  spec.source           = { :git => '{LINK TO CLOSED CAPTIONS GIT REPO}', :tag => spec.version.to_s }
+  spec.source           = { :git => '{LINK TO PhenixDeeplink GIT REPO}', :tag => spec.version.to_s }
   spec.ios.deployment_target = '12.0'
 
   spec.source_files     = 'Source/*.swift'

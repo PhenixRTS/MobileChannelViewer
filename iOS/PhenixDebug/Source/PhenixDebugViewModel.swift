@@ -5,19 +5,17 @@
 import Foundation
 import PhenixSdk
 
-struct PhenixDebugViewModel {
-    private let roomExpress: PhenixRoomExpress
-    let frameworkInformation: PhenixFrameworkInformation
+public struct PhenixDebugViewModel {
+    private let pcast: PhenixPCast
+    internal let frameworkInformation: PhenixFrameworkInformation
 
-    init(roomExpress: PhenixRoomExpress) {
-        self.roomExpress = roomExpress
+    public init(pcast: PhenixPCast) {
+        self.pcast = pcast
         self.frameworkInformation = PhenixFrameworkInformation()
     }
 
-    func collectPCastLogs(then handle: @escaping (String?) -> Void) {
-        let pcast = roomExpress.pcastExpress.pcast
-
-        pcast?.collectLogMessages { _, status, messages in
+    public func collectPCastLogs(then handle: @escaping (String?) -> Void) {
+        pcast.collectLogMessages { _, status, messages in
             guard let messages = messages, status == .ok else {
                 handle(nil)
                 return
