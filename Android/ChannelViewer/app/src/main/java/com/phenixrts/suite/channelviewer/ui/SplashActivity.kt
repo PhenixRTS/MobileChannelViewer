@@ -1,9 +1,10 @@
 /*
- * Copyright 2020 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+ * Copyright 2021 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
  */
 
 package com.phenixrts.suite.channelviewer.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -11,27 +12,32 @@ import android.os.Looper
 import com.phenixrts.suite.channelviewer.ChannelViewerApplication
 import com.phenixrts.suite.channelviewer.R
 import com.phenixrts.suite.channelviewer.common.*
-import com.phenixrts.suite.channelviewer.common.enums.ConnectionStatus
 import com.phenixrts.suite.channelviewer.common.enums.ExpressError
 import com.phenixrts.suite.channelviewer.databinding.ActivitySplashBinding
-import com.phenixrts.suite.channelviewer.repositories.ChannelExpressRepository
 import com.phenixrts.suite.channelviewer.ui.viewmodel.ChannelViewModel
-import com.phenixrts.suite.phenixcommon.common.launchMain
-import com.phenixrts.suite.phenixdeeplink.DeepLinkActivity
-import com.phenixrts.suite.phenixdeeplink.DeepLinkStatus
-import com.phenixrts.suite.phenixdeeplink.common.asConfigurationModel
+import com.phenixrts.suite.phenixcore.PhenixCore
+import com.phenixrts.suite.phenixcore.common.launchMain
+import com.phenixrts.suite.phenixcore.deeplink.DeepLinkActivity
+import com.phenixrts.suite.phenixcore.repositories.models.PhenixError
+import com.phenixrts.suite.phenixcore.repositories.models.PhenixEvent
+import com.phenixrts.suite.phenixcore.deeplink.models.DeepLinkStatus
+import com.phenixrts.suite.phenixcore.deeplink.models.PhenixDeepLinkConfiguration
+import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import javax.inject.Inject
 
 private const val TIMEOUT_DELAY = 10000L
 
+@SuppressLint("CustomSplashScreen")
 class SplashActivity : DeepLinkActivity() {
 
-    @Inject lateinit var channelExpress: ChannelExpressRepository
-    private lateinit var binding: ActivitySplashBinding
+    @Inject lateinit var phenixCore: PhenixCore
 
-    private val viewModel: ChannelViewModel by lazyViewModel({ application as ChannelViewerApplication }) {
-        ChannelViewModel(channelExpress)
+    private lateinit var binding: ActivitySplashBinding
+    private var channelToJoin = ""
+
+    private val viewModel by lazyViewModel({ application as ChannelViewerApplication }) {
+        ChannelViewModel(phenixCore)
     }
 
     private val timeoutHandler = Handler(Looper.getMainLooper())
@@ -41,6 +47,8 @@ class SplashActivity : DeepLinkActivity() {
         }
     }
 
+    override fun isAlreadyInitialized() = phenixCore.isInitialized
+
     override val additionalConfiguration: HashMap<String, String>
         get() = hashMapOf()
 
@@ -48,41 +56,57 @@ class SplashActivity : DeepLinkActivity() {
         ChannelViewerApplication.component.inject(this)
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        channelExpress.onChannelExpressError.observe(this, { error ->
-            Timber.d("Room express failed")
-            showErrorDialog(error)
-        })
-        Timber.d("Splash activity created")
+        launchMain {
+            phenixCore.onError.collect { error ->
+                if (error == PhenixError.FAILED_TO_INITIALIZE) {
+                    phenixCore.consumeLastError()
+                    Timber.d("Splash: Failed to initialize Phenix Core: $error")
+                    showErrorDialog(error.message)
+                }
+            }
+        }
+        launchMain {
+            phenixCore.onEvent.collect { event ->
+                Timber.d("Splash: Phenix core event: $event")
+                if (event == PhenixEvent.PHENIX_CORE_INITIALIZED) {
+                    phenixCore.consumeLastEvent()
+                    Timber.d("Joining channel: $channelToJoin")
+                    viewModel.joinChannel(channelToJoin)
+                    showLandingScreen()
+                }
+            }
+        }
         super.onCreate(savedInstanceState)
     }
 
-    override fun onDeepLinkQueried(status: DeepLinkStatus) {
+    override fun onDeepLinkQueried(
+        status: DeepLinkStatus,
+        configuration: PhenixDeepLinkConfiguration,
+        rawConfiguration: Map<String, String>,
+        deepLink: String
+    ) {
         launchMain {
             when (status) {
-                DeepLinkStatus.RELOAD -> showErrorDialog(ExpressError.CONFIGURATION_CHANGED_ERROR)
-                DeepLinkStatus.READY -> showLandingScreen()
+                DeepLinkStatus.RELOAD -> showErrorDialog(getErrorMessage(ExpressError.CONFIGURATION_CHANGED_ERROR))
+                DeepLinkStatus.READY -> initializePhenixCore(configuration)
             }
         }
     }
 
-    override fun isAlreadyInitialized(): Boolean = channelExpress.isRoomExpressInitialized()
-
-    private suspend fun showLandingScreen() {
-        val config = configuration.asConfigurationModel()
-        if (config == null || config.channelAlias.isNullOrBlank()) {
-            showErrorDialog(ExpressError.DEEP_LINK_ERROR)
+    private fun initializePhenixCore(configuration: PhenixDeepLinkConfiguration) {
+        if (configuration.channels.isEmpty()) {
+            showErrorDialog(getErrorMessage(ExpressError.DEEP_LINK_ERROR))
             return
         }
+        channelToJoin = configuration.channels.first()
         timeoutHandler.postDelayed(timeoutRunnable, TIMEOUT_DELAY)
-        channelExpress.setupChannelExpress(config)
-        channelExpress.waitForPCast()
-        Timber.d("Joining channel: ${config.channelAlias}")
-        val status = viewModel.joinChannel(config.channelAlias!!)
+        phenixCore.init(configuration)
+    }
+
+    private fun showLandingScreen() {
         timeoutHandler.removeCallbacks(timeoutRunnable)
-        if (status == ConnectionStatus.CONNECTED) {
-            Timber.d("Navigating to Landing Screen")
-            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-            finish()
-        }
+        Timber.d("Navigating to Landing Screen")
+        startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+        finish()
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+ * Copyright 2021 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
  */
 
 package com.phenixrts.suite.channelviewer.common
@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.phenixrts.suite.channelviewer.R
 import com.phenixrts.suite.channelviewer.common.enums.ExpressError
-import com.phenixrts.suite.phenixcommon.common.launchMain
+import com.phenixrts.suite.phenixcore.common.launchMain
 import kotlin.system.exitProcess
 
 private fun AppCompatActivity.closeApp() {
@@ -19,7 +19,7 @@ private fun AppCompatActivity.closeApp() {
     exitProcess(0)
 }
 
-private fun AppCompatActivity.getErrorMessage(error: ExpressError): String {
+fun AppCompatActivity.getErrorMessage(error: ExpressError): String {
     return when (error) {
         ExpressError.DEEP_LINK_ERROR -> getString(R.string.err_invalid_deep_link)
         ExpressError.UNRECOVERABLE_ERROR -> getString(R.string.err_unrecoverable_error)
@@ -31,10 +31,10 @@ fun View.showSnackBar(message: String) = launchMain {
     Snackbar.make(this@showSnackBar, message, Snackbar.LENGTH_INDEFINITE).show()
 }
 
-fun AppCompatActivity.showErrorDialog(error: ExpressError) {
+fun AppCompatActivity.showErrorDialog(error: String) {
     AlertDialog.Builder(this, R.style.AlertDialogTheme)
         .setCancelable(false)
-        .setMessage(getErrorMessage(error))
+        .setMessage(error)
         .setPositiveButton(getString(R.string.popup_ok)) { dialog, _ ->
             dialog.dismiss()
             closeApp()
