@@ -6,7 +6,7 @@ use_frameworks!
 inhibit_all_warnings!
 
 target 'ChannelViewer' do
-  pod 'PhenixSdk', '2021.0.1-beta'
+  pod 'PhenixSdk', '2021.0.15'
   pod 'PhenixDebug', :path => '../PhenixDebug'
   pod 'PhenixDeeplink', :path => '../PhenixDeeplink'
   pod 'PhenixClosedCaptions', :path => '../PhenixClosedCaptions'
