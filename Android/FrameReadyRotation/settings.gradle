@@ -1,0 +1,7 @@
+/*
+ * Copyright 2021 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+ */
+
+rootProject.name = "Frame Ready Rotation"
+include ':app'
+include ':phenixcore'
