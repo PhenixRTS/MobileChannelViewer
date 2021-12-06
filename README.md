@@ -1,4 +1,8 @@
-# MobileChannelViewerPrivate
+# MobileChannelViewer
+
+* [Android](https://github.com/PhenixRTS/MobileChannelViewer/tree/master/Android/ChannelViewer)
+* [iOS](https://github.com/PhenixRTS/MobileChannelViewer/tree/master/iOS)
+* [React Native](https://github.com/PhenixRTS/MobileChannelViewer/tree/master/ReactNative/ChannelViewer)
 
 ## Deep links
 The app is usable only through a deep link.

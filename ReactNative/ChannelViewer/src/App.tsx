@@ -1,8 +1,5 @@
-/*
+/**
  * Copyright 2021 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All Rights Reserved.
- *
- * By using this code you agree to the Phenix Terms of Service found online here:
- * http://phenixrts.com/terms-of-service.html
  */
 
 import React, {useState, useEffect} from 'react';
@@ -36,7 +33,7 @@ const sdk = require('phenix-web-sdk/dist/phenix-web-sdk-react-native');
 
 sdk.RTC.shim(); // Required
 
-const TOKEN = 'DIGEST:eyJhcHBsaWNhdGlvbklkIjoicGhlbml4cnRzLmNvbS15dXJpaS5idXRlbmtvIiwiZGlnZXN0IjoieHBzTzNkNDk0VnlhaFMrSTE4ajFoWU1jL2xXVGlVYlhZalBvUmcrTksvZDQ5WHUwUG4vVkRaTDgzL0RvY1hCS2dscWVROFhGYjRVZzNGSE5QR1NFa1E9PSIsInRva2VuIjoie1wiZXhwaXJlc1wiOjE2Njk3MzA4NTAyMzcsXCJ1cmlcIjpcImh0dHBzOi8vcGNhc3Qtc3RnLXVzLWNlbnRyYWwucGhlbml4cnRzLmNvbVwiLFwicmVxdWlyZWRUYWdcIjpcImNoYW5uZWxJZDpldXJvcGUtd2VzdCNwaGVuaXhydHMuY29tLXl1cmlpLmJ1dGVua28jeXVyaWlCdXRlbmtvLkRwcnVwMzlDTnNaQ1wifSJ9';
+const TOKEN = '';
 
 const App = () => {
   const webrtcSupported = sdk.RTC.webrtcSupported;
