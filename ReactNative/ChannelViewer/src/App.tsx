@@ -33,7 +33,7 @@ const sdk = require('phenix-web-sdk/dist/phenix-web-sdk-react-native');
 
 sdk.RTC.shim(); // Required
 
-const TOKEN = '';
+const TOKEN = 'DIGEST:eyJhcHBsaWNhdGlvbklkIjoicGhlbml4cnRzLmNvbS15dXJpaS5idXRlbmtvIiwiZGlnZXN0IjoiU0xrU0FsZjNyRDhQbjdZSlcwQml5cXkzNnRJaTArbDJ6Vlg0UitWdm13bHVncEd5SDVUY3ROOVdLZDIyUE8xaER2RXY4MXpJU0RIUDhIZGFDZWo5MVE9PSIsInRva2VuIjoie1wiZXhwaXJlc1wiOjE2NzEwMzI2NDQ5ODAsXCJ1cmlcIjpcImh0dHBzOi8vcGNhc3Qtc3RnLXVzLWNlbnRyYWwucGhlbml4cnRzLmNvbVwiLFwicmVxdWlyZWRUYWdcIjpcImNoYW5uZWxJZDpldXJvcGUtd2VzdCNwaGVuaXhydHMuY29tLXl1cmlpLmJ1dGVua28jeXVyaWlCdXRlbmtvLkRwcnVwMzlDTnNaQ1wifSJ9';
 
 const App = () => {
   const webrtcSupported = sdk.RTC.webrtcSupported;

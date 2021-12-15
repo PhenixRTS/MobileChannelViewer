@@ -11,7 +11,7 @@
     "lint-fix": "eslint --fix '*.{ts,tsx,js}'"
   },
   "dependencies": {
-    "phenix-web-sdk": "2021.2.0",
+    "phenix-web-sdk": "2021.2.1",
     "react": "17.0.2",
     "react-native": "0.65.1",
     "react-native-svg": "12.1.1",
