@@ -7,15 +7,15 @@ package com.phenixrts.suite.channelviewer.ui.viewmodel
 import android.view.SurfaceView
 import androidx.lifecycle.ViewModel
 import com.phenixrts.suite.channelviewer.BuildConfig
+import com.phenixrts.suite.phenixclosedcaptions.PhenixClosedCaptionView
 import com.phenixrts.suite.phenixcore.PhenixCore
-import com.phenixrts.suite.phenixcore.closedcaptions.PhenixClosedCaptionView
 import com.phenixrts.suite.phenixcore.common.launchMain
-import com.phenixrts.suite.phenixcore.debugmenu.DebugMenu
 import com.phenixrts.suite.phenixcore.repositories.models.PhenixChannelConfiguration
 import com.phenixrts.suite.phenixcore.repositories.models.PhenixChannelState
+import com.phenixrts.suite.phenixdebugmenu.DebugMenu
+import com.phenixrts.suite.phenixdebugmenu.models.DebugEvent
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.collect
 
 class ChannelViewModel(private val phenixCore: PhenixCore) : ViewModel() {
 
@@ -44,10 +44,15 @@ class ChannelViewModel(private val phenixCore: PhenixCore) : ViewModel() {
     }
 
     fun subscribeToClosedCaptions(closedCaptionView: PhenixClosedCaptionView) {
-        phenixCore.subscribeToCC(joinedChannel, closedCaptionView)
+        closedCaptionView.subscribeToCC(phenixCore, joinedChannel)
     }
 
-    fun observeDebugMenu(debugMenu: DebugMenu) {
-        phenixCore.observeDebugMenu(debugMenu, "${BuildConfig.APPLICATION_ID}.provider")
+    fun observeDebugMenu(debugMenu: DebugMenu, onError: (String) -> Unit, onEvent: (DebugEvent) -> Unit) {
+        debugMenu.observeDebugMenu(
+            phenixCore,
+            "${BuildConfig.APPLICATION_ID}.provider",
+            onError = onError,
+            onEvent = onEvent
+        )
     }
 }

@@ -7,20 +7,20 @@ package com.phenixrts.suite.channelviewer.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.google.android.material.snackbar.Snackbar
 import com.phenixrts.suite.channelviewer.BuildConfig
 import com.phenixrts.suite.channelviewer.ChannelViewerApplication
 import com.phenixrts.suite.channelviewer.R
 import com.phenixrts.suite.channelviewer.common.showInvalidDeepLinkDialog
 import com.phenixrts.suite.channelviewer.common.lazyViewModel
+import com.phenixrts.suite.channelviewer.common.showSnackBar
 import com.phenixrts.suite.channelviewer.databinding.ActivityMainBinding
 import com.phenixrts.suite.channelviewer.ui.viewmodel.ChannelViewModel
-import com.phenixrts.suite.phenixcore.debugmenu.common.showToast
 import com.phenixrts.suite.phenixcore.PhenixCore
 import com.phenixrts.suite.phenixcore.common.launchMain
 import com.phenixrts.suite.phenixcore.repositories.models.PhenixChannelState
 import com.phenixrts.suite.phenixcore.repositories.models.PhenixError
-import com.phenixrts.suite.phenixcore.repositories.models.PhenixEvent
-import kotlinx.coroutines.flow.collect
+import com.phenixrts.suite.phenixdebugmenu.models.DebugEvent
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -41,21 +41,10 @@ class MainActivity : AppCompatActivity() {
 
         launchMain {
             phenixCore.onError.collect { error ->
-                phenixCore.consumeLastError()
                 Timber.d("Main: Phenix Core error: $error")
                 when (error) {
-                    PhenixError.FAILED_TO_COLLECT_LOGS -> showToast(error.message)
                     PhenixError.FAILED_TO_INITIALIZE -> showInvalidDeepLinkDialog()
                     else -> { /* Ignored */ }
-                }
-            }
-        }
-        launchMain {
-            phenixCore.onEvent.collect { event ->
-                phenixCore.consumeLastEvent()
-                Timber.d("Main: Phenix core event: $event")
-                if (event == PhenixEvent.SHOW_DEBUG_MENU_APP_CHOOSER) {
-                    binding.debugMenu.showAppChooser(this@MainActivity)
                 }
             }
         }
@@ -73,7 +62,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.updateSurface(binding.channelSurface)
-        viewModel.observeDebugMenu(binding.debugMenu)
+        viewModel.observeDebugMenu(
+            binding.debugMenu,
+            onError = { error ->
+                binding.root.showSnackBar(error, Snackbar.LENGTH_LONG)
+            },
+            onEvent = { event ->
+                when (event) {
+                    DebugEvent.SHOW_MENU -> binding.debugMenu.showAppChooser(this@MainActivity)
+                    DebugEvent.FILES_DELETED -> binding.root.showSnackBar(getString(R.string.files_deleted), Snackbar.LENGTH_LONG)
+                }
+            }
+        )
         binding.debugMenu.onStart(getString(R.string.debug_app_version,
             BuildConfig.VERSION_NAME,
             BuildConfig.VERSION_CODE
@@ -89,7 +89,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (binding.debugMenu.isClosed()){
+        if (binding.debugMenu.isOpened()) {
+            binding.debugMenu.hide()
+        } else {
             super.onBackPressed()
         }
     }

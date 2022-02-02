@@ -27,8 +27,8 @@ fun AppCompatActivity.getErrorMessage(error: ExpressError): String {
     }
 }
 
-fun View.showSnackBar(message: String) = launchMain {
-    Snackbar.make(this@showSnackBar, message, Snackbar.LENGTH_INDEFINITE).show()
+fun View.showSnackBar(message: String, length: Int = Snackbar.LENGTH_INDEFINITE) = launchMain {
+    Snackbar.make(this@showSnackBar, message, length).show()
 }
 
 fun AppCompatActivity.showErrorDialog(error: String) {
