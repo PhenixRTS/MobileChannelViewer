@@ -74,13 +74,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         )
-        binding.debugMenu.onStart(getString(R.string.debug_app_version,
-            BuildConfig.VERSION_NAME,
-            BuildConfig.VERSION_CODE
-        ), getString(R.string.debug_sdk_version,
-            com.phenixrts.sdk.BuildConfig.VERSION_NAME,
-            com.phenixrts.sdk.BuildConfig.VERSION_CODE
-        ))
+        binding.debugMenu.onStart(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE.toString())
     }
 
     override fun onDestroy() {
