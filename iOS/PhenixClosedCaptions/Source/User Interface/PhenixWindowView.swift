@@ -1,5 +1,5 @@
 //
-//  Copyright 2021 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+//  Copyright 2022 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
 //
 
 import UIKit
@@ -15,7 +15,7 @@ class PhenixWindowView: UIView {
     internal var configuration: PhenixClosedCaptionsConfiguration = .default {
         didSet {
             setVisualization(for: textView)
-            updateConstraints()
+            setVisualizationForWindow()
         }
     }
 
@@ -84,7 +84,10 @@ private extension PhenixWindowView {
         let size = calculateFrameSize(forCharacterCountInLine: configuration.widthInCharacters, lineCount: configuration.heightInTextLines, font: PhenixTextView.font)
 
         widthConstraint.constant = size.width
-        heightConstraint.constant = size.height + CGFloat(configuration.heightInTextLines) // Add additional heightInTextLines count because UILabels and other text representation views add small amount of inset inside the text view.
+        // Add additional heightInTextLines count because
+        // UILabels and other text representation views
+        // add small amount of inset inside the text view.
+        heightConstraint.constant = size.height + CGFloat(configuration.heightInTextLines)
     }
 
     func setSuperviewPositionConstraints() {
@@ -143,6 +146,10 @@ private extension PhenixWindowView {
 
         textView.reloadCaptionStyle()
     }
+
+    func setVisualizationForWindow() {
+        isHidden = configuration.visible == false
+    }
 }
 
 fileprivate extension UIView {
@@ -156,7 +163,12 @@ fileprivate extension UIView {
         let attributes: [NSAttributedString.Key : Any] = [.font: font]
         let string = String(repeating: "W", count: characterCount) as NSString
         let containerRect = CGSize(width: .max, height: .max)
-        let size = string.boundingRect(with: containerRect, options: [.usesLineFragmentOrigin], attributes: attributes, context: nil).size
+        let size = string.boundingRect(
+            with: containerRect,
+            options: [.usesLineFragmentOrigin],
+            attributes: attributes,
+            context: nil
+        ).size
         return CGSize(width: ceil(size.width), height: ceil(size.height) * CGFloat(lineCount))
     }
 }

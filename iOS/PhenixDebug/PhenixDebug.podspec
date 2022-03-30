@@ -1,27 +1,23 @@
-Pod::Spec.new do |spec|
-  spec.version          = '0.1.0'
-
-  spec.name             = 'PhenixDebug'
-  spec.homepage         = "https://phenixrts.com"
-  spec.summary          = 'A short description of PhenixDebug.'
-  spec.description      = <<-DESC
-  Support framework providing necessary functionality to show debug view which displays the app and the `PhenixSdk` versions and shares run-time logs from the SDK.
+Pod::Spec.new do |s|
+  s.version          = '0.1.0'
+  s.name             = 'PhenixDebug'
+  s.homepage         = "https://phenixrts.com"
+  s.summary          = 'A framework, which provides debug options for PhenixSdk.'
+  s.description      = <<-DESC
+    A framework, which provides debug options for PhenixSdk.
                        DESC
-  spec.homepage         = 'https://phenixrts.com'
-  spec.license          = { :type => "Proprietary", :text => <<-LICENSE
-                          Copyright 2021 Phenix Real Time Solutions, Inc.
+  s.homepage         = 'https://phenixrts.com'
+  s.license          = { :type => "Proprietary", :text => <<-LICENSE
+                          Copyright 2022 Phenix Real Time Solutions, Inc.
                           Confidential and Proprietary. All rights reserved.
                           By using this code you agree to the Phenix Terms of Service found online here:
                           http://phenixrts.com/terms-of-service.html
                         LICENSE
                         }
-  spec.author           = "Phenix Real Time Solutions, Inc."
-  spec.source           = { :git => '{LINK TO PhenixDebug GIT REPO}', :tag => spec.version.to_s }
-  spec.ios.deployment_target = '12.0'
-
-  spec.source_files     = 'Source/*.swift', 'Source/Utils/*.swift'
-
-  spec.xcconfig         = { "ENABLE_BITCODE" => "NO" }
-
-  spec.dependency 'PhenixSdk', '~> 2021.0.0-beta'
+  s.author           = "Phenix Real Time Solutions, Inc."
+  s.source           = { :git => '{LINK TO PhenixDebug GIT REPO}', :tag => s.version.to_s }
+  s.ios.deployment_target = '13.0'
+  s.source_files     = 'Source/**/*.swift'
+  s.xcconfig         = { "ENABLE_BITCODE" => "NO" }
+  s.dependency 'PhenixCore'
 end

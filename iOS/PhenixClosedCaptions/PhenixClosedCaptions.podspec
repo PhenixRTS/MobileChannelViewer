@@ -1,27 +1,23 @@
-Pod::Spec.new do |spec|
-  spec.version          = '0.1.0'
-
-  spec.name             = 'PhenixClosedCaptions'
-  spec.homepage         = "https://phenixrts.com"
-  spec.summary          = 'A short description of PhenixClosedCaptions.'
-  spec.description      = <<-DESC
-TODO: Add long description of the pod here.
+Pod::Spec.new do |s|
+  s.version          = '0.1.0'
+  s.name             = 'PhenixClosedCaptions'
+  s.homepage         = "https://phenixrts.com"
+  s.summary          = 'A framework, which provides closed captions for PhenixSdk.'
+  s.description      = <<-DESC
+A framework, which provides closed captions for PhenixSdk.
                        DESC
-  spec.homepage         = 'https://phenixrts.com'
-  spec.license          = { :type => "Proprietary", :text => <<-LICENSE
-                          Copyright 2021 Phenix Real Time Solutions, Inc.
+  s.homepage         = 'https://phenixrts.com'
+  s.license          = { :type => "Proprietary", :text => <<-LICENSE
+                          Copyright 2022 Phenix Real Time Solutions, Inc.
                           Confidential and Proprietary. All rights reserved.
                           By using this code you agree to the Phenix Terms of Service found online here:
                           http://phenixrts.com/terms-of-service.html
                         LICENSE
                         }
-  spec.author           = "Phenix Real Time Solutions, Inc."
-  spec.source           = { :git => '{LINK TO PhenixClosedCaptions GIT REPO}', :tag => spec.version.to_s }
-  spec.ios.deployment_target = '12.0'
-
-  spec.source_files     = 'Source/*.swift', 'Source/Models/*.swift', 'Source/User Interface/*.swift', 'Source/Utils/*.swift'
-
-  spec.xcconfig         = { "ENABLE_BITCODE" => "NO" }
-
-  spec.dependency 'PhenixSdk', '~> 2021.0.0-beta'
+  s.author           = "Phenix Real Time Solutions, Inc."
+  s.source           = { :git => '{LINK TO PhenixClosedCaptions GIT REPO}', :tag => s.version.to_s }
+  s.ios.deployment_target = '13.0'
+  s.xcconfig         = { "ENABLE_BITCODE" => "NO" }
+  s.source_files     = 'Source/**/*.swift'
+  s.dependency 'PhenixCore'
 end

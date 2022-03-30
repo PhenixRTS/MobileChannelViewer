@@ -7,23 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4832E2B72795AB2F00EDCE3F /* DebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4832E2B52795AB2F00EDCE3F /* DebugViewController.swift */; };
+		4832E2B82795AB2F00EDCE3F /* DebugViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4832E2B62795AB2F00EDCE3F /* DebugViewModel.swift */; };
 		B577F0FA25C3EB0400F59DD2 /* PhenixDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = B577F0F825C3EB0400F59DD2 /* PhenixDebug.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B577F10225C3EB7900F59DD2 /* PhenixDebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B577F10125C3EB7900F59DD2 /* PhenixDebugViewController.swift */; };
-		B577F10525C3EC5300F59DD2 /* PhenixDebugViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B577F10425C3EC5300F59DD2 /* PhenixDebugViewModel.swift */; };
-		B577F10825C3ECD800F59DD2 /* PhenixFrameworkInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B577F10725C3ECD700F59DD2 /* PhenixFrameworkInformation.swift */; };
+		B577F10825C3ECD800F59DD2 /* SDKInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B577F10725C3ECD700F59DD2 /* SDKInspector.swift */; };
 		B577F10D25C3ED4500F59DD2 /* Bundle+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B577F10C25C3ED4500F59DD2 /* Bundle+Extension.swift */; };
-		B577F11025C3EDE200F59DD2 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B577F10F25C3EDE200F59DD2 /* UIApplication+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4832E2B52795AB2F00EDCE3F /* DebugViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugViewController.swift; sourceTree = "<group>"; };
+		4832E2B62795AB2F00EDCE3F /* DebugViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugViewModel.swift; sourceTree = "<group>"; };
 		B577F0F525C3EB0400F59DD2 /* PhenixDebug.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhenixDebug.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B577F0F825C3EB0400F59DD2 /* PhenixDebug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhenixDebug.h; sourceTree = "<group>"; };
 		B577F0F925C3EB0400F59DD2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B577F10125C3EB7900F59DD2 /* PhenixDebugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixDebugViewController.swift; sourceTree = "<group>"; };
-		B577F10425C3EC5300F59DD2 /* PhenixDebugViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixDebugViewModel.swift; sourceTree = "<group>"; };
-		B577F10725C3ECD700F59DD2 /* PhenixFrameworkInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixFrameworkInformation.swift; sourceTree = "<group>"; };
+		B577F10725C3ECD700F59DD2 /* SDKInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKInspector.swift; sourceTree = "<group>"; };
 		B577F10C25C3ED4500F59DD2 /* Bundle+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extension.swift"; sourceTree = "<group>"; };
-		B577F10F25C3EDE200F59DD2 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,31 +54,22 @@
 		B577F0F725C3EB0400F59DD2 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				B577F10125C3EB7900F59DD2 /* PhenixDebugViewController.swift */,
-				B577F10425C3EC5300F59DD2 /* PhenixDebugViewModel.swift */,
-				B577F10725C3ECD700F59DD2 /* PhenixFrameworkInformation.swift */,
-				B577F11325C3EF0000F59DD2 /* Supporting Files */,
-				B577F11525C3EF1B00F59DD2 /* Utils */,
+				4832E2B52795AB2F00EDCE3F /* DebugViewController.swift */,
+				4832E2B62795AB2F00EDCE3F /* DebugViewModel.swift */,
+				B577F11325C3EF0000F59DD2 /* Support */,
 			);
 			path = Source;
 			sourceTree = "<group>";
 		};
-		B577F11325C3EF0000F59DD2 /* Supporting Files */ = {
+		B577F11325C3EF0000F59DD2 /* Support */ = {
 			isa = PBXGroup;
 			children = (
 				B577F0F825C3EB0400F59DD2 /* PhenixDebug.h */,
 				B577F0F925C3EB0400F59DD2 /* Info.plist */,
-			);
-			path = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		B577F11525C3EF1B00F59DD2 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
 				B577F10C25C3ED4500F59DD2 /* Bundle+Extension.swift */,
-				B577F10F25C3EDE200F59DD2 /* UIApplication+Extension.swift */,
+				B577F10725C3ECD700F59DD2 /* SDKInspector.swift */,
 			);
-			path = Utils;
+			path = Support;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,10 +152,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B577F10525C3EC5300F59DD2 /* PhenixDebugViewModel.swift in Sources */,
-				B577F10825C3ECD800F59DD2 /* PhenixFrameworkInformation.swift in Sources */,
-				B577F10225C3EB7900F59DD2 /* PhenixDebugViewController.swift in Sources */,
-				B577F11025C3EDE200F59DD2 /* UIApplication+Extension.swift in Sources */,
+				4832E2B82795AB2F00EDCE3F /* DebugViewModel.swift in Sources */,
+				4832E2B72795AB2F00EDCE3F /* DebugViewController.swift in Sources */,
+				B577F10825C3ECD800F59DD2 /* SDKInspector.swift in Sources */,
 				B577F10D25C3ED4500F59DD2 /* Bundle+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -306,9 +294,9 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Source/Supporting Files/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Support/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -334,9 +322,9 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Source/Supporting Files/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Source/Support/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -1,13 +1,19 @@
 source 'https://cdn.cocoapods.org/'
 source 'git@github.com:PhenixRTS/CocoaPodsSpecs.git' # Phenix private repository
 
-platform :ios, '12.0'
+platform :ios, '13.6'
 use_frameworks!
 inhibit_all_warnings!
 
-target 'ChannelViewer' do
-  pod 'PhenixSdk', '2021.0.15'
+def phenix
+  pod 'PhenixSdk', '2022.0.3'
+  pod 'PhenixCore', :path => '../PhenixCore'
   pod 'PhenixDebug', :path => '../PhenixDebug'
   pod 'PhenixDeeplink', :path => '../PhenixDeeplink'
   pod 'PhenixClosedCaptions', :path => '../PhenixClosedCaptions'
+end
+
+target 'ChannelViewer' do
+  phenix
+  pod 'SwiftLint', '~> 0.47.1'
 end

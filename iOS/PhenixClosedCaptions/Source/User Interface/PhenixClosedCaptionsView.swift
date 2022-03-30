@@ -1,5 +1,5 @@
 //
-//  Copyright 2021 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+//  Copyright 2022 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
 //
 
 import os.log
@@ -40,49 +40,14 @@ public class PhenixClosedCaptionsView: UIView {
         // Retrieve the view from the set
         let window = getWindow(withIndex: index)
 
-        // TODO: Make those properties "sticky" in the cache.
+        let updater = PhenixClosedCaptionsConfiguration.Updater(
+            configuration: window.configuration,
+            windowUpdate: windowUpdate
+        )
+        let (configuration, needsConstraintUpdate) = updater.update()
+        window.configuration = configuration
 
-        if let backgroundAlpha = windowUpdate.backgroundAlpha {
-            window.configuration.textBackgroundAlpha = backgroundAlpha
-        }
-
-        if let justify = windowUpdate.justify {
-            window.configuration.justify = justify
-        }
-
-        if let backgroundColor = UIColor(hex: windowUpdate.backgroundColor) {
-            window.configuration.textBackgroundColor = backgroundColor
-        }
-
-        if let wordWrap = windowUpdate.wordWrap {
-            window.configuration.wordWrap = wordWrap
-        }
-
-        if let zOrder = windowUpdate.zOrder {
-            window.configuration.zOrder = zOrder
-        }
-
-        if let visible = windowUpdate.visible {
-            window.isHidden = visible == false
-        }
-
-        if let anchorPointOnTextWindow = windowUpdate.anchorPointOnTextWindow?.cgPoint {
-            window.configuration.anchorPointOnTextWindow = anchorPointOnTextWindow
-            window.setNeedsUpdateConstraints()
-        }
-
-        if let positionOfTextWindow = windowUpdate.positionOfTextWindow?.cgPoint {
-            window.configuration.positionOfTextWindow = positionOfTextWindow
-            window.setNeedsUpdateConstraints()
-        }
-
-        if let widthInCharacters = windowUpdate.widthInCharacters {
-            window.configuration.widthInCharacters = widthInCharacters
-            window.setNeedsUpdateConstraints()
-        }
-
-        if let heightInTextLines = windowUpdate.heightInTextLines {
-            window.configuration.heightInTextLines = heightInTextLines
+        if needsConstraintUpdate {
             window.setNeedsUpdateConstraints()
         }
     }
@@ -113,23 +78,42 @@ public class PhenixClosedCaptionsView: UIView {
         windows.removeAll()
     }
 
+    /// A way to retrieve the window from the current window collection.
+    ///
+    /// If the window does not exist in the window collection, then it will be created and also saved in this collection.
+    /// - Parameter index: Window tag index
+    /// - Returns: Retrieved window view
     internal func getWindow(withIndex index: UInt) -> PhenixWindowView {
-        // Retrieve the view from the set or create a new one.
-        let window = windows[index] ?? PhenixWindowView()
-
-        if windows[index] == nil { // If the window didn't exist...
-            window.translatesAutoresizingMaskIntoConstraints = false
-            window.tag = Int(index)
-            window.configuration = configuration
-
-            // Add to the container.
-            addSubview(window)
-
-            // Insert into the view set.
-            windows[index] = window
+        if let window = windows[index] {
+            return window
         }
 
+        // If the window don't exist...
+        let window = createWindow(withIndex: index)
+        setupWindow(window)
+
         return window
+    }
+
+    /// Create new window view
+    /// - Parameter index: Window tag index
+    /// - Returns: Created window view
+    internal func createWindow(withIndex index: UInt) -> PhenixWindowView {
+        let window = PhenixWindowView()
+        window.translatesAutoresizingMaskIntoConstraints = false
+        window.tag = Int(index)
+        window.configuration = configuration
+        return window
+    }
+
+    /// Add the provided window to the view and save it in the windows list.
+    /// - Parameter window: Provided window view
+    internal func setupWindow(_ window: PhenixWindowView) {
+        // Add to the container.
+        addSubview(window)
+
+        // Insert into the view set.
+        windows[UInt(window.tag)] = window
     }
 }
 

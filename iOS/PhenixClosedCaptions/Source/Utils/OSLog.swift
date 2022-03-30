@@ -1,5 +1,5 @@
 //
-//  Copyright 2021 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+//  Copyright 2022 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
 //
 
 import Foundation
@@ -12,4 +12,3 @@ extension OSLog {
     static let service = OSLog(subsystem: subsystem, category: "Phenix.Core.ClosedCaptionsService")
     static let containerView = OSLog(subsystem: subsystem, category: "Phenix.Core.ClosedCaptionsView")
 }
-
