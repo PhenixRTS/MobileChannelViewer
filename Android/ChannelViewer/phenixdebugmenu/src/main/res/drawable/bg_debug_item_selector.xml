@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2022 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+  -->
+
+<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="@color/debug_red">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/debug_white" />
+        </shape>
+    </item>
+</ripple>

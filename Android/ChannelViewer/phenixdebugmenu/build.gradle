@@ -1,0 +1,62 @@
+/*
+ * Copyright 2022 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+ */
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlinx-serialization'
+    id 'org.jetbrains.dokka'
+}
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion 32
+        versionCode 1
+        versionName "2022.0"
+        consumerProguardFiles "consumer-rules.pro"
+        archivesBaseName = "PhenixDebugMenu-$versionName.$versionCode"
+    }
+
+    buildFeatures {
+        viewBinding true
+        dataBinding = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+        freeCompilerArgs += [
+                "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi",
+                "-Xuse-experimental=kotlinx.coroutines.FlowPreview",
+                "-Xuse-experimental=kotlinx.serialization.ExperimentalSerializationApi"]
+    }
+    dokkaHtml.configure {
+        suppressObviousFunctions.set(true)
+        suppressInheritedMembers.set(true)
+        dokkaSourceSets {
+            named("main") {
+                noAndroidSdkLink.set(false)
+            }
+        }
+    }
+}
+
+dependencies {
+
+    // Phenix Core
+    implementation(project(':phenixcore'))
+}

@@ -4,3 +4,7 @@
 
 rootProject.name='Channel Viewer'
 include ':app'
+include ':phenixcore'
+include ':phenixdeeplink'
+include ':phenixdebugmenu'
+include ':phenixclosedcaption'

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2022 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+  -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="log"
+            type="String" />
+    </data>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:lineSpacingExtra="1dp"
+        android:background="@drawable/bg_debug_item_selector"
+        android:textColor="@color/debug_black"
+        android:textSize="12sp"
+        android:text="@{log}"
+        tools:text="2022-03-01 13:39:00.234 14671-14671/com.phenixrts.suite.channelviewer D/PhenixCore: (SplashActivity.kt:114) #showLandingScreen: Navigating to Landing Screen" />
+
+</layout>
