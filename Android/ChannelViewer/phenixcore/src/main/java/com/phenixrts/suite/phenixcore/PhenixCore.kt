@@ -278,6 +278,7 @@ class PhenixCore(application: Application) {
      * The [channels] list will be updated when channels are removed.
      */
     fun leaveAllChannels() {
+        Timber.d("Leave all channels")
         whenInitialized {
             repository.leaveAllChannels()
         }

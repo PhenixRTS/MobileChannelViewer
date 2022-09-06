@@ -20,6 +20,7 @@ import com.phenixrts.pcast.android.AndroidVideoRenderSurface
 import com.phenixrts.room.*
 import com.phenixrts.suite.phenixcore.common.ConsumableSharedFlow
 import com.phenixrts.suite.phenixcore.common.launchMain
+import com.phenixrts.suite.phenixcore.common.observableUnique
 import com.phenixrts.suite.phenixcore.repositories.core.common.*
 import com.phenixrts.suite.phenixcore.repositories.core.common.getSubscribeAudioOptions
 import com.phenixrts.suite.phenixcore.repositories.core.common.getSubscribeVideoOptions
@@ -33,7 +34,6 @@ import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.math.abs
 import kotlin.math.log10
-import kotlin.properties.Delegates
 
 private const val READ_TIMEOUT_DELAY = 200
 private const val DEFAULT_BANDWIDTH_LIMIT = 350_000L
@@ -52,6 +52,7 @@ internal data class PhenixCoreMember(
     private var videoStateDisposable: Disposable? = null
     private var audioStateDisposable: Disposable? = null
     private var bandwidthDisposable: Disposable? = null
+    private var roleDisposable: Disposable? = null
     private var videoSubscriber: ExpressSubscriber? = null
     private var audioSubscriber: ExpressSubscriber? = null
     private var audioRenderer: Renderer? = null
@@ -63,7 +64,7 @@ internal data class PhenixCoreMember(
     private var audioBuffer = arrayListOf<Double>()
     private var streamImageView: ImageView? = null
     private var frameReadyConfiguration: PhenixFrameReadyConfiguration? = null
-    private val memberStreams = mutableListOf<PhenixCoreMemberStream>()
+    private val memberStreams = mutableSetOf<PhenixCoreMemberStream>()
 
     private val streamSubscriptionHandler = Handler(Looper.getMainLooper())
     private val streamSubscriptionRunner = Runnable {
@@ -88,65 +89,47 @@ internal data class PhenixCoreMember(
     var handRaiseTimestamp: Long = 0
         private set
 
-    var connectionState: PhenixMemberConnectionState by Delegates.observable(PhenixMemberConnectionState.PENDING) { _, oldValue, newValue ->
-        if (oldValue != newValue) {
-            Timber.d("Member connection state changed: $newValue for: ${asString()}")
-            _onUpdated.tryEmit(Unit)
-        }
+    var connectionState: PhenixMemberConnectionState by observableUnique(PhenixMemberConnectionState.PENDING) { newValue ->
+        Timber.d("Member connection state changed: $newValue for: ${asString()}")
+        _onUpdated.tryEmit(Unit)
     }
-    var memberRole: MemberRole by Delegates.observable(member.observableRole.value) { _, oldValue, newValue ->
-        if (oldValue != newValue) {
-            Timber.d("Member role changed: $newValue for: ${asString()}")
-            _onUpdated.tryEmit(Unit)
-        }
+    var memberRole: MemberRole by observableUnique(member.observableRole.value) { newValue ->
+        Timber.d("Member role changed: $newValue for: ${asString()}")
+        _onUpdated.tryEmit(Unit)
     }
-    var memberState: MemberState by Delegates.observable(member.observableState.value) { _, oldValue, newValue ->
-        if (oldValue != newValue) {
-            Timber.d("Member state changed: $newValue for: ${asString()}")
-            handRaiseTimestamp = if (hasRaisedHand) member.observableLastUpdate.value.time else 0
-            _onUpdated.tryEmit(Unit)
-        }
+    var memberState: MemberState by observableUnique(member.observableState.value) { newValue ->
+        Timber.d("Member state changed: $newValue for: ${asString()}")
+        handRaiseTimestamp = if (hasRaisedHand) member.observableLastUpdate.value.time else 0
+        _onUpdated.tryEmit(Unit)
     }
-    var memberName: String by Delegates.observable(member.observableScreenName.value) { _, oldValue, newValue ->
-        if (oldValue != newValue) {
-            Timber.d("Member name changed: $newValue for: ${asString()}")
-            _onUpdated.tryEmit(Unit)
-        }
+    var memberName: String by observableUnique(member.observableScreenName.value) { newValue ->
+        Timber.d("Member name changed: $newValue for: ${asString()}")
+        _onUpdated.tryEmit(Unit)
     }
-    var audioLevel by Delegates.observable(INITIAL_AUDIO_LEVEL) { _, oldValue, newValue ->
-        if (oldValue != newValue) {
-            Timber.d("Member audio level changed: $newValue for: ${asString()}")
-            _onUpdated.tryEmit(Unit)
-        }
+    var audioLevel by observableUnique(INITIAL_AUDIO_LEVEL) { newValue ->
+        Timber.d("Member audio level changed: $newValue for: ${asString()}")
+        _onUpdated.tryEmit(Unit)
     }
-    var isSelected by Delegates.observable(false) { _, oldValue, newValue ->
-        if (oldValue != newValue) {
-            Timber.d("Member isSelected changed: $newValue for: ${asString()}")
-            _onUpdated.tryEmit(Unit)
-        }
+    var isSelected by observableUnique(false) { newValue ->
+        Timber.d("Member isSelected changed: $newValue for: ${asString()}")
+        _onUpdated.tryEmit(Unit)
     }
-    var isAudioEnabled by Delegates.observable(false) { _, oldValue, newValue ->
+    var isAudioEnabled by observableUnique(false) { newValue ->
         if (newValue) {
             audioRenderer?.unmuteAudio()
         } else {
             audioRenderer?.muteAudio()
         }
-        if (oldValue != newValue) {
-            Timber.d("Member audio state changed: $newValue for: ${asString()}")
-            _onUpdated.tryEmit(Unit)
-        }
+        Timber.d("Member audio state changed: $newValue for: ${asString()}")
+        _onUpdated.tryEmit(Unit)
     }
-    var isVideoEnabled by Delegates.observable(false) { _, oldValue, newValue ->
-        if (oldValue != newValue) {
-            Timber.d("Member video state changed: $newValue for: ${asString()}")
-            _onUpdated.tryEmit(Unit)
-        }
+    var isVideoEnabled by observableUnique(false) { newValue ->
+        Timber.d("Member video state changed: $newValue for: ${asString()}")
+        _onUpdated.tryEmit(Unit)
     }
-    var volume by Delegates.observable(0) { _, oldValue, newValue ->
-        if (oldValue != newValue) {
-            Timber.d("Member volume changed: $newValue for: ${asString()}")
-            _onUpdated.tryEmit(Unit)
-        }
+    var volume by observableUnique(0) { newValue ->
+        Timber.d("Member volume changed: $newValue for: ${asString()}")
+        _onUpdated.tryEmit(Unit)
     }
 
     fun isThisMember(sessionId: String?) = member.sessionId == sessionId
@@ -194,6 +177,7 @@ internal data class PhenixCoreMember(
         videoStateDisposable?.dispose()
         audioStateDisposable?.dispose()
         bandwidthDisposable?.dispose()
+        roleDisposable?.dispose()
         observingStreams = false
         isSelected = false
         isFirstFrameDrawn = false
@@ -264,6 +248,7 @@ internal data class PhenixCoreMember(
                     audioStateDisposable = this
                 }
                 observeDataQuality()
+                observeMemberRole()
             }
         }
     }
@@ -344,6 +329,16 @@ internal data class PhenixCoreMember(
                 connectionState = PhenixMemberConnectionState.AWAY
                 streamSubscriptionHandler.postDelayed(streamSubscriptionRunner, STREAM_SUBSCRIPTION_TIMEOUT)
             }
+        }
+    }
+
+    private fun observeMemberRole() {
+        member.observableRole?.subscribe { role ->
+            Timber.d("Member role changed: $role")
+            memberRole = role
+        }?.run {
+            roleDisposable?.dispose()
+            roleDisposable = this
         }
     }
 

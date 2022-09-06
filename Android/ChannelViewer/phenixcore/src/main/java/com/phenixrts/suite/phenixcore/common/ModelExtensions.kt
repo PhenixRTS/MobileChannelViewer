@@ -18,8 +18,9 @@ import com.phenixrts.suite.phenixcore.repositories.models.*
 import com.phenixrts.suite.phenixcore.repositories.room.models.PhenixCoreMember
 import com.phenixrts.suite.phenixcore.repositories.stream.models.PhenixCoreStream
 import timber.log.Timber
+import kotlin.properties.Delegates
 
-internal fun List<PhenixCoreChannel>.asPhenixChannels() = map { channel ->
+internal fun Set<PhenixCoreChannel>.asPhenixChannels() = map { channel ->
     PhenixChannel(
         alias = channel.channelAlias,
         isAudioEnabled = channel.isAudioEnabled,
@@ -31,7 +32,7 @@ internal fun List<PhenixCoreChannel>.asPhenixChannels() = map { channel ->
     )
 }
 
-internal fun List<PhenixCoreStream>.asPhenixStreams() = map { stream ->
+internal fun Set<PhenixCoreStream>.asPhenixStreams() = map { stream ->
     PhenixStream(
         id = stream.streamID,
         isAudioEnabled = stream.isAudioEnabled,
@@ -43,7 +44,7 @@ internal fun List<PhenixCoreStream>.asPhenixStreams() = map { stream ->
     )
 }
 
-internal fun List<PhenixCoreMember>.asPhenixMembers() = map { member ->
+internal fun Set<PhenixCoreMember>.asPhenixMembers() = map { member ->
     member.asPhenixMember()
 }
 
@@ -105,7 +106,7 @@ internal fun PhenixAudioEchoCancelationMode.asAudioEchoCancelationMode() = when 
 }
 
 internal fun Member.mapRoomMember(
-    members: List<PhenixCoreMember>?,
+    members: Set<PhenixCoreMember>?,
     selfSessionId: String?,
     express: RoomExpress,
     configuration: PhenixRoomConfiguration?
@@ -150,4 +151,9 @@ internal fun ChatMessage.asPhenixMessage(alias: String) = PhenixMessage(
     memberName = observableFrom.value.observableScreenName.value
 )
 
-internal fun List<PhenixMessage>.asCopy() = map { it.copy() }
+internal fun Set<PhenixMessage>.asCopy() = map { it.copy() }
+
+internal fun <T> observableUnique(initialValue: T, onChange: (newValue: T) -> Unit) =
+    Delegates.observable(initialValue) { _, oldValue, newValue ->
+        if (oldValue != newValue) onChange(newValue)
+    }

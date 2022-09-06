@@ -30,6 +30,7 @@ internal class PhenixCoreRepository(
 ) {
 
     private var configuration = PhenixConfiguration()
+    private var channelExpress: ChannelExpress? = null
     private var roomExpress: RoomExpress? = null
     private var channelRepository: PhenixChannelRepository? = null
     private var streamRepository: PhenixStreamRepository? = null
@@ -97,6 +98,7 @@ internal class PhenixCoreRepository(
         ChannelExpressFactory.createChannelExpress(channelExpressOptions)?.let { express ->
             express.roomExpress?.pCastExpress?.waitForOnline {
                 Timber.d("Phenix Core initialized with configuration: $configuration")
+                channelExpress = express
                 roomExpress = express.roomExpress
                 val chatRepository = PhenixChatRepository()
                 this.chatRepository = chatRepository
@@ -178,7 +180,10 @@ internal class PhenixCoreRepository(
 
     fun leaveStream(streamID: String) = streamRepository?.leaveStream(streamID)
 
-    fun leaveAllChannels() = channelRepository?.release()
+    fun leaveAllChannels() {
+        Timber.d("Leave all channels: $channelRepository, $streamRepository")
+        channelRepository?.release()
+    }
 
     fun leaveAllStreams() = streamRepository?.release()
 
@@ -348,6 +353,8 @@ internal class PhenixCoreRepository(
     }
 
     fun release() {
+        Timber.d("Releasing Phenix Core")
+        channelExpress?.dispose()
         roomExpress?.dispose()
         channelRepository?.release()
         streamRepository?.release()
@@ -356,6 +363,7 @@ internal class PhenixCoreRepository(
         chatRepository?.release()
 
         configuration = PhenixConfiguration()
+        channelExpress = null
         roomExpress = null
         channelRepository = null
         streamRepository = null

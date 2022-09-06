@@ -17,21 +17,19 @@ import com.phenixrts.suite.phenixcore.repositories.models.PhenixMessage
 import com.phenixrts.suite.phenixcore.repositories.models.PhenixMessageConfiguration
 import kotlinx.coroutines.flow.asSharedFlow
 import timber.log.Timber
-import java.util.*
 
 internal class PhenixChatRepository {
 
-    private val rawMessages = mutableListOf<PhenixMessage>()
+    private val rawMessages = mutableSetOf<PhenixMessage>()
     private val _onError = ConsumableSharedFlow<PhenixError>()
     private val _onEvent = ConsumableSharedFlow<PhenixEvent>()
     private val _messages = ConsumableSharedFlow<List<PhenixMessage>>(canReplay = true)
-    private val joinedDate = Date()
 
     val onError = _onError.asSharedFlow()
     val onEvent = _onEvent.asSharedFlow()
     val messages = _messages.asSharedFlow()
 
-    private val chatServices = mutableListOf<PhenixChatService>()
+    private val chatServices = mutableSetOf<PhenixChatService>()
 
     fun sendMessage(alias: String, message: String, mimeType: String) {
         Timber.d("Sending message: $message with: $mimeType to: $alias")
@@ -49,7 +47,7 @@ internal class PhenixChatRepository {
     }
 
     fun disposeChatService(alias: String) {
-        val disposedServices = mutableListOf<PhenixChatService>()
+        val disposedServices = mutableSetOf<PhenixChatService>()
         chatServices.filter { it.alias == alias }.forEach { chatService ->
             chatService.disposable?.dispose()
             chatService.service.dispose()
@@ -62,14 +60,14 @@ internal class PhenixChatRepository {
         chatServices.addIfNew(alias, configuration, service)
         chatServices.findChatService(alias, configuration.mimeType)?.let { chatService ->
             Timber.d("Observing chat with mimetype: ${chatService.mimeType} in: ${chatService.alias}")
-            chatService.service.observableChatMessages?.subscribe { messages ->
-                messages.lastOrNull()?.takeIf { it.observableTimeStamp.value.time > joinedDate.time }?.let { last ->
+            chatService.disposable?.dispose()
+            chatService.service.observableLastChatMessage?.subscribe { message ->
+                message?.takeIf { it.observableTimeStamp.value.time > configuration.joinedDate }?.let { last ->
                     Timber.d("Phenix message received: ${last.observableMessage.value}")
                     rawMessages.add(last.asPhenixMessage(alias))
                     _messages.tryEmit(rawMessages.asCopy())
                 }
             }.run {
-                chatService.disposable?.dispose()
                 chatService.disposable = this
             }
         }
@@ -93,10 +91,10 @@ internal class PhenixChatRepository {
         }
     }
 
-    private fun MutableList<PhenixChatService>.findChatService(alias: String, mimeType: String? = null) =
+    private fun MutableSet<PhenixChatService>.findChatService(alias: String, mimeType: String? = null) =
         firstOrNull { if (mimeType != null) it.alias == alias && it.mimeType == mimeType else it.alias == alias }
 
-    private fun MutableList<PhenixChatService>.addIfNew(
+    private fun MutableSet<PhenixChatService>.addIfNew(
         alias: String,
         configuration: PhenixMessageConfiguration,
         service: RoomService

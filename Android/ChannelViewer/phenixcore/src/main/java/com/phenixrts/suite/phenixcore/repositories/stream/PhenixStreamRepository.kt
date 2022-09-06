@@ -19,7 +19,7 @@ internal class PhenixStreamRepository(
     private val pCastExpress: PCastExpress,
     private val configuration: PhenixConfiguration
 ) {
-    private val rawStreams = mutableListOf<PhenixCoreStream>()
+    private val rawStreams = mutableSetOf<PhenixCoreStream>()
     private var streamConfiguration: PhenixStreamConfiguration? = null
 
     private val _onError = ConsumableSharedFlow<PhenixError>()

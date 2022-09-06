@@ -11,13 +11,11 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 32
-        versionCode 1
-        versionName "2022.0"
+        targetSdkVersion 33
         consumerProguardFiles "consumer-rules.pro"
         archivesBaseName = "PhenixDebugMenu-$versionName.$versionCode"
     }
@@ -44,6 +42,7 @@ android {
                 "-Xuse-experimental=kotlinx.coroutines.FlowPreview",
                 "-Xuse-experimental=kotlinx.serialization.ExperimentalSerializationApi"]
     }
+    namespace 'com.phenixrts.suite.phenixdebugmenu'
     dokkaHtml.configure {
         suppressObviousFunctions.set(true)
         suppressInheritedMembers.set(true)

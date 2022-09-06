@@ -29,8 +29,8 @@ internal class PhenixRoomRepository(
     private val chatRepository: PhenixChatRepository
 ) {
 
-    private val rawMembers = mutableListOf<PhenixCoreMember>()
-    private val observableRoomDisposables: MutableList<Disposable?> = mutableListOf()
+    private val rawMembers = mutableSetOf<PhenixCoreMember>()
+    private val observableRoomDisposables: MutableSet<Disposable?> = mutableSetOf()
     private var roomDisposable: Disposable? = null
     private var rawRoom: PhenixRoom? = null
     private var roomConfiguration: PhenixRoomConfiguration? = null
@@ -104,6 +104,7 @@ internal class PhenixRoomRepository(
     fun stopPublishingToRoom() {
         Timber.d("Stopping media publishing")
         publisher?.stop()
+        publisher?.dispose()
         publisher = null
     }
 
@@ -276,7 +277,7 @@ internal class PhenixRoomRepository(
         }.run { observableRoomDisposables.add(this) }
     }
 
-    private fun disposeGoneMembers(members: List<PhenixCoreMember>) = synchronized(rawMembers) {
+    private fun disposeGoneMembers(members: Set<PhenixCoreMember>) = synchronized(rawMembers) {
         val rawMembersMap = rawMembers.associateBy { it.memberId }
         members.filter { member -> rawMembersMap[member.memberId]?.isDisposable == true }.forEach { member ->
             Timber.d("Disposing gone member: $member")
@@ -291,7 +292,7 @@ internal class PhenixRoomRepository(
                 Timber.d("Received RAW members count: ${members.size}")
                 val selfId = self.sessionId
                 members.forEach { Timber.d("RAW Member: ${it.observableScreenName.value} ${it.sessionId == selfId}") }
-                val memberList = mutableListOf(
+                val memberList = mutableSetOf(
                     self.mapRoomMember(rawMembers, selfId, roomExpress, roomConfiguration)
                 )
                 val mappedMembers = members.filterNot { it.sessionId == selfId }.mapTo(memberList) {

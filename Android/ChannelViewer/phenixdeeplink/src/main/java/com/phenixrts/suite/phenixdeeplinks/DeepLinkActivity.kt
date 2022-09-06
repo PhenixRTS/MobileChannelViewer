@@ -5,6 +5,7 @@
 package com.phenixrts.suite.phenixdeeplinks
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.phenixrts.suite.phenixcore.common.json
@@ -85,8 +86,12 @@ abstract class DeepLinkActivity : AppCompatActivity() {
                 path = deepLink.toString()
                 val isStagingUri = path.contains(STAGING_URI)
                 Timber.d("Loading configuration from deep link: $deepLink")
-                path.takeIf { it.contains(QUERY_CHANNEL) }?.substringAfterLast(QUERY_CHANNEL)?.run {
-                    configuration[QUERY_SELECTED_ALIAS] = this
+                try {
+                    Uri.parse(path).fragment?.run {
+                        configuration[QUERY_SELECTED_ALIAS] = this
+                    }
+                } catch (e: Exception) {
+                    Timber.e(e, "Failed to get uri fragment")
                 }
                 configuration.keys.forEach { key ->
                     when (key) {

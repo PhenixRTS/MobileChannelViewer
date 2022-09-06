@@ -7,6 +7,7 @@ package com.phenixrts.suite.channelviewer.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import com.google.android.material.snackbar.Snackbar
 import com.phenixrts.suite.channelviewer.BuildConfig
 import com.phenixrts.suite.channelviewer.ChannelViewerApplication
@@ -75,18 +76,20 @@ class MainActivity : AppCompatActivity() {
             }
         )
         binding.debugMenu.onStart(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE.toString())
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding.debugMenu.isOpened()) {
+                    binding.debugMenu.hide()
+                } else {
+                    finish()
+                }
+            }
+        })
     }
 
     override fun onDestroy() {
         super.onDestroy()
         binding.debugMenu.onStop()
-    }
-
-    override fun onBackPressed() {
-        if (binding.debugMenu.isOpened()) {
-            binding.debugMenu.hide()
-        } else {
-            super.onBackPressed()
-        }
     }
 }

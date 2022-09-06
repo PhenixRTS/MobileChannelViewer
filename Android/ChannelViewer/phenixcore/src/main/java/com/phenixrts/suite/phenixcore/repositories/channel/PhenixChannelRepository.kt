@@ -27,7 +27,7 @@ internal class PhenixChannelRepository(
     private val chatRepository: PhenixChatRepository
 ) {
     private val pCastExpress = channelExpress.roomExpress!!.pCastExpress
-    private val rawChannels = mutableListOf<PhenixCoreChannel>()
+    private val rawChannels = mutableSetOf<PhenixCoreChannel>()
     private var publisher: ExpressPublisher? = null
     private var roomService: RoomService? = null
     private var channelConfiguration: PhenixChannelConfiguration? = null
@@ -159,6 +159,10 @@ internal class PhenixChannelRepository(
     }
 
     fun release() {
+        Timber.d("Leaving all channels: ${rawChannels.size}")
+        stopPublishingToChannel()
+        roomService?.dispose()
+        roomService = null
         rawChannels.forEach { it.release() }
         rawChannels.clear()
         _channels.tryEmit(rawChannels.asPhenixChannels())

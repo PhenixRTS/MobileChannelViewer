@@ -4,7 +4,10 @@
 
 package com.phenixrts.suite.phenixcore.repositories.models
 
+import java.util.*
+
 data class PhenixMessageConfiguration(
     val mimeType: String = "",
-    val batchSize: Int = 0
+    val batchSize: Int = 0,
+    val joinedDate: Long = Date().time
 )

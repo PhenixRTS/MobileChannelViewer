@@ -36,8 +36,8 @@ class FileWriterDebugTree(private val context: Application) : Timber.DebugTree()
     private var appLogFolder: File? = null
     private var sdkFileWriter: BufferedWriter? = null
     private var appFileWriter: BufferedWriter? = null
-    private val sdkLogFiles = mutableListOf<File>()
-    private val appLogFiles = mutableListOf<File>()
+    private val sdkLogFiles = mutableSetOf<File>()
+    private val appLogFiles = mutableSetOf<File>()
     private var sdkLogLineCount = 0
     private var appLogLineCount = 0
 
@@ -96,10 +96,10 @@ class FileWriterDebugTree(private val context: Application) : Timber.DebugTree()
         }
     }
 
-    fun getLogFileUris(authority: String): List<Uri> {
+    fun getLogFileUris(authority: String): Set<Uri> {
         sdkFileWriter?.flush()
         appFileWriter?.flush()
-        val logFileUris = mutableListOf<Uri>()
+        val logFileUris = mutableSetOf<Uri>()
         sdkLogFiles.mapNotNullTo(logFileUris) { it.getUri(authority) }
         appLogFiles.mapNotNullTo(logFileUris) { it.getUri(authority) }
         return logFileUris

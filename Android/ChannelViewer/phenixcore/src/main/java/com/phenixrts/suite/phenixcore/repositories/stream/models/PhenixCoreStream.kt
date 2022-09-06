@@ -43,8 +43,8 @@ data class PhenixCoreStream(
     private var renderer: Renderer? = null
     private var expressSubscriber: ExpressSubscriber? = null
     private var timeShift: TimeShift? = null
-    private var timeShiftDisposables = mutableListOf<Disposable>()
-    private var timeShiftSeekDisposables = mutableListOf<Disposable>()
+    private var timeShiftDisposables = mutableSetOf<Disposable>()
+    private var timeShiftSeekDisposables = mutableSetOf<Disposable>()
     private var isFirstFrameDrawn = false
     private var isRendering = false
     private var timeShiftStart: Long = 0
@@ -230,7 +230,6 @@ data class PhenixCoreStream(
 
     fun release() {
         releaseTimeShift()
-        expressSubscriber?.stop()
         renderer?.stop()
         expressSubscriber?.dispose()
         renderer?.dispose()
@@ -285,7 +284,7 @@ data class PhenixCoreStream(
             Timber.d("Adding capabilities: ${config.capabilities}")
             subscribeOptionsBuilder = subscribeOptionsBuilder.withCapabilities(config.capabilities.toTypedArray())
         } else if (!streamToken.isNullOrBlank()) {
-            Timber.d("Adding stream token: ${!streamToken.isNullOrBlank()}")
+            Timber.d("Adding stream token: $streamToken")
             subscribeOptionsBuilder = subscribeOptionsBuilder.withStreamToken(streamToken)
                 .withSkipRetryOnUnauthorized()
         }

@@ -45,14 +45,15 @@ internal data class PhenixCoreChannel(
     private var roomService: RoomService? = null
     private var timeShift: TimeShift? = null
     private var bandwidthLimiter: Disposable? = null
-    private var timeShiftDisposables = mutableListOf<Disposable>()
-    private var timeShiftSeekDisposables = mutableListOf<Disposable>()
+    private var timeShiftDisposables = mutableSetOf<Disposable>()
+    private var timeShiftSeekDisposables = mutableSetOf<Disposable>()
     private var isFirstFrameDrawn = false
     private var isRendering = false
     private var timeShiftCreateRetryCount = 0
     private var timeShiftStart = 0L
     private var streamImageView: ImageView? = null
     private var frameReadyConfiguration: PhenixFrameReadyConfiguration? = null
+    private var isDisposed = false
 
     private val _onUpdated = ConsumableSharedFlow<Unit>()
     private val _onError = ConsumableSharedFlow<PhenixError>()
@@ -218,7 +219,6 @@ internal data class PhenixCoreChannel(
     fun release() {
         releaseTimeShift()
         releaseBandwidthLimiter()
-        expressSubscriber?.stop()
         renderer?.stop()
         expressSubscriber?.dispose()
         renderer?.dispose()
@@ -227,10 +227,13 @@ internal data class PhenixCoreChannel(
         streamImageView = null
         roomService = null
         chatRepository.disposeChatService(channelAlias)
+        isDisposed = true
+        Timber.d("Channel disposed")
     }
 
     private fun joinChannel(config: PhenixChannelConfiguration) {
-        channelExpress.joinChannel(getChannelConfiguration(config), { requestStatus: RequestStatus?, service: RoomService? ->
+        channelExpress.joinChannel(getChannelConfiguration(config), joinCoreChannel@ { requestStatus: RequestStatus?, service: RoomService? ->
+            if (isDisposed) return@joinCoreChannel
             Timber.d("Channel joined with status: $requestStatus for: ${asString()}")
             if (requestStatus == RequestStatus.OK) {
                 channelState = PhenixChannelState.NO_STREAM
@@ -241,6 +244,7 @@ internal data class PhenixCoreChannel(
             _onUpdated.tryEmit(Unit)
         }, { requestStatus: RequestStatus?, subscriber: ExpressSubscriber?, expressRenderer: Renderer? ->
             launchIO {
+                if (isDisposed) return@launchIO
                 Timber.d("Stream re-started: $requestStatus for: ${asString()}")
                 if (requestStatus == RequestStatus.OK) {
                     renderer?.dispose()
@@ -313,7 +317,7 @@ internal data class PhenixCoreChannel(
             })
             .withRenderer(videoRenderSurface)
         if (!streamToken.isNullOrBlank()) {
-            Timber.d("Adding stream token: ${!streamToken.isNullOrBlank()}")
+            Timber.d("Adding stream token")
             channelOptionsBuilder = channelOptionsBuilder.withStreamToken(streamToken)
                 .withSkipRetryOnUnauthorized()
         }
@@ -323,7 +327,7 @@ internal data class PhenixCoreChannel(
     private fun subscribeToTimeShiftReadyForPlaybackObservable() {
         updateTimeShiftState(PhenixTimeShiftState.STARTING)
         timeShift?.observableReadyForPlaybackStatus?.subscribe { isReady ->
-            if (timeShiftState == PhenixTimeShiftState.REPLAYING) return@subscribe
+            if (timeShiftState == PhenixTimeShiftState.REPLAYING || isDisposed) return@subscribe
             val state = if (isReady) PhenixTimeShiftState.READY else PhenixTimeShiftState.STARTING
             if (isReady) timeShiftCreateRetryCount = 0
             updateTimeShiftState(state)
@@ -337,6 +341,7 @@ internal data class PhenixCoreChannel(
         }?.run { timeShiftDisposables.add(this) }
         timeShift?.observableFailure?.subscribe { status ->
             launchIO {
+                if (isDisposed) return@launchIO
                 Timber.d("Time shift failure: $status, retryCount: $timeShiftCreateRetryCount for: ${asString()}")
                 releaseTimeShift()
                 if (timeShiftCreateRetryCount < TIME_SHIFT_RETRY_COUNT) {
@@ -356,7 +361,7 @@ internal data class PhenixCoreChannel(
     private fun drawFrameBitmap(bitmap: Bitmap) {
         try {
             launchMain {
-                if (!isSelected || bitmap.isRecycled) return@launchMain
+                if (!isSelected || bitmap.isRecycled || isDisposed) return@launchMain
                 if (isFirstFrameDrawn) delay(THUMBNAIL_DRAW_DELAY)
                 streamImageView?.setImageBitmap(bitmap.copy(bitmap.config, bitmap.isMutable))
                 isFirstFrameDrawn = true
@@ -391,6 +396,7 @@ internal data class PhenixCoreChannel(
                 "\"isRendering\":\"$isRendering\"," +
                 "\"isAudioEnabled\":\"$isAudioEnabled\"," +
                 "\"isVideoEnabled\":\"$isVideoEnabled\"," +
+                "\"isDisposed\":\"$isDisposed\"," +
                 "\"isSelected\":\"$isSelected\"}"
     }
 }
