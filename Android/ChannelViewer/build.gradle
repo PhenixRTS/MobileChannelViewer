@@ -9,7 +9,8 @@ buildscript {
     ext.arch_version = '2.1.0'
     ext.dagger_version = '2.32'
     ext.kotlinx_coroutines_version = '1.4.1'
-    ext.phenix_version = '2022.0.3'
+    ext.phenix_package = 'phenix-sdk-android-beta'
+    ext.phenix_version = '2023.0.0-df80922-20230822T073055-beta.16'
 
     repositories {
         google()

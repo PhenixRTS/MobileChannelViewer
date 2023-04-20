@@ -7,6 +7,8 @@ package com.phenixrts.suite.channelviewer.repositories
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
+import com.phenixrts.common.AuthenticationStatus
+import com.phenixrts.common.Disposable
 import com.phenixrts.common.RequestStatus
 import com.phenixrts.environment.android.AndroidContext
 import com.phenixrts.express.*
@@ -29,9 +31,13 @@ class ChannelExpressRepository(private val context: Application) {
 
     private var expressConfiguration = ChannelConfiguration()
     private var channelExpress: ChannelExpress? = null
+    private var authenticationStatusChangeSubscription : Disposable? = null
+
     var roomExpress: RoomExpress? = null
+
     val onChannelExpressError = MutableLiveData<ExpressError>()
     val onChannelState = MutableLiveData<ChannelJoinedState>()
+    val onAuthenticationStatus = MutableLiveData<AuthenticationStatus>()
     val mimeTypes = MutableLiveData<List<String>>()
     var roomService: RoomService? = null
 
@@ -40,20 +46,15 @@ class ChannelExpressRepository(private val context: Application) {
     private fun initializeChannelExpress() {
         Timber.d("Creating Channel Express: $expressConfiguration")
         AndroidContext.setContext(context)
-        var pcastBuilder = PCastExpressFactory.createPCastExpressOptionsBuilder()
-            .withMinimumConsoleLogLevel("info")
-            .withPCastUri(expressConfiguration.uri)
-            .withUnrecoverableErrorCallback { status: RequestStatus?, description: String ->
-                launchMain {
-                    Timber.e("Unrecoverable error in PhenixSDK. Error status: [$status]. Description: [$description]")
-                    onChannelExpressError.value = ExpressError.UNRECOVERABLE_ERROR
-                }
+        var pcastBuilder = PCastExpressFactory.createPCastExpressOptionsBuilder { status: RequestStatus?, description: String ->
+            launchMain {
+                Timber.e("Unrecoverable error in PhenixSDK. Error status: [$status]. Description: [$description]")
+                onChannelExpressError.value = ExpressError.UNRECOVERABLE_ERROR
             }
-        pcastBuilder = if (expressConfiguration.edgeToken?.isNotBlank() == true) {
-            pcastBuilder.withAuthenticationToken(expressConfiguration.edgeToken)
-        } else {
-            pcastBuilder.withBackendUri(expressConfiguration.backend)
         }
+            .withMinimumConsoleLogLevel("debug")
+            .withAuthenticationToken(expressConfiguration.authToken)
+
         val roomExpressOptions = RoomExpressFactory.createRoomExpressOptionsBuilder()
             .withPCastExpressOptions(pcastBuilder.buildPCastExpressOptions())
             .buildRoomExpressOptions()
@@ -65,6 +66,13 @@ class ChannelExpressRepository(private val context: Application) {
         ChannelExpressFactory.createChannelExpress(channelExpressOptions)?.let { express ->
             channelExpress = express
             roomExpress = express.roomExpress
+
+            authenticationStatusChangeSubscription = express.pCastExpress.observableAuthenticationStatus.subscribe { status ->
+                launchMain {
+                    onAuthenticationStatus.value = status
+                }
+            }
+
             Timber.d("Channel express initialized")
         } ?: run {
             Timber.e("Unrecoverable error in PhenixSDK")
@@ -94,11 +102,11 @@ class ChannelExpressRepository(private val context: Application) {
         channelExpress?.pCastExpress?.waitForOnline()
     }
 
-    suspend fun joinChannel(channelAlias: String, surface: AndroidVideoRenderSurface): ConnectionStatus = suspendCancellableCoroutine { continuation ->
+    suspend fun joinChannel(surface: AndroidVideoRenderSurface): ConnectionStatus = suspendCancellableCoroutine { continuation ->
         launchMain {
-            Timber.d("Joining room: $channelAlias")
+            Timber.d("Joining room")
             channelExpress?.let { express ->
-                express.joinChannel(getChannelConfiguration(channelAlias, surface, expressConfiguration)).asFlow().collect { status ->
+                express.joinChannel(getChannelConfiguration(surface, expressConfiguration)).asFlow().collect { status ->
                     launchMain {
                         Timber.d("Channel status: $status")
                         onChannelState.value = status
@@ -119,6 +127,10 @@ class ChannelExpressRepository(private val context: Application) {
                 if (continuation.isActive) continuation.resume(ConnectionStatus.FAILED)
             }
         }
+    }
+
+    fun updateAuthenticationToken(authenticationToken: String) {
+        channelExpress?.pCastExpress?.setAuthenticationToken(authenticationToken)
     }
 
     fun isRoomExpressInitialized(): Boolean = roomExpress != null

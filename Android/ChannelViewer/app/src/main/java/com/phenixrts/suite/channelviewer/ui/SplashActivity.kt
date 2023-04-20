@@ -68,16 +68,22 @@ class SplashActivity : DeepLinkActivity() {
     override fun isAlreadyInitialized(): Boolean = channelExpress.isRoomExpressInitialized()
 
     private suspend fun showLandingScreen() {
-        val config = configuration.asConfigurationModel()
-        if (config == null || config.channelAlias.isNullOrBlank()) {
+        var config = configuration.asConfigurationModel()
+
+        if (config == null || config.edgeToken.isNullOrBlank()) {
             showErrorDialog(ExpressError.DEEP_LINK_ERROR)
             return
         }
+
+        if (config.authToken.isNullOrBlank()) {
+            config = config.copy(authToken = config.edgeToken)
+        }
+
         timeoutHandler.postDelayed(timeoutRunnable, TIMEOUT_DELAY)
         channelExpress.setupChannelExpress(config)
         channelExpress.waitForPCast()
-        Timber.d("Joining channel: ${config.channelAlias}")
-        val status = viewModel.joinChannel(config.channelAlias!!)
+        Timber.d("Joining channel: ${config}")
+        val status = viewModel.joinChannel()
         timeoutHandler.removeCallbacks(timeoutRunnable)
         if (status == ConnectionStatus.CONNECTED) {
             Timber.d("Navigating to Landing Screen")

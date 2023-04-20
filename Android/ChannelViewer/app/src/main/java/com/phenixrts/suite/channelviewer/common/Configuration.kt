@@ -13,27 +13,16 @@ import com.phenixrts.pcast.android.AndroidVideoRenderSurface
 import com.phenixrts.suite.phenixdeeplink.common.ChannelConfiguration
 import timber.log.Timber
 
-fun getChannelConfiguration(channelAlias: String, surface: AndroidVideoRenderSurface,
+fun getChannelConfiguration(surface: AndroidVideoRenderSurface,
                             channelConfig: ChannelConfiguration): JoinChannelOptions {
-    var joinRoomBuilder = RoomExpressFactory.createJoinRoomOptionsBuilder()
-        .withRoomAlias(channelAlias)
-    if (channelConfig.edgeToken.isNullOrBlank()) {
-        joinRoomBuilder = joinRoomBuilder.withCapabilities(arrayOf("real-time"))
-    }
-    val joinRoomOptions = joinRoomBuilder.buildJoinRoomOptions()
     val rendererOptions = RendererOptions().apply {
         aspectRatioMode = AspectRatioMode.LETTERBOX
     }
     var joinChannelBuilder = ChannelExpressFactory
         .createJoinChannelOptionsBuilder()
-        .withJoinRoomOptions(joinRoomOptions)
+        .withStreamToken(channelConfig.edgeToken)
         .withRenderer(surface)
         .withRendererOptions(rendererOptions)
-    if (!channelConfig.edgeToken.isNullOrBlank()) {
-        Timber.d("Joining with edge token: ${channelConfig.edgeToken}")
-        joinChannelBuilder = joinChannelBuilder
-                .withStreamToken(channelConfig.edgeToken)
-                .withSkipRetryOnUnauthorized()
-    }
+
     return joinChannelBuilder.buildJoinChannelOptions()
 }

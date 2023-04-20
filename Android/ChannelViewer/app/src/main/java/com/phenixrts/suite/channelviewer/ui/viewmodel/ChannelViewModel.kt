@@ -22,6 +22,7 @@ class ChannelViewModel(private val channelExpressRepository: ChannelExpressRepos
     private val androidVideoSurface = AndroidVideoRenderSurface()
     private var roomService: RoomService? = null
     val onChannelExpressError = channelExpressRepository.onChannelExpressError
+    val onAuthenticationStatus = channelExpressRepository.onAuthenticationStatus
     val mimeTypes = channelExpressRepository.mimeTypes
     val onChannelState = MutableLiveData<ConnectionStatus>()
 
@@ -36,13 +37,17 @@ class ChannelViewModel(private val channelExpressRepository: ChannelExpressRepos
         }
     }
 
-    suspend fun joinChannel(channelAlias: String): ConnectionStatus = suspendCoroutine { continuation ->
+    suspend fun joinChannel(): ConnectionStatus = suspendCoroutine { continuation ->
         launchMain {
-            continuation.resume(channelExpressRepository.joinChannel(channelAlias, androidVideoSurface))
+            continuation.resume(channelExpressRepository.joinChannel(androidVideoSurface))
         }
     }
 
     fun updateSurfaceHolder(holder: SurfaceHolder) {
         androidVideoSurface.setSurfaceHolder(holder)
+    }
+
+    fun updateAuthenticationToken(authenticationToken: String) {
+        channelExpressRepository.updateAuthenticationToken(authenticationToken);
     }
 }

@@ -7,6 +7,7 @@ package com.phenixrts.suite.channelviewer.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.phenixrts.common.AuthenticationStatus
 import com.phenixrts.suite.channelviewer.BuildConfig
 import com.phenixrts.suite.channelviewer.ChannelViewerApplication
 import com.phenixrts.suite.channelviewer.R
@@ -48,11 +49,13 @@ class MainActivity : AppCompatActivity() {
         binding.menuOverlay.setOnClickListener {
             debugMenu.onScreenTapped()
         }
-        viewModel.onChannelExpressError.observe(this, {
+
+        viewModel.onChannelExpressError.observe(this) {
             Timber.d("Channel Express failed")
             showInvalidDeepLinkDialog()
-        })
-        viewModel.onChannelState.observe(this, { status ->
+        }
+
+        viewModel.onChannelState.observe(this) { status ->
             Timber.d("Stream state changed: $status")
             if (status == ConnectionStatus.ONLINE) {
                 binding.offlineView.root.visibility = View.GONE
@@ -63,13 +66,23 @@ class MainActivity : AppCompatActivity() {
                 Timber.d("Stream failed")
                 showInvalidDeepLinkDialog()
             }
-        })
+        }
 
-        viewModel.mimeTypes.observe(this, { mimeTypes ->
+        viewModel.mimeTypes.observe(this) { mimeTypes ->
             channelExpress.roomService?.let { service ->
                 binding.closedCaptionView.subscribe(service, mimeTypes)
             }
-        })
+        }
+
+        // Handle authentication token expiration in case of re-connection (e.g. network loss).
+        viewModel.onAuthenticationStatus.observe(this) { status ->
+            Timber.d("Authentication status changed to [$status]")
+            if (status == AuthenticationStatus.UNAUTHENTICATED) {
+                // Fetch a new authentication token and use it.
+                // val authenticationToken = ...
+                // viewModel.updateAuthenticationToken(authenticationToken)
+            }
+        }
 
         viewModel.updateSurfaceHolder(binding.channelSurface.holder)
         debugMenu.onStart(getString(R.string.debug_app_version,

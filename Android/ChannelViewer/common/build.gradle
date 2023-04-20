@@ -48,7 +48,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     // Phenix
-    implementation "com.phenixrts.android:phenix-sdk-android:$phenix_version"
+    implementation "com.phenixrts.android:$phenix_package:$phenix_version"
 
     // Material
     implementation 'com.google.android.material:material:1.3.0'

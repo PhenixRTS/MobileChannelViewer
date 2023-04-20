@@ -16,10 +16,6 @@ android {
         versionCode 1
         versionName "1.0"
         consumerProguardFiles "consumer-rules.pro"
-        buildConfigField "String", "BACKEND_URL", "\"https://demo.phenixrts.com/pcast\""
-        buildConfigField "String", "PCAST_URL", "\"\""
-        buildConfigField "String", "STAGING_BACKEND_URL", "\"https://demo-stg.phenixrts.com/pcast\""
-        buildConfigField "String", "STAGING_PCAST_URL", "\"https://pcast-stg.phenixrts.com/\""
         buildConfigField "String", "MIME_TYPES", "\"application/Phenix-CC\""
     }
 
