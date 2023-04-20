@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2022 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+  ~ Copyright 2023 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
   -->
 
-<manifest />
+<manifest package="com.phenixrts.suite.phenixdeeplink" />

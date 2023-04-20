@@ -1,58 +1,48 @@
 /*
- * Copyright 2022 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+ * Copyright 2023 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
  */
 
 package com.phenixrts.suite.channelviewer.ui.viewmodel
 
-import android.view.SurfaceView
+import android.view.SurfaceHolder
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.phenixrts.suite.channelviewer.BuildConfig
-import com.phenixrts.suite.phenixclosedcaptions.PhenixClosedCaptionView
-import com.phenixrts.suite.phenixcore.PhenixCore
-import com.phenixrts.suite.phenixcore.common.launchMain
-import com.phenixrts.suite.phenixcore.repositories.models.PhenixChannelConfiguration
-import com.phenixrts.suite.phenixcore.repositories.models.PhenixChannelState
-import com.phenixrts.suite.phenixdebugmenu.DebugMenu
-import com.phenixrts.suite.phenixdebugmenu.models.DebugEvent
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
+import androidx.lifecycle.asFlow
+import com.phenixrts.pcast.android.AndroidVideoRenderSurface
+import com.phenixrts.room.RoomService
+import com.phenixrts.suite.channelviewer.common.enums.ConnectionStatus
+import com.phenixrts.suite.channelviewer.repositories.ChannelExpressRepository
+import com.phenixrts.suite.phenixcommon.common.launchMain
+import kotlinx.coroutines.flow.collect
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-class ChannelViewModel(private val phenixCore: PhenixCore) : ViewModel() {
+class ChannelViewModel(private val channelExpressRepository: ChannelExpressRepository) : ViewModel() {
 
-    private val _onChannelState = MutableSharedFlow<PhenixChannelState>(replay = 1)
-    private var joinedChannel = ""
-
-    val onChannelState: SharedFlow<PhenixChannelState> = _onChannelState
+    private val androidVideoSurface = AndroidVideoRenderSurface()
+    private var roomService: RoomService? = null
+    val onChannelExpressError = channelExpressRepository.onChannelExpressError
+    val mimeTypes = channelExpressRepository.mimeTypes
+    val onChannelState = MutableLiveData<ConnectionStatus>()
 
     init {
         launchMain {
-            phenixCore.channels.collect { channels ->
-                channels.firstOrNull()?.let { channel ->
-                    _onChannelState.tryEmit(channel.channelState)
+            channelExpressRepository.onChannelState.asFlow().collect { state ->
+                if (state.connectionStatus == ConnectionStatus.CONNECTED) {
+                    roomService = state.roomService
                 }
+                onChannelState.value = state.connectionStatus
             }
         }
     }
 
-    fun joinChannel(channelAlias: String) {
-        joinedChannel = channelAlias
-        phenixCore.joinChannel(PhenixChannelConfiguration(channelAlias))
+    suspend fun joinChannel(channelAlias: String): ConnectionStatus = suspendCoroutine { continuation ->
+        launchMain {
+            continuation.resume(channelExpressRepository.joinChannel(channelAlias, androidVideoSurface))
+        }
     }
 
-    fun updateSurface(surface: SurfaceView) {
-        phenixCore.renderOnSurface(joinedChannel, surface)
-    }
-
-    fun subscribeToClosedCaptions(closedCaptionView: PhenixClosedCaptionView) {
-        closedCaptionView.subscribeToCC(phenixCore, joinedChannel)
-    }
-
-    fun observeDebugMenu(debugMenu: DebugMenu, onError: (String) -> Unit, onEvent: (DebugEvent) -> Unit) {
-        debugMenu.observeDebugMenu(
-            phenixCore,
-            "${BuildConfig.APPLICATION_ID}.provider",
-            onError = onError,
-            onEvent = onEvent
-        )
+    fun updateSurfaceHolder(holder: SurfaceHolder) {
+        androidVideoSurface.setSurfaceHolder(holder)
     }
 }

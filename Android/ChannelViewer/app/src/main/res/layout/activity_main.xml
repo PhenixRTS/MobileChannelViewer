@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2022 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+  ~ Copyright 2023 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
   -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -25,7 +25,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.phenixrts.suite.phenixclosedcaptions.PhenixClosedCaptionView
+        <com.phenixrts.suite.phenixclosedcaption.PhenixClosedCaptionView
             android:id="@+id/closed_caption_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -45,10 +45,11 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
-        <com.phenixrts.suite.phenixdebugmenu.DebugMenu
-            android:id="@+id/debug_menu"
+        <View
+            android:id="@+id/menu_overlay"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="64dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
