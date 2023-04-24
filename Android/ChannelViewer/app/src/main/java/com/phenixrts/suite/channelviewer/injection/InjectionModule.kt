@@ -4,7 +4,6 @@
 
 package com.phenixrts.suite.channelviewer.injection
 
-import com.phenixrts.suite.channelviewer.BuildConfig
 import com.phenixrts.suite.channelviewer.ChannelViewerApplication
 import com.phenixrts.suite.channelviewer.repositories.ChannelExpressRepository
 import com.phenixrts.suite.phenixcommon.common.FileWriterDebugTree
@@ -23,7 +22,6 @@ class InjectionModule(private val context: ChannelViewerApplication) {
 
     @Provides
     @Singleton
-    fun provideFileWriterDebugTree(): FileWriterDebugTree =
-        FileWriterDebugTree(context, TIMBER_TAG, "${BuildConfig.APPLICATION_ID}.provider")
+    fun provideFileWriterDebugTree(): FileWriterDebugTree = FileWriterDebugTree(context, TIMBER_TAG)
 
 }

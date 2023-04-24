@@ -10,9 +10,10 @@ import android.os.Handler
 import android.os.Looper
 import com.phenixrts.suite.channelviewer.ChannelViewerApplication
 import com.phenixrts.suite.channelviewer.R
-import com.phenixrts.suite.channelviewer.common.*
-import com.phenixrts.suite.channelviewer.common.enums.ConnectionStatus
 import com.phenixrts.suite.channelviewer.common.enums.ExpressError
+import com.phenixrts.suite.channelviewer.common.lazyViewModel
+import com.phenixrts.suite.channelviewer.common.showErrorDialog
+import com.phenixrts.suite.channelviewer.common.showSnackBar
 import com.phenixrts.suite.channelviewer.databinding.ActivitySplashBinding
 import com.phenixrts.suite.channelviewer.repositories.ChannelExpressRepository
 import com.phenixrts.suite.channelviewer.ui.viewmodel.ChannelViewModel
@@ -46,12 +47,17 @@ class SplashActivity : DeepLinkActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ChannelViewerApplication.component.inject(this)
+
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        channelExpress.onChannelExpressError.observe(this, { error ->
-            Timber.d("Room express failed")
-            showErrorDialog(error)
-        })
+
+        launchMain {
+            channelExpress.onChannelExpressError.collect { error ->
+                Timber.d("Room express failed")
+                showErrorDialog(error)
+            }
+        }
+
         Timber.d("Splash activity created")
         super.onCreate(savedInstanceState)
     }
@@ -79,16 +85,15 @@ class SplashActivity : DeepLinkActivity() {
             config = config.copy(authToken = config.edgeToken)
         }
 
+        Timber.d("Initializing ChannelExpress with configuration ${config}")
+
         timeoutHandler.postDelayed(timeoutRunnable, TIMEOUT_DELAY)
         channelExpress.setupChannelExpress(config)
         channelExpress.waitForPCast()
-        Timber.d("Joining channel: ${config}")
-        val status = viewModel.joinChannel()
         timeoutHandler.removeCallbacks(timeoutRunnable)
-        if (status == ConnectionStatus.CONNECTED) {
-            Timber.d("Navigating to Landing Screen")
-            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-            finish()
-        }
+
+        Timber.d("Navigating to Landing Screen")
+        startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+        finish()
     }
 }

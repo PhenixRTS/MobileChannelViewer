@@ -10,6 +10,9 @@ import android.net.Uri
 import android.os.Process
 import android.util.Log
 import androidx.core.content.FileProvider
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 import java.io.*
 import java.text.SimpleDateFormat
@@ -17,51 +20,37 @@ import java.util.*
 
 private const val DATE_FORMAT = "MM-dd HH:mm:ss.SSS"
 private val LEVEL_NAMES = arrayOf("F", "?", "T", "D", "I", "W", "E")
+private const val LOG_FOLDER = "logs"
+private const val SDK_LOG_FOLDER = "$LOG_FOLDER/sdk"
+private const val APP_LOG_FOLDER = "$LOG_FOLDER/app"
+private const val APP_LOGS_FILE = "Phenix_appLogs_"
+private const val SDK_LOGS_FILE = "Phenix_sdkLogs_"
+private const val FILE_EXTENSION = ".txt"
+private const val MAX_LINES_PER_FILE = 1000 * 10 // 10k Lines per log file
 
 class FileWriterDebugTree(
     private val context: Application,
-    private val logTag: String,
-    private val providerAuthority: String
+    private val logTag: String
 ) : Timber.DebugTree() {
 
-    private var filePath: File? = null
+    private var sdkLogFolder: File? = null
+    private var appLogFolder: File? = null
     private var sdkFileWriter: BufferedWriter? = null
     private var appFileWriter: BufferedWriter? = null
-    private var sdkLogFile: File? = null
-    private var firstAppLogFile: File? = null
-    private var secondAppLogFile: File? = null
-    private var lineCount = 0
-    private var isUsingFirstFile = true
+    private val sdkLogFiles = mutableSetOf<File>()
+    private val appLogFiles = mutableSetOf<File>()
+    private var sdkLogLineCount = 0
+    private var appLogLineCount = 0
+    private var logCollectionMethod: (((String) -> Unit) -> Unit)? = null
+
+    private val writerChannel = Channel<String>(1)
+    private val writerMutex = Mutex()
+
 
     init {
-        initFileWriter()
-    }
-
-    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        super.log(priority, tag, message, t)
-        launchIO {
-            getFormattedLogMessage(tag, priority, message, t).run {
-                writeAppLogs(this)
-            }
-        }
-    }
-
-    override fun log(priority: Int, message: String?, vararg args: Any?) {
-        super.log(priority, message, *args)
-        launchIO {
-            getFormattedLogMessage(logTag, priority, message, null).run {
-                writeAppLogs(this)
-            }
-        }
-    }
-
-    override fun log(priority: Int, t: Throwable?, message: String?, vararg args: Any?) {
-        super.log(priority, t, message, *args)
-        launchIO {
-            getFormattedLogMessage(logTag, priority, message, t).run {
-                writeAppLogs(this)
-            }
-        }
+        initLogFolders()
+        initLogFiles()
+        writeAppLogs()
     }
 
     /**
@@ -70,72 +59,155 @@ class FileWriterDebugTree(
     override fun createStackElementTag(element: StackTraceElement) =
         "$logTag: (${element.fileName}:${element.lineNumber}) #${element.methodName} "
 
-    private fun initFileWriter() {
-        val contextWrapper = ContextWrapper(context)
-        filePath = File(contextWrapper.filesDir, LOG_FOLDER)
-        if (filePath?.exists() == false && filePath?.mkdir() == false) {
-            d("Failed to create log file directory")
-            return
+    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+        super.log(priority, tag, message, t)
+        formatAndLogMessage(tag, priority, message, t)
+    }
+
+    override fun log(priority: Int, message: String?, vararg args: Any?) {
+        super.log(priority, message, *args)
+        formatAndLogMessage(logTag, priority, message, null)
+    }
+
+    override fun log(priority: Int, t: Throwable?, message: String?, vararg args: Any?) {
+        super.log(priority, t, message, *args)
+        formatAndLogMessage(logTag, priority, message, t)
+    }
+
+    fun writeSdkLogs(onWritten: () -> Unit = {}) = try {
+        logCollectionMethod?.invoke { logs ->
+            sdkFileWriter?.write(logs)
+            onWritten()
         }
+    } catch (e: Exception) {
+        e(e, "Failed to write sdk logs")
+    }
 
-        sdkLogFile = File(filePath, SDK_LOGS_FILE)
-        firstAppLogFile = File(filePath, FIRST_APP_LOGS_FILE)
-        secondAppLogFile = File(filePath, SECOND_APP_LOGS_FILE)
+    fun setLogCollectionMethod(method: ((String) -> Unit) -> Unit) {
+        logCollectionMethod = method
+    }
 
+    fun collectLogs(appLogs: Boolean, onCollected: (List<String>) -> Unit) = launchIO {
+        if (appLogs) {
+            onCollected(collectAppLogs())
+        } else {
+            writeSdkLogs {
+                onCollected(collectSdkLogs())
+            }
+        }
+    }
+
+    fun getLogFileUris(authority: String): Set<Uri> {
+        sdkFileWriter?.flush()
+        appFileWriter?.flush()
+        val logFileUris = mutableSetOf<Uri>()
+        sdkLogFiles.mapNotNullTo(logFileUris) { it.getUri(authority) }
+        appLogFiles.mapNotNullTo(logFileUris) { it.getUri(authority) }
+        return logFileUris
+    }
+
+    @Throws(Exception::class)
+    fun clearLogs() {
+        sdkFileWriter?.flush()
+        appFileWriter?.flush()
+        sdkLogFiles.forEach { it.delete() }
+        appLogFiles.forEach { it.delete() }
+        sdkLogFiles.clear()
+        appLogFiles.clear()
+        d("Log files deleted")
+        initLogFiles()
+    }
+
+    private fun collectAppLogs(): List<String> = appLogFiles.flatMap { file -> file.useLines { it.toList() } }
+
+    private fun collectSdkLogs(): List<String> = sdkLogFiles.flatMap { file -> file.useLines { it.toList() } }
+
+    private fun File.getUri(authority: String) =
+        if (length() > 0) FileProvider.getUriForFile(context, authority, this) else null
+
+    private fun initLogFolders() {
         try {
-            sdkLogFile?.let { file ->
-                sdkFileWriter = BufferedWriter(FileWriter(file, false))
+            val contextWrapper = ContextWrapper(context)
+            contextWrapper.createFolder(LOG_FOLDER)
+            sdkLogFolder = contextWrapper.createFolder(SDK_LOG_FOLDER)
+            appLogFolder = contextWrapper.createFolder(APP_LOG_FOLDER)
+            if (sdkLogFolder == null || appLogFolder == null) {
+                e("Failed to create log file directories: ${sdkLogFolder?.absolutePath}, ${appLogFolder?.absolutePath}")
+                return
             }
-            firstAppLogFile?.let { file ->
-                appFileWriter = BufferedWriter(FileWriter(file, true))
-                getLineCount(file)
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            lineCount = 0
+            d("File writer initialized")
+        } catch (e: Exception) {
+            e(e, "Failed to initialize file writer")
+            sdkLogLineCount = 0
+            appLogLineCount = 0
         }
     }
 
-    private fun getLineCount(file: File) {
-        lineCount = try {
-            val lineReader = LineNumberReader(BufferedReader(InputStreamReader(FileInputStream(file))))
-            lineReader.skip(Long.MAX_VALUE)
-            lineReader.lineNumber + 1
-        } catch (e: IOException) {
-            e.printStackTrace()
-            0
+    private fun initLogFiles() {
+        try {
+            sdkLogFolder!!.listFiles()?.let { sdkLogFiles.addAll(it) }
+            appLogFolder!!.listFiles()?.let { appLogFiles.addAll(it) }
+
+            val sdkLogFile = sdkLogFiles.lastOrNull()
+                ?: sdkLogFolder!!.createLogFile(SDK_LOGS_FILE).apply { sdkLogFiles.add(this) }
+            val appLogFile = appLogFiles.lastOrNull()
+                ?: appLogFolder!!.createLogFile(APP_LOGS_FILE).apply { appLogFiles.add(this) }
+
+            sdkFileWriter = BufferedWriter(FileWriter(sdkLogFile, true))
+            appFileWriter = BufferedWriter(FileWriter(appLogFile, true))
+
+            sdkLogLineCount = countLines(sdkLogFile)
+            appLogLineCount = countLines(appLogFile)
+
+            d("SDK log files: ${sdkLogFiles.size}, app log files: ${appLogFiles.size}")
+        } catch (e: Exception) {
+            e(e, "Failed to initialize file writer")
+            sdkLogLineCount = 0
+            appLogLineCount = 0
         }
     }
 
-    private fun writeAppLogs(message: String) = try {
-        if (lineCount == MAX_LINES_PER_FILE) {
-            appFileWriter?.flush()
-            appFileWriter?.close()
-            if (isUsingFirstFile) {
-                isUsingFirstFile = false
-                secondAppLogFile?.let { file ->
-                    appFileWriter = BufferedWriter(FileWriter(file, false))
-                }
-            } else {
-                firstAppLogFile?.let { file ->
-                    appFileWriter = BufferedWriter(FileWriter(file, false))
-                }
-            }
-            lineCount = 0
-        }
-        appFileWriter?.append(message + "\n")
-        lineCount++
+    private fun ContextWrapper.createFolder(name: String) =
+        File(filesDir, name).apply { mkdir() }.takeIf { it.exists() }
+
+    private fun File.createLogFile(name: String): File {
+        val fileCount = list()?.size ?: 0
+        return File(this, "$name$fileCount$FILE_EXTENSION")
+    }
+
+    private fun countLines(file: File) = try {
+        val lineReader = LineNumberReader(BufferedReader(InputStreamReader(FileInputStream(file))))
+        lineReader.skip(Long.MAX_VALUE)
+        lineReader.lineNumber + 1
     } catch (e: Exception) {
-        d(e, "Failed to write app logs")
+        e(e, "Failed to count lines for file: ${file.absolutePath}")
+        0
     }
 
-    fun writeSdkLogs(message: String) = try {
-        sdkFileWriter?.write(message)
-    } catch (e: Exception) {
-        d(e, "Failed to write sdk logs")
+    private fun writeAppLogs() = launchIO {
+        while (true) {
+            runCatching {
+                val message = writerChannel.receive()
+                writerMutex.withLock {
+                    if (appLogLineCount == MAX_LINES_PER_FILE) {
+                        appFileWriter?.flush()
+                        appFileWriter?.close()
+                        val appLogFile = appLogFolder!!.createLogFile(APP_LOGS_FILE)
+                        appFileWriter = BufferedWriter(FileWriter(appLogFile, true))
+                        appLogFiles.add(appLogFile)
+                        appLogLineCount = 0
+                    }
+                    appFileWriter?.append(message + "\n")
+                    appFileWriter?.flush()
+                    appLogLineCount++
+                }
+            }.onFailure { throwable ->
+                e(throwable, "Failed to write app logs")
+            }
+        }
     }
 
-    private fun getFormattedLogMessage(tag: String?, level: Int, message: String?, e: Throwable?): String {
+    private fun formatAndLogMessage(tag: String?, level: Int, message: String?, e: Throwable?) {
         val id: Long = try {
             Process.myTid().toLong()
         } catch (e1: RuntimeException) {
@@ -150,36 +222,7 @@ class FileWriterDebugTree(
         if (e != null) {
             builder.append(": throwable=").append(Log.getStackTraceString(e))
         }
-        return builder.toString()
-    }
-
-    fun getLogFileUris(): List<Uri> {
-        val fileUris = arrayListOf<Uri>()
-        sdkFileWriter?.flush()
-        appFileWriter?.flush()
-        sdkLogFile?.takeIf { it.length() > 0 }?.let { file ->
-            FileProvider.getUriForFile(context, providerAuthority, file)
-        }?.let { sdkUri ->
-            fileUris.add(sdkUri)
-        }
-        firstAppLogFile?.takeIf { it.length() > 0 }?.let { file ->
-            FileProvider.getUriForFile(context, providerAuthority, file)
-        }?.let { appUri ->
-            fileUris.add(appUri)
-        }
-        secondAppLogFile?.takeIf { it.length() > 0 }?.let { file ->
-            FileProvider.getUriForFile(context, providerAuthority, file)
-        }?.let { appUri ->
-            fileUris.add(appUri)
-        }
-        return fileUris
-    }
-
-    companion object {
-        private const val LOG_FOLDER = "logs"
-        private const val FIRST_APP_LOGS_FILE = "Phenix_appLogs_1.txt"
-        private const val SECOND_APP_LOGS_FILE = "Phenix_appLogs_2.txt"
-        private const val SDK_LOGS_FILE = "Phenix_sdkLogs.txt"
-        private const val MAX_LINES_PER_FILE = 1000 * 10 // 10k Lines per log file
+        val formattedMessage = builder.toString()
+        writerChannel.trySend(formattedMessage)
     }
 }

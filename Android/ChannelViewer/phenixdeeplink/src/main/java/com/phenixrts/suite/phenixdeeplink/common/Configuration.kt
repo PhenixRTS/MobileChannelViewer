@@ -26,7 +26,11 @@ data class ChannelConfiguration(
 }
 
 fun HashMap<String, String>.asConfigurationModel(): ChannelConfiguration? = try {
-    Json { ignoreUnknownKeys = true }.decodeFromString<ChannelConfiguration>(JSONObject(this as Map<*, *>).toString())
+    Json {
+        ignoreUnknownKeys = true
+        encodeDefaults = true
+        isLenient = true
+    }.decodeFromString<ChannelConfiguration>(JSONObject(this as Map<*, *>).toString())
 } catch (e: Exception) {
     null
 }

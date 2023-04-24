@@ -4,32 +4,24 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.4.30'
-    ext.lifecycle_version = '2.3.0'
-    ext.arch_version = '2.1.0'
-    ext.dagger_version = '2.32'
-    ext.kotlinx_coroutines_version = '1.4.1'
-    ext.phenix_package = 'phenix-sdk-android-beta'
-    ext.phenix_version = '2023.0.0-df80922-20230822T073055-beta.16'
+    ext.phenix_sdk_package = 'com.phenixrts.android:phenix-sdk-android-beta:2023.0.0-df80922-20230822T073055-beta.16'
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:1.7.10"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:1.6.21"
     }
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven {
             url project.findProperty("phenixMavenRepositoryUrl") ?: "https://maven.pkg.github.com/PhenixRTS/AndroidSDK"
 

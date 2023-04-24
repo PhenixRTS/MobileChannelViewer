@@ -19,7 +19,11 @@ import com.phenixrts.room.RoomService
 import com.phenixrts.suite.phenixclosedcaption.ClosedCaptionMessage.AnchorPosition
 import com.phenixrts.suite.phenixclosedcaption.ClosedCaptionMessage.WindowUpdate
 import com.phenixrts.suite.phenixclosedcaption.common.drawClosedCaptions
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json

@@ -52,26 +52,43 @@ private fun getTextGravity(mode: JustificationMode): Int = when(mode) {
 private fun getMeasuredFontSize(widthInCharacters: Int, maxRowWidth: Int, maxRowHeight: Int,
                                 paddingHorizontal: Int, paddingVertical: Int): Float {
     val paint = Paint()
-    val minFontSize = MIN_FONT_SIZE
-    var fontSize = MAX_FONT_SIZE
-    var sizeFound = false
     val textToMeasure = MEASURABLE_CHARACTER.repeat(widthInCharacters)
+    var currMinFontSize = MIN_FONT_SIZE
+    var currMaxFontSize = MAX_FONT_SIZE
+    var sizeFound = false
+
+    fun calcFontSize() = currMinFontSize + (currMaxFontSize - currMinFontSize) / 2
+    var fontSize = calcFontSize()
+    var fontSizeCandidate = fontSize
+    fun isFontCandidateFound() = fontSizeCandidate in (fontSize - FONT_CHANGE_DELTA .. fontSize + FONT_CHANGE_DELTA)
+
+    var count = 0
     while (!sizeFound) {
         val textBounds = Rect()
         paint.textSize = fontSize
         paint.getTextBounds(textToMeasure, 0, textToMeasure.length, textBounds)
         val measuredRowWidth = textBounds.width() + paddingHorizontal
         val measuredRowHeight = paint.fontMetrics.bottom - paint.fontMetrics.top + paint.fontMetrics.leading + paddingVertical
-
-        if (measuredRowWidth <= maxRowWidth && measuredRowHeight <= maxRowHeight || fontSize < minFontSize) {
+        if (measuredRowWidth > maxRowWidth || measuredRowHeight > maxRowHeight) {
+            currMaxFontSize = fontSize
+            fontSizeCandidate = fontSize
+            fontSize = calcFontSize()
+            if (isFontCandidateFound()) sizeFound = true
+        } else if (fontSize > currMinFontSize) {
+            currMinFontSize = fontSize
+            fontSizeCandidate = fontSize
+            fontSize = calcFontSize()
+            if (isFontCandidateFound()) sizeFound = true
+        } else {
             sizeFound = true
-            Timber.d("Font size calculated: $fontSize, width: [$measuredRowWidth / $maxRowWidth], height: [$measuredRowHeight / $maxRowHeight}")
         }
-        else {
-            fontSize -= FONT_CHANGE_DELTA
+        count++
+        if (sizeFound) {
+            Timber.d("Font size calculated: $fontSize, width: [$measuredRowWidth / $maxRowWidth], " +
+                    "height: [$measuredRowHeight / $maxRowHeight} in: $count steps")
         }
     }
-    return fontSize
+    return fontSizeCandidate
 }
 
 private fun AppCompatTextView.drawText(caption: String, rowHeight: Int, fontSize: Float, configuration: ClosedCaptionConfiguration) {

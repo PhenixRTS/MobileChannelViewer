@@ -5,15 +5,14 @@
 package com.phenixrts.suite.channelviewer.ui.viewmodel
 
 import android.view.SurfaceHolder
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
 import com.phenixrts.pcast.android.AndroidVideoRenderSurface
 import com.phenixrts.room.RoomService
 import com.phenixrts.suite.channelviewer.common.enums.ConnectionStatus
 import com.phenixrts.suite.channelviewer.repositories.ChannelExpressRepository
+import com.phenixrts.suite.phenixcommon.common.ConsumableSharedFlow
 import com.phenixrts.suite.phenixcommon.common.launchMain
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -24,15 +23,15 @@ class ChannelViewModel(private val channelExpressRepository: ChannelExpressRepos
     val onChannelExpressError = channelExpressRepository.onChannelExpressError
     val onAuthenticationStatus = channelExpressRepository.onAuthenticationStatus
     val mimeTypes = channelExpressRepository.mimeTypes
-    val onChannelState = MutableLiveData<ConnectionStatus>()
+    val onChannelState = ConsumableSharedFlow<ConnectionStatus>()
 
     init {
         launchMain {
-            channelExpressRepository.onChannelState.asFlow().collect { state ->
+            channelExpressRepository.onChannelState.asSharedFlow().collect { state ->
                 if (state.connectionStatus == ConnectionStatus.CONNECTED) {
                     roomService = state.roomService
                 }
-                onChannelState.value = state.connectionStatus
+                onChannelState.tryEmit(state.connectionStatus)
             }
         }
     }

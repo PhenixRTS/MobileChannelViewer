@@ -15,5 +15,3 @@
 /app/.gitignore
 /app/proguard-rules.pro
 /.idea/
-/gradlew
-/gradlew.bat
