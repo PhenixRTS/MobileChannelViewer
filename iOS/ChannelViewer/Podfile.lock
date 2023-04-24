@@ -1,20 +1,17 @@
 PODS:
   - PhenixClosedCaptions (0.1.0):
-    - PhenixCore
-  - PhenixCore (0.1.0):
     - PhenixSdk
   - PhenixDebug (0.1.0):
-    - PhenixCore
+    - PhenixSdk
   - PhenixDeeplink (0.1.0)
-  - PhenixSdk (2022.0.3)
+  - PhenixSdk (2022.0.5-2205f42-20221121T154334682)
   - SwiftLint (0.47.1)
 
 DEPENDENCIES:
   - PhenixClosedCaptions (from `../PhenixClosedCaptions`)
-  - PhenixCore (from `../PhenixCore`)
   - PhenixDebug (from `../PhenixDebug`)
   - PhenixDeeplink (from `../PhenixDeeplink`)
-  - PhenixSdk (= 2022.0.3)
+  - PhenixSdk (= 2022.0.5-2205f42-20221121T154334682)
   - SwiftLint (~> 0.47.1)
 
 SPEC REPOS:
@@ -26,21 +23,18 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   PhenixClosedCaptions:
     :path: "../PhenixClosedCaptions"
-  PhenixCore:
-    :path: "../PhenixCore"
   PhenixDebug:
     :path: "../PhenixDebug"
   PhenixDeeplink:
     :path: "../PhenixDeeplink"
 
 SPEC CHECKSUMS:
-  PhenixClosedCaptions: c19e454a3d2cffd83012da200ae8e24125eb1eb7
-  PhenixCore: 6b23f145fa824074cf8fe50fdf60d59ee932b93c
-  PhenixDebug: 009fd4dad0f965e67decc52f6afeee85e869c14b
+  PhenixClosedCaptions: 9861fe359d3f7532b5ed08f1e77c728bfd84c77f
+  PhenixDebug: b1c7e59bbbd85d143bca117d982f5f3d70eee045
   PhenixDeeplink: 67dfe518f7d8c98acd39825117f349eba1db5165
-  PhenixSdk: 185954e6f777fdf19008ccae8e58d4bf0e7c51e8
+  PhenixSdk: 4b00328ba0dd56adba9a4310ec36c20915fdf54b
   SwiftLint: f80f1be7fa96d30e0aa68e58d45d4ea1ccaac519
 
-PODFILE CHECKSUM: 774affb778b76da765ce27ce934a7947bffa2de6
+PODFILE CHECKSUM: fa01fca53ca18bfacdeb7ad971096c821cd0647b
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.0

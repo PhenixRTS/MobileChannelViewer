@@ -7,19 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4884D65F27B270B500B40AC7 /* PhenixDeeplink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4884D65E27B270B500B40AC7 /* PhenixDeeplink.swift */; };
-		B550BBA5276B79E400C05715 /* PhenixDeeplinkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B550BBA4276B79E400C05715 /* PhenixDeeplinkModel.swift */; };
 		B586C8FF25C9633800ED5757 /* PhenixDeeplink.h in Headers */ = {isa = PBXBuildFile; fileRef = B586C8FD25C9633800ED5757 /* PhenixDeeplink.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B586C90B25C9635F00ED5757 /* PhenixDeeplinkUrlModelRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B586C90825C9635F00ED5757 /* PhenixDeeplinkUrlModelRepresentable.swift */; };
+		B586C90925C9635F00ED5757 /* PhenixDeeplinkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B586C90625C9635F00ED5757 /* PhenixDeeplinkService.swift */; };
+		B586C90B25C9635F00ED5757 /* PhenixDeeplinkModelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B586C90825C9635F00ED5757 /* PhenixDeeplinkModelProvider.swift */; };
+		B5BED78F25C964A300B734F0 /* PhenixDeeplinkService+Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5BED78E25C964A300B734F0 /* PhenixDeeplinkService+Factory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4884D65E27B270B500B40AC7 /* PhenixDeeplink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixDeeplink.swift; sourceTree = "<group>"; };
-		B550BBA4276B79E400C05715 /* PhenixDeeplinkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixDeeplinkModel.swift; sourceTree = "<group>"; };
 		B586C8FA25C9633800ED5757 /* PhenixDeeplink.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PhenixDeeplink.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B586C8FD25C9633800ED5757 /* PhenixDeeplink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhenixDeeplink.h; sourceTree = "<group>"; };
 		B586C8FE25C9633800ED5757 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B586C90825C9635F00ED5757 /* PhenixDeeplinkUrlModelRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhenixDeeplinkUrlModelRepresentable.swift; sourceTree = "<group>"; };
+		B586C90625C9635F00ED5757 /* PhenixDeeplinkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhenixDeeplinkService.swift; sourceTree = "<group>"; };
+		B586C90825C9635F00ED5757 /* PhenixDeeplinkModelProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhenixDeeplinkModelProvider.swift; sourceTree = "<group>"; };
+		B5BED78E25C964A300B734F0 /* PhenixDeeplinkService+Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhenixDeeplinkService+Factory.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,22 +33,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4884D66027B2725000B40AC7 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				B586C90825C9635F00ED5757 /* PhenixDeeplinkUrlModelRepresentable.swift */,
-			);
-			path = Protocols;
-			sourceTree = "<group>";
-		};
-		B550BBA6276B7F0F00C05715 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				B550BBA4276B79E400C05715 /* PhenixDeeplinkModel.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		B586C8F025C9633800ED5757 = {
 			isa = PBXGroup;
 			children = (
@@ -68,10 +52,9 @@
 		B586C8FC25C9633800ED5757 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				B586C8FD25C9633800ED5757 /* PhenixDeeplink.h */,
-				4884D65E27B270B500B40AC7 /* PhenixDeeplink.swift */,
-				4884D66027B2725000B40AC7 /* Protocols */,
-				B550BBA6276B7F0F00C05715 /* Models */,
+				B586C90825C9635F00ED5757 /* PhenixDeeplinkModelProvider.swift */,
+				B586C90625C9635F00ED5757 /* PhenixDeeplinkService.swift */,
+				B5BED78E25C964A300B734F0 /* PhenixDeeplinkService+Factory.swift */,
 				B5BED78C25C963CC00B734F0 /* Supporting Files */,
 			);
 			path = Source;
@@ -80,6 +63,7 @@
 		B5BED78C25C963CC00B734F0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B586C8FD25C9633800ED5757 /* PhenixDeeplink.h */,
 				B586C8FE25C9633800ED5757 /* Info.plist */,
 			);
 			path = "Supporting Files";
@@ -165,9 +149,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4884D65F27B270B500B40AC7 /* PhenixDeeplink.swift in Sources */,
-				B550BBA5276B79E400C05715 /* PhenixDeeplinkModel.swift in Sources */,
-				B586C90B25C9635F00ED5757 /* PhenixDeeplinkUrlModelRepresentable.swift in Sources */,
+				B5BED78F25C964A300B734F0 /* PhenixDeeplinkService+Factory.swift in Sources */,
+				B586C90925C9635F00ED5757 /* PhenixDeeplinkService.swift in Sources */,
+				B586C90B25C9635F00ED5757 /* PhenixDeeplinkModelProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,39 +7,37 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		48C037B027F2FB0100F043C8 /* Bootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C037AF27F2FB0100F043C8 /* Bootstrap.swift */; };
-		48C037B327F2FC1E00F043C8 /* LaunchScreenImitation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48C037B127F2FC1E00F043C8 /* LaunchScreenImitation.storyboard */; };
-		48C037B727F2FC6F00F043C8 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C037B627F2FC6F00F043C8 /* LaunchViewController.swift */; };
 		48C037BC27F2FD8E00F043C8 /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C037BA27F2FD8E00F043C8 /* OSLog.swift */; };
-		48C037BD27F2FD8E00F043C8 /* Storyboarded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C037BB27F2FD8E00F043C8 /* Storyboarded.swift */; };
-		48C037BF27F2FDF600F043C8 /* AppSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C037BE27F2FDF600F043C8 /* AppSession.swift */; };
-		48C037C127F31DF000F043C8 /* ViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C037C027F31DF000F043C8 /* ViewerViewController.swift */; };
-		48C037C727F31E7800F043C8 /* ViewerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C037C627F31E7800F043C8 /* ViewerViewModel.swift */; };
-		48C037CA27F34E5A00F043C8 /* UIViewController+TopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C037C927F34E5A00F043C8 /* UIViewController+TopViewController.swift */; };
 		5B088843A97DBD1A9F3D6EB3 /* Pods_ChannelViewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C521EE5DA312F969187FA2FD /* Pods_ChannelViewer.framework */; };
 		B59097AF25B5C885003D5323 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59097AE25B5C885003D5323 /* AppDelegate.swift */; };
 		B59097B625B5C885003D5323 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B59097B425B5C885003D5323 /* Main.storyboard */; };
 		B59097B825B5C886003D5323 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B59097B725B5C886003D5323 /* Assets.xcassets */; };
 		B59097BB25B5C886003D5323 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B59097B925B5C886003D5323 /* LaunchScreen.storyboard */; };
+		B59097DC25B5D5CB003D5323 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59097DB25B5D5CB003D5323 /* ViewController.swift */; };
+		B59097E625B5D72F003D5323 /* PhenixConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59097E525B5D72F003D5323 /* PhenixConfiguration.swift */; };
+		B590982525B71BDC003D5323 /* PhenixChannelViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B590982425B71BDC003D5323 /* PhenixChannelViewer.swift */; };
+		B590982925B72C36003D5323 /* PhenixChannelViewerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B590982825B72C36003D5323 /* PhenixChannelViewerDelegate.swift */; };
+		B5A0B8EF25C00346004E1C6D /* PhenixRequestStatusLocalized.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A0B8EE25C00345004E1C6D /* PhenixRequestStatusLocalized.swift */; };
+		B5F704F825D6AC2100CD4504 /* ValidationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F704F725D6AC2100CD4504 /* ValidationProvider.swift */; };
+		B5F704FC25D6ACEF00CD4504 /* PhenixDeeplinkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5F704FB25D6ACEF00CD4504 /* PhenixDeeplinkModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		48C037AF27F2FB0100F043C8 /* Bootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bootstrap.swift; sourceTree = "<group>"; };
-		48C037B227F2FC1E00F043C8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreenImitation.storyboard; sourceTree = "<group>"; };
-		48C037B627F2FC6F00F043C8 /* LaunchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		48C037BA27F2FD8E00F043C8 /* OSLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSLog.swift; sourceTree = "<group>"; };
-		48C037BB27F2FD8E00F043C8 /* Storyboarded.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storyboarded.swift; sourceTree = "<group>"; };
-		48C037BE27F2FDF600F043C8 /* AppSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSession.swift; sourceTree = "<group>"; };
-		48C037C027F31DF000F043C8 /* ViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewerViewController.swift; sourceTree = "<group>"; };
-		48C037C627F31E7800F043C8 /* ViewerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewerViewModel.swift; sourceTree = "<group>"; };
-		48C037C927F34E5A00F043C8 /* UIViewController+TopViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+TopViewController.swift"; sourceTree = "<group>"; };
 		B59097AB25B5C885003D5323 /* ChannelViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChannelViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B59097AE25B5C885003D5323 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B59097B525B5C885003D5323 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B59097B725B5C886003D5323 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B59097BA25B5C886003D5323 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B59097BC25B5C886003D5323 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B59097DB25B5D5CB003D5323 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		B59097E525B5D72F003D5323 /* PhenixConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixConfiguration.swift; sourceTree = "<group>"; };
+		B590982425B71BDC003D5323 /* PhenixChannelViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixChannelViewer.swift; sourceTree = "<group>"; };
+		B590982825B72C36003D5323 /* PhenixChannelViewerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixChannelViewerDelegate.swift; sourceTree = "<group>"; };
 		B59098E325B85B29003D5323 /* ChannelViewer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ChannelViewer.entitlements; sourceTree = "<group>"; };
+		B5A0B8EE25C00345004E1C6D /* PhenixRequestStatusLocalized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixRequestStatusLocalized.swift; sourceTree = "<group>"; };
+		B5F704F725D6AC2100CD4504 /* ValidationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationProvider.swift; sourceTree = "<group>"; };
+		B5F704FB25D6ACEF00CD4504 /* PhenixDeeplinkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhenixDeeplinkModel.swift; sourceTree = "<group>"; };
 		C521EE5DA312F969187FA2FD /* Pods_ChannelViewer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChannelViewer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8A03354AE29B0EC0F7B44C6 /* Pods-ChannelViewer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChannelViewer.release.xcconfig"; path = "Target Support Files/Pods-ChannelViewer/Pods-ChannelViewer.release.xcconfig"; sourceTree = "<group>"; };
 		EE073E8D3146ADBB65B2DDDF /* Pods-ChannelViewer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChannelViewer.debug.xcconfig"; path = "Target Support Files/Pods-ChannelViewer/Pods-ChannelViewer.debug.xcconfig"; sourceTree = "<group>"; };
@@ -63,32 +61,6 @@
 				C521EE5DA312F969187FA2FD /* Pods_ChannelViewer.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		48C037B427F2FC3C00F043C8 /* Scenes */ = {
-			isa = PBXGroup;
-			children = (
-				48C037B527F2FC4800F043C8 /* LaunchScene */,
-				48C037B827F2FCB100F043C8 /* ViewerScene */,
-			);
-			path = Scenes;
-			sourceTree = "<group>";
-		};
-		48C037B527F2FC4800F043C8 /* LaunchScene */ = {
-			isa = PBXGroup;
-			children = (
-				48C037B627F2FC6F00F043C8 /* LaunchViewController.swift */,
-			);
-			path = LaunchScene;
-			sourceTree = "<group>";
-		};
-		48C037B827F2FCB100F043C8 /* ViewerScene */ = {
-			isa = PBXGroup;
-			children = (
-				48C037C027F31DF000F043C8 /* ViewerViewController.swift */,
-				48C037C627F31E7800F043C8 /* ViewerViewModel.swift */,
-			);
-			path = ViewerScene;
 			sourceTree = "<group>";
 		};
 		6BA4082C42D627466CAB8FFD /* Pods */ = {
@@ -123,10 +95,10 @@
 			children = (
 				B59098E325B85B29003D5323 /* ChannelViewer.entitlements */,
 				B59097AE25B5C885003D5323 /* AppDelegate.swift */,
-				48C037BE27F2FDF600F043C8 /* AppSession.swift */,
-				48C037AF27F2FB0100F043C8 /* Bootstrap.swift */,
+				B59097DB25B5D5CB003D5323 /* ViewController.swift */,
+				B5F704FA25D6ACDC00CD4504 /* Deeplink */,
+				B59097E425B5D70E003D5323 /* Phenix */,
 				B59097C625B5CA03003D5323 /* Resources */,
-				48C037B427F2FC3C00F043C8 /* Scenes */,
 				B59097C325B5C99C003D5323 /* Support */,
 				B59097C425B5C9C4003D5323 /* UserInterface */,
 			);
@@ -138,8 +110,6 @@
 			children = (
 				B59097BC25B5C886003D5323 /* Info.plist */,
 				48C037BA27F2FD8E00F043C8 /* OSLog.swift */,
-				48C037BB27F2FD8E00F043C8 /* Storyboarded.swift */,
-				48C037C927F34E5A00F043C8 /* UIViewController+TopViewController.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -148,7 +118,6 @@
 			isa = PBXGroup;
 			children = (
 				B59097B925B5C886003D5323 /* LaunchScreen.storyboard */,
-				48C037B127F2FC1E00F043C8 /* LaunchScreenImitation.storyboard */,
 				B59097B425B5C885003D5323 /* Main.storyboard */,
 			);
 			path = UserInterface;
@@ -160,6 +129,34 @@
 				B59097B725B5C886003D5323 /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		B59097E425B5D70E003D5323 /* Phenix */ = {
+			isa = PBXGroup;
+			children = (
+				B59097E525B5D72F003D5323 /* PhenixConfiguration.swift */,
+				B5A0B8EE25C00345004E1C6D /* PhenixRequestStatusLocalized.swift */,
+				B5F704F725D6AC2100CD4504 /* ValidationProvider.swift */,
+				B590983425B7356E003D5323 /* Viewer */,
+			);
+			path = Phenix;
+			sourceTree = "<group>";
+		};
+		B590983425B7356E003D5323 /* Viewer */ = {
+			isa = PBXGroup;
+			children = (
+				B590982425B71BDC003D5323 /* PhenixChannelViewer.swift */,
+				B590982825B72C36003D5323 /* PhenixChannelViewerDelegate.swift */,
+			);
+			path = Viewer;
+			sourceTree = "<group>";
+		};
+		B5F704FA25D6ACDC00CD4504 /* Deeplink */ = {
+			isa = PBXGroup;
+			children = (
+				B5F704FB25D6ACEF00CD4504 /* PhenixDeeplinkModel.swift */,
+			);
+			path = Deeplink;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -224,7 +221,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48C037B327F2FC1E00F043C8 /* LaunchScreenImitation.storyboard in Resources */,
 				B59097BB25B5C886003D5323 /* LaunchScreen.storyboard in Resources */,
 				B59097B825B5C886003D5323 /* Assets.xcassets in Resources */,
 				B59097B625B5C885003D5323 /* Main.storyboard in Resources */,
@@ -316,29 +312,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48C037BF27F2FDF600F043C8 /* AppSession.swift in Sources */,
-				48C037B027F2FB0100F043C8 /* Bootstrap.swift in Sources */,
 				B59097AF25B5C885003D5323 /* AppDelegate.swift in Sources */,
 				48C037BC27F2FD8E00F043C8 /* OSLog.swift in Sources */,
-				48C037C727F31E7800F043C8 /* ViewerViewModel.swift in Sources */,
-				48C037CA27F34E5A00F043C8 /* UIViewController+TopViewController.swift in Sources */,
-				48C037BD27F2FD8E00F043C8 /* Storyboarded.swift in Sources */,
-				48C037B727F2FC6F00F043C8 /* LaunchViewController.swift in Sources */,
-				48C037C127F31DF000F043C8 /* ViewerViewController.swift in Sources */,
+				B5A0B8EF25C00346004E1C6D /* PhenixRequestStatusLocalized.swift in Sources */,
+				B590982925B72C36003D5323 /* PhenixChannelViewerDelegate.swift in Sources */,
+				B5F704FC25D6ACEF00CD4504 /* PhenixDeeplinkModel.swift in Sources */,
+				B59097DC25B5D5CB003D5323 /* ViewController.swift in Sources */,
+				B59097E625B5D72F003D5323 /* PhenixConfiguration.swift in Sources */,
+				B590982525B71BDC003D5323 /* PhenixChannelViewer.swift in Sources */,
+				B5F704F825D6AC2100CD4504 /* ValidationProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		48C037B127F2FC1E00F043C8 /* LaunchScreenImitation.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				48C037B227F2FC1E00F043C8 /* Base */,
-			);
-			name = LaunchScreenImitation.storyboard;
-			sourceTree = "<group>";
-		};
 		B59097B425B5C885003D5323 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

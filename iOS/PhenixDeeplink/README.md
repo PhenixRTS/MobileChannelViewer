@@ -65,27 +65,27 @@ If you prefer not to use [CocoaPods](https://cocoapods.org), you can integrate P
 
 ## Usage
 
-1. Choose which deep link model to use
+1. Create a new deep link model, which will know how to parse the provided URL parameters. This model must conform to the `PhenixDeeplinkModelProvider` protocol.
 
-1.1. Use already predefined deep link model `PhenixDeeplinkModel`, which contains all the possible deep link parameters, like, `authToken`, `publishToken`, etc.
-
-1.2. Create a new custom deep link model, which will know how to parse the provided URL parameters.
-This model must conform to the `PhenixDeeplinkUrlModelRepresentable` protocol.
-
-Here is an example deep link model for URL like  `https://{host}?authToken=DIGEST:eyJhcHBsaWNhdGlvb#test`:
+Here is an example deep link model for URL like  `https://{host}?uri=https://pcast.phenixrts.com&backend=https://demo.phenixrts.com/pcast#test`:
 
 ```swift
 import PhenixDeeplink
 
-struct ExampleDeeplinkModel: PhenixDeeplinkUrlModelRepresentable {
+struct ExampleDeeplinkModel: PhenixDeeplinkModelProvider {
     let alias: String?
-    let authToken: String?
+    let uri: URL?
+    let backend: URL?
 
     init?(components: URLComponents) {
         self.alias = components.fragment
 
-        if let string = components.queryItems?.first(where: { $0.name == "authToken" })?.value {
-            self.authToken = string
+        if let string = components.queryItems?.first(where: { $0.name == "uri" })?.value {
+            self.uri = URL(string: string)
+        }
+
+        if let string = components.queryItems?.first(where: { $0.name == "backend" })?.value {
+            self.backend = URL(string: string)
         }
     }
 }
@@ -100,17 +100,11 @@ import PhenixDeeplink
 3. In the *AppDelegate.swift* inside the method `func application(_:continue:restorationHandler:) -> Bool` make a deep link instance:
 
 ```swift
-func application(
-    _ application: UIApplication,
-    continue userActivity: NSUserActivity,
-    restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
-) -> Bool {
-    guard let model: PhenixDeeplinkModel = PhenixDeeplink.makeDeeplink(userActivity) else {
+func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+    guard let deeplink = PhenixDeeplinkService<PhenixDeeplinkModel>.makeDeeplink(userActivity) else {
         return false
     }
 
-    // Provide the deep link model to your application.
-    
-    return true
+    ...
 }
 ```

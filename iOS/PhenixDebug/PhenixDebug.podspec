@@ -19,5 +19,5 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '13.0'
   s.source_files     = 'Source/**/*.swift'
   s.xcconfig         = { "ENABLE_BITCODE" => "NO" }
-  s.dependency 'PhenixCore'
+  s.dependency 'PhenixSdk'
 end

@@ -19,5 +19,5 @@ A framework, which provides closed captions for PhenixSdk.
   s.ios.deployment_target = '13.0'
   s.xcconfig         = { "ENABLE_BITCODE" => "NO" }
   s.source_files     = 'Source/**/*.swift'
-  s.dependency 'PhenixCore'
+  s.dependency 'PhenixSdk'
 end
