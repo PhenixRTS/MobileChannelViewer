@@ -11,4 +11,5 @@
     <string name="err_configuration_changed">Configuration has changed. Please start the app again to apply the changes.</string>
     <string name="popup_ok">OK</string>
     <string name="files_deleted">Log files deleted</string>
+    <string name="enable_pip">Enable picture-in-picture</string>
 </resources>

@@ -4,16 +4,23 @@
 
 package com.phenixrts.suite.channelviewer.ui
 
+import android.app.PictureInPictureParams
+import android.content.res.Configuration
+import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
+import android.util.Rational
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.phenixrts.common.AuthenticationStatus
+import com.phenixrts.pcast.AspectRatioMode
+import com.phenixrts.pcast.Dimensions
 import com.phenixrts.suite.channelviewer.BuildConfig
 import com.phenixrts.suite.channelviewer.ChannelViewerApplication
 import com.phenixrts.suite.channelviewer.R
-import com.phenixrts.suite.channelviewer.common.enums.ConnectionStatus
 import com.phenixrts.suite.channelviewer.common.lazyViewModel
 import com.phenixrts.suite.channelviewer.common.showInvalidDeepLinkDialog
 import com.phenixrts.suite.channelviewer.common.showSnackBar
@@ -44,6 +51,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (isPictureInPictureAvailable()) {
+            binding.checkboxPipEnabled.isChecked = true
+        } else {
+            binding.checkboxPipEnabled.visibility = View.GONE
+        }
+
         launchMain {
             viewModel.onChannelExpressError.collect{
                 Timber.d("Channel Express failed")
@@ -52,19 +65,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         launchMain {
-            viewModel.onChannelState.collect { status ->
-                Timber.d("Stream state changed: $status")
-
-                if (status == ConnectionStatus.ONLINE) {
+            viewModel.onChannelStreamPlaying.collect { state ->
+                if (state.streamPlaying) {
                     binding.offlineView.root.visibility = View.GONE
                 } else {
                     binding.offlineView.root.visibility = View.VISIBLE
                 }
+            }
+        }
 
-                if (status == ConnectionStatus.FAILED) {
-                    Timber.d("Stream failed")
-                    showInvalidDeepLinkDialog()
+        launchMain {
+            viewModel.onChannelStreamPlaying.collect { state ->
+                if (state.streamPlaying) {
+                    binding.offlineView.root.visibility = View.GONE
+                } else {
+                    binding.offlineView.root.visibility = View.VISIBLE
                 }
+            }
+        }
+
+        launchMain {
+            viewModel.onVideoDisplayOptionsChanged.collect() { options ->
+                updatePictureInPictureParameters(options.dimensions, options.aspectRatioMode);
             }
         }
 
@@ -120,8 +142,75 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun updatePictureInPictureParameters(videoDimensions: Dimensions, aspectRatioMode: AspectRatioMode) {
+        if (!isPictureInPictureAvailable()) {
+            return
+        }
+
+        val pictureInPictureParametersBuilder = PictureInPictureParams.Builder()
+
+        val videoAspectRatio = Rational(videoDimensions.width.toInt(), videoDimensions.height.toInt())
+
+        val surfaceGlobalVisibleRectangle = Rect()
+        binding.channelSurface.getGlobalVisibleRect(surfaceGlobalVisibleRectangle)
+
+        // We need a rectangle to indicate which area to show while going into PiP mode.
+        var videoDisplayRectangle = Rect()
+
+        // In LetterBox ratio mode, the video takes up the whole width of the rendering surface.
+        // Calculate the height based on the aspect ratio.
+        if (aspectRatioMode == AspectRatioMode.LETTERBOX) {
+            val videoActualHeight = surfaceGlobalVisibleRectangle.width() * videoAspectRatio.denominator / videoAspectRatio.numerator
+
+            videoDisplayRectangle.top =
+                (surfaceGlobalVisibleRectangle.centerY() - videoActualHeight / 2).coerceAtLeast(surfaceGlobalVisibleRectangle.top)
+            videoDisplayRectangle.bottom = (videoDisplayRectangle.top + videoActualHeight).coerceAtMost(surfaceGlobalVisibleRectangle.bottom)
+            videoDisplayRectangle.left = surfaceGlobalVisibleRectangle.left
+            videoDisplayRectangle.right = surfaceGlobalVisibleRectangle.right
+        }
+        // In Fill ratio mode, the video takes the entire rendering area.
+        // Just take the rectangle of the whole surface.
+        else if (aspectRatioMode == AspectRatioMode.FILL) {
+            videoDisplayRectangle = surfaceGlobalVisibleRectangle
+        }
+
+        if (!videoDisplayRectangle.isEmpty) {
+            pictureInPictureParametersBuilder.setSourceRectHint(videoDisplayRectangle)
+            pictureInPictureParametersBuilder.setAspectRatio(Rational(videoDisplayRectangle.width(), videoDisplayRectangle.height()))
+        }
+
+        setPictureInPictureParams(pictureInPictureParametersBuilder.build())
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+
+        if (isPictureInPictureAvailable() && binding.checkboxPipEnabled.isChecked) {
+            enterPictureInPictureMode(PictureInPictureParams.Builder().build())
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean, newConfig: Configuration
+    ) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+
+        if (isInPictureInPictureMode) {
+            binding.closedCaptionView.visibility = View.GONE
+            binding.checkboxPipEnabled.visibility = View.GONE
+        } else {
+            binding.closedCaptionView.visibility = View.VISIBLE
+            binding.checkboxPipEnabled.visibility = View.VISIBLE
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         binding.debugMenu.onStop()
+    }
+
+    private fun isPictureInPictureAvailable() : Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
 }

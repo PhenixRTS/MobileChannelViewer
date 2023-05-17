@@ -7,34 +7,21 @@ package com.phenixrts.suite.channelviewer.ui.viewmodel
 import android.view.SurfaceHolder
 import androidx.lifecycle.ViewModel
 import com.phenixrts.pcast.android.AndroidVideoRenderSurface
-import com.phenixrts.room.RoomService
 import com.phenixrts.suite.channelviewer.common.enums.ConnectionStatus
 import com.phenixrts.suite.channelviewer.repositories.ChannelExpressRepository
-import com.phenixrts.suite.phenixcommon.common.ConsumableSharedFlow
 import com.phenixrts.suite.phenixcommon.common.launchMain
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class ChannelViewModel(private val channelExpressRepository: ChannelExpressRepository) : ViewModel() {
 
     private val androidVideoSurface = AndroidVideoRenderSurface()
-    private var roomService: RoomService? = null
+
     val onChannelExpressError = channelExpressRepository.onChannelExpressError
     val onAuthenticationStatus = channelExpressRepository.onAuthenticationStatus
     val mimeTypes = channelExpressRepository.mimeTypes
-    val onChannelState = ConsumableSharedFlow<ConnectionStatus>()
-
-    init {
-        launchMain {
-            channelExpressRepository.onChannelState.asSharedFlow().collect { state ->
-                if (state.connectionStatus == ConnectionStatus.CONNECTED) {
-                    roomService = state.roomService
-                }
-                onChannelState.tryEmit(state.connectionStatus)
-            }
-        }
-    }
+    val onChannelStreamPlaying = channelExpressRepository.onChannelStreamPlaying
+    val onVideoDisplayOptionsChanged = channelExpressRepository.onVideoDisplayOptionsChanged
 
     suspend fun joinChannel(): ConnectionStatus = suspendCoroutine { continuation ->
         launchMain {

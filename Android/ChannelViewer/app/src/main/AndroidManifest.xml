@@ -58,7 +58,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.MainActivity" android:launchMode="singleTop" />
+        <!--
+        Those configChanges elements are needed, otherwise the activity is re-created when switching to
+        pip mode, which triggers the creation of a new ChannelExpress instance.
+         -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:supportsPictureInPicture="true"
+            android:resizeableActivity="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:launchMode="singleTop" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -16,6 +16,7 @@ import com.phenixrts.express.PCastExpressFactory
 import com.phenixrts.express.RoomExpress
 import com.phenixrts.express.RoomExpressFactory
 import com.phenixrts.pcast.AspectRatioMode
+import com.phenixrts.pcast.Dimensions
 import com.phenixrts.pcast.Renderer
 import com.phenixrts.pcast.RendererOptions
 import com.phenixrts.pcast.android.AndroidVideoRenderSurface
@@ -42,14 +43,19 @@ class ChannelExpressRepository(private val context: Application) {
     @Inject
     lateinit var fileWriterTree: FileWriterDebugTree
 
+    private val defaultAspectRatioMode = AspectRatioMode.LETTERBOX
+
     private var expressConfiguration = ChannelConfiguration()
     private var channelExpress: ChannelExpress? = null
     private var authenticationStatusChangeSubscription : Disposable? = null
+    private var roomExpress: RoomExpress? = null
+    private var renderer: Renderer? = null
 
-    var roomExpress: RoomExpress? = null
     val onChannelExpressError = ConsumableSharedFlow<ExpressError>()
-    val onChannelState = ConsumableSharedFlow<ChannelJoinedState>()
     val onAuthenticationStatus = ConsumableSharedFlow<AuthenticationStatus>()
+    val onChannelStreamPlaying = ConsumableSharedFlow<ChannelStreamPlayingState>()
+    val onVideoDisplayOptionsChanged = ConsumableSharedFlow<VideoDisplayOptions>()
+
     val mimeTypes = ConsumableSharedFlow<List<String>>()
     var roomService: RoomService? = null
 
@@ -126,13 +132,12 @@ class ChannelExpressRepository(private val context: Application) {
         launchMain {
             Timber.d("Joining channel")
 
-            val rendererOptions = RendererOptions().apply {
-                aspectRatioMode = AspectRatioMode.LETTERBOX
-            }
             var joinChannelOptions = ChannelExpressFactory
                 .createJoinChannelOptionsBuilder()
                 .withRenderer(surface)
-                .withRendererOptions(rendererOptions)
+                .withRendererOptions(RendererOptions().apply {
+                    aspectRatioMode = defaultAspectRatioMode
+                })
                 .withStreamToken(expressConfiguration.edgeToken)
                 .buildJoinChannelOptions()
 
@@ -154,13 +159,32 @@ class ChannelExpressRepository(private val context: Application) {
                     }
                 },
                 // Channel subscribed callback
-                { requestStatus: RequestStatus?, _: ExpressSubscriber?, _: Renderer? ->
+                { requestStatus: RequestStatus?, _: ExpressSubscriber?, renderer: Renderer? ->
                     launchMain{
                         Timber.d("Channel subscribed with status [$requestStatus]")
+
                         when (requestStatus) {
-                            RequestStatus.OK -> onChannelState.tryEmit(ChannelJoinedState(ConnectionStatus.ONLINE, roomService))
-                            RequestStatus.NO_STREAM_PLAYING -> onChannelState.tryEmit(ChannelJoinedState(ConnectionStatus.OFFLINE))
-                            else -> onChannelState.tryEmit(ChannelJoinedState(ConnectionStatus.FAILED))
+                            // A stream is playing in the channel.
+                            RequestStatus.OK -> {
+                                onChannelStreamPlaying.tryEmit(ChannelStreamPlayingState(true))
+
+                                this@ChannelExpressRepository.renderer = renderer
+
+                                renderer?.setVideoDisplayDimensionsChangedCallback { _, dimensions ->
+                                    onVideoDisplayOptionsChanged.tryEmit(VideoDisplayOptions(dimensions, defaultAspectRatioMode))
+                                }
+                            }
+
+                            // No stream is currently available.
+                            RequestStatus.NO_STREAM_PLAYING -> {
+                                onChannelStreamPlaying.tryEmit(ChannelStreamPlayingState(false))
+
+                                renderer?.setVideoDisplayDimensionsChangedCallback(null)
+                            }
+
+                            else -> {
+                                onChannelExpressError.tryEmit(ExpressError.UNRECOVERABLE_ERROR)
+                            }
                         }
                     }
             })
@@ -174,4 +198,6 @@ class ChannelExpressRepository(private val context: Application) {
     fun isRoomExpressInitialized(): Boolean = roomExpress != null
 }
 
-data class ChannelJoinedState(val connectionStatus: ConnectionStatus, val roomService: RoomService? = null)
+data class VideoDisplayOptions(val dimensions: Dimensions, val aspectRatioMode: AspectRatioMode)
+
+data class ChannelStreamPlayingState(val streamPlaying: Boolean)
