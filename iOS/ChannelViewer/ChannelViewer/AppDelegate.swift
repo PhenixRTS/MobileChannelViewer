@@ -43,6 +43,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.rootViewController?.present(alert, animated: true)
     }
 
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            try audioSession.setCategory(.playback, mode: .moviePlayback)
+        } catch {
+            Self.terminate(
+                afterDisplayingAlertWithTitle: "Setting up AVAudioSession failed: \(error)",
+                message: "Please try to restart the application."
+            )
+        }
+
+        return true
+    }
+
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        if let viewController = self.window?.rootViewController as? ViewController {
+            viewController.limitBandwidth()
+        }
+    }
+
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        if let viewController = self.window?.rootViewController as? ViewController {
+            viewController.disposeBandwidthLimit()
+        }
+    }
+
     // MARK: - Deeplink handling
 
     func application(

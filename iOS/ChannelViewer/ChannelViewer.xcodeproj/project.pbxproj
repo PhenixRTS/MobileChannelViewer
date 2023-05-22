@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		48C037BC27F2FD8E00F043C8 /* OSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C037BA27F2FD8E00F043C8 /* OSLog.swift */; };
+		4CC8EDEA2A13724D00FAA2D3 /* CMSampleBuffer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC8EDE92A13724D00FAA2D3 /* CMSampleBuffer+Extension.swift */; };
 		5B088843A97DBD1A9F3D6EB3 /* Pods_ChannelViewer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C521EE5DA312F969187FA2FD /* Pods_ChannelViewer.framework */; };
 		B59097AF25B5C885003D5323 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59097AE25B5C885003D5323 /* AppDelegate.swift */; };
 		B59097B625B5C885003D5323 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B59097B425B5C885003D5323 /* Main.storyboard */; };
@@ -24,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		48C037BA27F2FD8E00F043C8 /* OSLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSLog.swift; sourceTree = "<group>"; };
+		4CC8EDE92A13724D00FAA2D3 /* CMSampleBuffer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMSampleBuffer+Extension.swift"; sourceTree = "<group>"; };
 		B59097AB25B5C885003D5323 /* ChannelViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChannelViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B59097AE25B5C885003D5323 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B59097B525B5C885003D5323 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 			children = (
 				B590982425B71BDC003D5323 /* PhenixChannelViewer.swift */,
 				B590982825B72C36003D5323 /* PhenixChannelViewerDelegate.swift */,
+				4CC8EDE92A13724D00FAA2D3 /* CMSampleBuffer+Extension.swift */,
 			);
 			path = Viewer;
 			sourceTree = "<group>";
@@ -321,6 +324,7 @@
 				B59097E625B5D72F003D5323 /* PhenixConfiguration.swift in Sources */,
 				B590982525B71BDC003D5323 /* PhenixChannelViewer.swift in Sources */,
 				B5F704F825D6AC2100CD4504 /* ValidationProvider.swift in Sources */,
+				4CC8EDEA2A13724D00FAA2D3 /* CMSampleBuffer+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,7 +401,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -452,7 +456,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

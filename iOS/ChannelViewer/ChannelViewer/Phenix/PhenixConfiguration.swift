@@ -50,19 +50,27 @@ public enum PhenixConfiguration {
         return PhenixChannelExpressFactory.createChannelExpress(channelExpressOptions)
     }
 
-    public static func makeJoinChannelOptions(roomAlias: String?, videoLayer: CALayer, capabilities: [String]) -> PhenixJoinChannelOptions! {
+    public static func makeJoinChannelOptions(with videoLayer: CALayer?) -> PhenixJoinChannelOptions! {
         var joinRoomOptionsBuilder = PhenixRoomExpressFactory.createJoinRoomOptionsBuilder()
 
         if edgeToken == nil {
             joinRoomOptionsBuilder = joinRoomOptionsBuilder?.withCapabilities(capabilities)
         }
 
-        let joinRoomOptions = joinRoomOptionsBuilder?
-            .withRoomAlias(roomAlias)
-            .buildJoinRoomOptions()
+        if let channelAlias = channelAlias {
+            joinRoomOptionsBuilder = joinRoomOptionsBuilder?
+                .withRoomAlias(channelAlias)
+        }
+
+        let joinRoomOptions = joinRoomOptionsBuilder?.buildJoinRoomOptions()
 
         let rendererOptions = PhenixRendererOptions()
         rendererOptions.aspectRatioMode = .letterbox
+
+        if videoLayer == nil {
+            rendererOptions.preferredVideoRenderDeviceType = PhenixVideoRenderDeviceType.typeAutomatic
+            rendererOptions.useNullVideoDevice = true
+        }
 
         var joinChannelOptionsBuilder = PhenixChannelExpressFactory.createJoinChannelOptionsBuilder()
 
@@ -72,12 +80,15 @@ public enum PhenixConfiguration {
                 .withSkipRetryOnUnauthorized()
         }
 
-        let joinChannelOptions = joinChannelOptionsBuilder?
+        joinChannelOptionsBuilder = joinChannelOptionsBuilder?
             .withJoinRoomOptions(joinRoomOptions)
-            .withRenderer(videoLayer)
             .withRendererOptions(rendererOptions)
-            .buildJoinChannelOptions()
 
-        return joinChannelOptions
+        if let videoLayer = videoLayer {
+            joinChannelOptionsBuilder = joinChannelOptionsBuilder?
+                .withRenderer(videoLayer)
+        }
+
+        return joinChannelOptionsBuilder?.buildJoinChannelOptions()
     }
 }
