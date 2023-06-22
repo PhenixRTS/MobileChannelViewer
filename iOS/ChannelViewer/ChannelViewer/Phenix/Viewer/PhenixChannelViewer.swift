@@ -16,9 +16,31 @@ public final class PhenixChannelViewer: NSObject {
     private var renderer: PhenixRenderer?
     private var bandwidthDisposable: PhenixDisposable?
     private var videoStreamTrack: PhenixMediaStreamTrack?
+    private var authenticationStatusDisposable: PhenixDisposable?
 
     public init(channelExpress: PhenixChannelExpress) {
         self.channelExpress = channelExpress
+        super.init()
+        self.observeAuthenticationStatus()
+    }
+
+    private func observeAuthenticationStatus() {
+        authenticationStatusDisposable = channelExpress.pcastExpress.getObservableAuthenticationStatus().subscribe { [weak self] change in
+            guard let self = self else { return }
+            let status = PhenixAuthenticationStatus(rawValue: change!.value.intValue)!
+
+            if PhenixAuthenticationStatus.unauthenticated == status {
+                self.handleUnauthenticatedStatus()
+            }
+        }
+    }
+
+    private func handleUnauthenticatedStatus() {
+        // You can fetch a new authentication token and set it using setAuthenticationToken method to re-authenticate the SDK
+        AppDelegate.terminate(
+            afterDisplayingAlertWithTitle: "Failed to authenticate the Phenix SDK. The provided authentication token has expired",
+            message: "Application will be terminated."
+        )
     }
 
     public func limitBandwidth() {
