@@ -80,25 +80,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return false
         }
 
-        if deeplink.edgeToken != nil {
-            // Clear the default backend uri.
-            PhenixConfiguration.backendUri = nil
-        }
-
         if let edgeToken = deeplink.edgeToken {
             PhenixConfiguration.edgeToken = edgeToken
-        }
-
-        if let backend = deeplink.backend {
-            PhenixConfiguration.backendUri = backend
-        }
-
-        if let pcastUri = deeplink.uri {
-            PhenixConfiguration.pcastUri = pcastUri
-        }
-
-        if let alias = deeplink.alias {
-            PhenixConfiguration.channelAlias = alias
         }
 
         if let delegate = UIApplication.shared.delegate as? AppDelegate,

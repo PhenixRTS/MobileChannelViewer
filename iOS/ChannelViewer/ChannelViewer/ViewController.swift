@@ -52,11 +52,7 @@ class ViewController: UIViewController {
 
         // Validate configuration
         do {
-            try ValidationProvider.validate(
-                backend: PhenixConfiguration.backendUri,
-                edgeToken: PhenixConfiguration.edgeToken,
-                channelAlias: PhenixConfiguration.channelAlias
-            )
+            try ValidationProvider.validate(edgeToken: PhenixConfiguration.edgeToken)
         } catch {
             DispatchQueue.main.async {
                 AppDelegate.terminate(

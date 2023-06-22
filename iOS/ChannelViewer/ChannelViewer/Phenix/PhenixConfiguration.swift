@@ -6,37 +6,26 @@ import PhenixSdk
 import UIKit
 
 public enum PhenixConfiguration {
-    public static var pcastUri: URL?
-    public static var backendUri: URL? = URL(string: "https://demo.phenixrts.com/pcast")
     public static var edgeToken: String?
-    public static let capabilities: [String] = ["real-time"]
-    public static var channelAlias: String?
 
     public static func makeChannelExpress() -> PhenixChannelExpress {
-        precondition((backendUri != nil) != (edgeToken != nil), "You must provide the EdgeToken or the backend url. At least one must be provided but not both simultaneously.")
+        precondition((edgeToken != nil), "You must provide the EdgeToken.")
 
-        var pcastExpressOptionsBuilder = PhenixPCastExpressFactory.createPCastExpressOptionsBuilder()
+        var pcastExpressOptionsBuilder = PhenixPCastExpressFactory.createPCastExpressOptionsBuilder { status, description in
+            DispatchQueue.main.async {
+                AppDelegate.terminate(
+                    afterDisplayingAlertWithTitle: "Phenix SDK returned an unrecoverable error with status [\(status)] and description [\(description)].",
+                    message: "Application will be terminated."
+                )
+            }
+        }
 
         if let edgeToken = edgeToken {
             pcastExpressOptionsBuilder = pcastExpressOptionsBuilder?.withAuthenticationToken(edgeToken)
-        } else if let backendUri = backendUri {
-            pcastExpressOptionsBuilder = pcastExpressOptionsBuilder?.withBackendUri(backendUri.absoluteString)
-        }
-
-        if let pcastUri = pcastUri {
-            pcastExpressOptionsBuilder = pcastExpressOptionsBuilder?.withPCastUri(pcastUri.absoluteString)
         }
 
         let pcastExpressOptions = pcastExpressOptionsBuilder?
             .withMinimumConsoleLogLevel("Info")
-            .withUnrecoverableErrorCallback { status, description in
-                DispatchQueue.main.async {
-                    AppDelegate.terminate(
-                        afterDisplayingAlertWithTitle: "Something went wrong!",
-                        message: "Application entered in unrecoverable state and will be terminated."
-                    )
-                }
-            }
             .buildPCastExpressOptions()
 
         let roomExpressOptions = PhenixRoomExpressFactory.createRoomExpressOptionsBuilder()
@@ -51,19 +40,6 @@ public enum PhenixConfiguration {
     }
 
     public static func makeJoinChannelOptions(with videoLayer: CALayer?) -> PhenixJoinChannelOptions! {
-        var joinRoomOptionsBuilder = PhenixRoomExpressFactory.createJoinRoomOptionsBuilder()
-
-        if edgeToken == nil {
-            joinRoomOptionsBuilder = joinRoomOptionsBuilder?.withCapabilities(capabilities)
-        }
-
-        if let channelAlias = channelAlias {
-            joinRoomOptionsBuilder = joinRoomOptionsBuilder?
-                .withRoomAlias(channelAlias)
-        }
-
-        let joinRoomOptions = joinRoomOptionsBuilder?.buildJoinRoomOptions()
-
         let rendererOptions = PhenixRendererOptions()
         rendererOptions.aspectRatioMode = .letterbox
 
@@ -73,16 +49,12 @@ public enum PhenixConfiguration {
         }
 
         var joinChannelOptionsBuilder = PhenixChannelExpressFactory.createJoinChannelOptionsBuilder()
+            .withRendererOptions(rendererOptions)
 
         if let edgeToken = edgeToken {
             joinChannelOptionsBuilder = joinChannelOptionsBuilder?
                 .withStreamToken(edgeToken)
-                .withSkipRetryOnUnauthorized()
         }
-
-        joinChannelOptionsBuilder = joinChannelOptionsBuilder?
-            .withJoinRoomOptions(joinRoomOptions)
-            .withRendererOptions(rendererOptions)
 
         if let videoLayer = videoLayer {
             joinChannelOptionsBuilder = joinChannelOptionsBuilder?
