@@ -6,7 +6,7 @@ use_frameworks!
 inhibit_all_warnings!
 
 def phenix
-  pod 'PhenixSdk', '2023.0.0-a11bca6-20230615T140420377-beta.3'
+  pod 'PhenixSdk', '2023.0.0-e7cae78-20230704T074557589-beta.4'
   pod 'PhenixDebug', :path => '../PhenixDebug'
   pod 'PhenixDeeplink', :path => '../PhenixDeeplink'
   pod 'PhenixClosedCaptions', :path => '../PhenixClosedCaptions'
