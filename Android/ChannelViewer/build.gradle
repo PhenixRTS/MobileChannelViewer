@@ -4,7 +4,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.phenix_sdk_package = 'com.phenixrts.android:phenix-sdk-android-beta:2023.0.0-df80922-20230822T073055-beta.16'
+    ext.phenix_sdk_package = 'com.phenixrts.android:phenix-sdk-android-beta:2023.0.0-e7db9f4-20231005T045658-beta.27'
 
     repositories {
         google()
