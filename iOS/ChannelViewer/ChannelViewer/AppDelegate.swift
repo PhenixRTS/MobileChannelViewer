@@ -57,17 +57,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        if let viewController = self.window?.rootViewController as? ViewController {
-            viewController.limitBandwidth()
-        }
-    }
-
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        if let viewController = self.window?.rootViewController as? ViewController {
-            viewController.disposeBandwidthLimit()
-        }
-    }
 
     // MARK: - Deeplink handling
 

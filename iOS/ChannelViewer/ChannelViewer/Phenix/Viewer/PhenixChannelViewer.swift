@@ -2,21 +2,22 @@
 //  Copyright 2023 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
 //
 
+import AVKit
 import PhenixSdk
 import UIKit
-import AVKit
 
 public final class PhenixChannelViewer: NSObject {
     private let channelExpress: PhenixChannelExpress
     public weak var delegate: PhenixChannelViewerDelegate?
-
-    private var pipVideoCallViewController: AVPictureInPictureController?
 
     private var subscriber: PhenixExpressSubscriber?
     private var renderer: PhenixRenderer?
     private var bandwidthDisposable: PhenixDisposable?
     private var videoStreamTrack: PhenixMediaStreamTrack?
     private var authenticationStatusDisposable: PhenixDisposable?
+
+    private var pipController: AVPictureInPictureController?
+    private var initialVideoDataForPipReceived: Bool = false
 
     public init(channelExpress: PhenixChannelExpress) {
         self.channelExpress = channelExpress
@@ -43,126 +44,148 @@ public final class PhenixChannelViewer: NSObject {
         )
     }
 
-    public func limitBandwidth() {
-        if let track = videoStreamTrack {
-            bandwidthDisposable = track.limitBandwidth(300000) // 144p
+    public func setupPictureInPictureOverlay() {
+        guard #available(iOS 15, *) else {
+            return
+        }
+
+        if !(renderer?.isPictureInPictureAvailable ?? false) {
+            return
+        }
+
+        guard let pipContentSource = renderer?.pictureInPictureContentSource else {
+            return
+        }
+
+        if let pipController = pipController {
+            pipController.contentSource = pipContentSource
+        } else {
+            pipController = AVPictureInPictureController(contentSource: pipContentSource)
+            pipController?.delegate = self
         }
     }
 
-    public func disposeBandwidthLimit() {
-        bandwidthDisposable = nil
-    }
-
-    private func initializePiPController(with videoLayer: AVSampleBufferDisplayLayer) {
-        if #available(iOS 15, *) {
-            let contentSource = AVPictureInPictureController.ContentSource(
-                sampleBufferDisplayLayer: videoLayer, playbackDelegate: self)
-
-            let pipController = AVPictureInPictureController(contentSource: contentSource)
-            self.pipVideoCallViewController = pipController
-        }
-    }
-
-    public func join(videoLayer: CALayer, pipVideoLayer: AVSampleBufferDisplayLayer?) {
-        if let pipVideoLayer = pipVideoLayer {
-            initializePiPController(with: pipVideoLayer)
-        }
-
-        let options = PhenixConfiguration.makeJoinChannelOptions(
-            with: pipVideoLayer == nil ? videoLayer : nil
-        )
+    public func join(videoLayer: CALayer) {
+        let options = PhenixConfiguration.makeJoinChannelOptions(with: videoLayer)
 
         channelExpress.joinChannel(options, { [weak self] status, roomService in
             guard let self = self else { return }
-            switch status {
-            case .ok:
-                guard let roomService = roomService else {
-                    let error = Error(reason: "Missing PhenixRoomService")
-                    self.delegate?.channelViewer(self, didFailToJoinWith: error)
-                    return
-                }
-                self.delegate?.channelViewer(self, didJoin: roomService)
-
-            default:
-                let error = Error(reason: status.description)
-                self.delegate?.channelViewer(self, didFailToJoinWith: error)
-            }
+            onChannelJoined(status: status, roomService: roomService)
         }) { [weak self] status, subscriber, renderer in
             guard let self = self else { return }
-            switch status {
-            case .ok:
-                guard let subscriber = subscriber else {
-                    let error = Error(reason: "Missing PhenixExpressSubscriber")
-                    self.delegate?.channelViewer(self, didFailToSubscribeWith: error)
-                    return
-                }
-                guard let renderer = renderer else {
-                    let error = Error(reason: "Missing PhenixRenderer")
-                    self.delegate?.channelViewer(self, didFailToSubscribeWith: error)
-                    return
-                }
-
-                if let pipVideoLayer = pipVideoLayer, let track = subscriber.getVideoTracks().first {
-                    self.videoStreamTrack = track
-
-                    renderer.setFrameReadyCallback(track) { notification in
-                        guard let notification = notification else { return }
-
-                        notification.read({ inputFrame in
-                            guard let videoFrame = inputFrame else { return }
-
-                            videoFrame.makeFrameDisplayableImmediately()
-
-                            DispatchQueue.main.async {
-                                pipVideoLayer.enqueue(videoFrame)
-                            }
-                        })
-
-                        notification.drop()
-                    }
-                }
-
-                self.renderer = renderer
-                self.subscriber = subscriber
-
-                self.delegate?.channelViewer(self, didSubscribeWith: subscriber, renderer: renderer)
-
-            case .noStreamPlaying:
-                self.delegate?.channelViewerHasNoActiveStream(self)
-
-            default:
-                let error = Error(reason: status.description)
-                self.delegate?.channelViewer(self, didFailToSubscribeWith: error)
-            }
+            onStreamSubscribed(status: status, subscriber: subscriber, renderer: renderer)
         }
+    }
+
+    private func onChannelJoined(status: PhenixRequestStatus, roomService: PhenixRoomService?) {
+        switch status {
+        case .ok:
+            guard let roomService = roomService else {
+                let error = Error(reason: "Missing PhenixRoomService")
+                self.delegate?.channelViewer(self, didFailToJoinWith: error)
+                return
+            }
+            self.delegate?.channelViewer(self, didJoin: roomService)
+
+        default:
+            let error = Error(reason: status.description)
+            self.delegate?.channelViewer(self, didFailToJoinWith: error)
+        }
+    }
+
+    private func onStreamSubscribed(status: PhenixRequestStatus, subscriber: PhenixExpressSubscriber?, renderer: PhenixRenderer?) {
+        switch status {
+        case .ok:
+            guard let subscriber = subscriber else {
+                let error = Error(reason: "Missing PhenixExpressSubscriber")
+                self.delegate?.channelViewer(self, didFailToSubscribeWith: error)
+                return
+            }
+            guard let renderer = renderer else {
+                let error = Error(reason: "Missing PhenixRenderer")
+                self.delegate?.channelViewer(self, didFailToSubscribeWith: error)
+                return
+            }
+
+            if let track = subscriber.getVideoTracks().first {
+                self.videoStreamTrack = track
+            }
+
+            self.renderer = renderer
+            self.subscriber = subscriber
+
+            initialVideoDataForPipReceived = false
+
+            renderer.setDataQualityChangedCallback { [weak self] _, status, reason in
+                if status != .all {
+                    return
+                }
+
+                guard let self = self else {
+                    return
+                }
+
+                if initialVideoDataForPipReceived {
+                    return
+                }
+
+                initialVideoDataForPipReceived = true
+
+                DispatchQueue.main.async { [weak self] in
+                    self?.setupPictureInPictureOverlay()
+                }
+            }
+
+            self.delegate?.channelViewer(self, didSubscribeWith: subscriber, renderer: renderer)
+
+        case .noStreamPlaying:
+            self.delegate?.channelViewerHasNoActiveStream(self)
+
+        default:
+            let error = Error(reason: status.description)
+            self.delegate?.channelViewer(self, didFailToSubscribeWith: error)
+        }
+    }
+
+    private func limitBandwidth() {
+        if let track = videoStreamTrack {
+            bandwidthDisposable = track.limitBandwidth(520000) // 360p
+        }
+    }
+
+    private func disposeBandwidthLimit() {
+        bandwidthDisposable = nil
     }
 }
 
 // MARK: - PhenixChannelViewer.Error
-extension PhenixChannelViewer {
-    public struct Error: Swift.Error, LocalizedError {
+
+public extension PhenixChannelViewer {
+    struct Error: Swift.Error, LocalizedError {
         public let reason: String
         public var errorDescription: String? { reason }
     }
 }
 
-extension PhenixChannelViewer : AVPictureInPictureSampleBufferPlaybackDelegate {
-    public func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, setPlaying playing: Bool) {
+extension PhenixChannelViewer: AVPictureInPictureControllerDelegate {
+    public func pictureInPictureControllerWillStartPictureInPicture(_: AVPictureInPictureController) {
+        limitBandwidth()
     }
 
-    public func pictureInPictureControllerTimeRangeForPlayback(_ pictureInPictureController: AVPictureInPictureController) -> CMTimeRange {
-        return CMTimeRange(start: .negativeInfinity, duration: .positiveInfinity)
+    public func pictureInPictureControllerDidStartPictureInPicture(_: AVPictureInPictureController) {}
+
+    public func pictureInPictureController(_: AVPictureInPictureController, failedToStartPictureInPictureWithError _: Error) {}
+
+    public func pictureInPictureControllerWillStopPictureInPicture(_: AVPictureInPictureController) {
+        disposeBandwidthLimit()
     }
 
-    public func pictureInPictureControllerIsPlaybackPaused(_ pictureInPictureController: AVPictureInPictureController) -> Bool {
-        return false
-    }
+    public func pictureInPictureControllerDidStopPictureInPicture(_: AVPictureInPictureController) {}
 
-    public func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, didTransitionToRenderSize newRenderSize: CMVideoDimensions) {
+    public func pictureInPictureController(_: AVPictureInPictureController,
+                                           restoreUserInterfaceForPictureInPictureStopWithCompletionHandler completionHandler: @escaping (Bool) -> Void)
+    {
+        // Restore the user interface.
+        completionHandler(true)
     }
-
-    public func pictureInPictureController(_ pictureInPictureController: AVPictureInPictureController, skipByInterval skipInterval: CMTime, completion completionHandler: @escaping () -> Void) {
-        completionHandler()
-    }
-
 }

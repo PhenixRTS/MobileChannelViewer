@@ -13,8 +13,6 @@ class ViewController: UIViewController {
     @IBOutlet private var closedCaptionsView: PhenixClosedCaptionsView!
     @IBOutlet private var closedCaptionsToggleButton: UIButton!
 
-    private var pipVideoLayer: AVSampleBufferDisplayLayer?
-
     private lazy var channelViewer: PhenixChannelViewer = {
         let viewer = PhenixChannelViewer(channelExpress: AppDelegate.channelExpress)
         viewer.delegate = self
@@ -24,14 +22,6 @@ class ViewController: UIViewController {
     private var currentRoomService: PhenixRoomService?
     private var closedCaptionsService: PhenixClosedCaptionsService?
     private var deepLinkHandled = false
-
-    public func limitBandwidth() {
-        channelViewer.limitBandwidth()
-    }
-
-    public func disposeBandwidthLimit() {
-        channelViewer.disposeBandwidthLimit()
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,31 +58,7 @@ class ViewController: UIViewController {
         tapGesture.numberOfTapsRequired = 5
         surfaceView.addGestureRecognizer(tapGesture)
 
-        let pipVideoLayer = createPiPVideoLayer()
-
-        if let pipVideoLayer = pipVideoLayer {
-            self.pipVideoLayer = pipVideoLayer
-            surfaceView.layer.addSublayer(pipVideoLayer)
-            pipVideoLayer.frame = surfaceView.layer.bounds
-        }
-
-        channelViewer.join(videoLayer: surfaceView.layer, pipVideoLayer: pipVideoLayer)
-    }
-
-    private func createPiPVideoLayer() -> AVSampleBufferDisplayLayer? {
-        if #available(iOS 15, *) {
-            return AVSampleBufferDisplayLayer()
-        }
-
-        return nil
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        if let pipVideoLayer = pipVideoLayer {
-            pipVideoLayer.frame = surfaceView.layer.bounds
-        }
+        channelViewer.join(videoLayer: surfaceView.layer)
     }
 
     @IBAction func closedCaptionsToggleButtonTapped(_ sender: Any) {
