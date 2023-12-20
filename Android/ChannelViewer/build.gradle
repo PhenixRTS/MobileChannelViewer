@@ -1,11 +1,8 @@
 /*
  * Copyright 2023 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
  */
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.phenix_sdk_package = 'com.phenixrts.android:phenix-sdk-android-beta:2023.0.0-d27f937-20231206T075852-beta.31'
-
     repositories {
         google()
         mavenCentral()

@@ -76,6 +76,4 @@ dependencies {
     // Timber
     api 'com.jakewharton.timber:timber:5.0.1'
 
-    // Phenix
-    implementation "$phenix_sdk_package"
 }

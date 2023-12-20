@@ -75,5 +75,5 @@ dependencies {
     api 'com.jakewharton.timber:timber:5.0.1'
 
     // Phenix
-    implementation "$phenix_sdk_package"
+    api 'com.phenixrts.android:phenix-sdk-android:2023.0.0-d27f937-20231206T075852'
 }

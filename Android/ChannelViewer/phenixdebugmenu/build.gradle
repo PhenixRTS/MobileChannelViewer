@@ -55,7 +55,4 @@ android {
 
 dependencies {
     implementation project(":common")
-
-    // Phenix
-    implementation "$phenix_sdk_package"
 }

@@ -84,7 +84,4 @@ dependencies {
 
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
-
-    // Phenix
-    implementation "$phenix_sdk_package"
 }
