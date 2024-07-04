@@ -17,7 +17,6 @@ public final class PhenixChannelViewer: NSObject {
     private var authenticationStatusDisposable: PhenixDisposable?
 
     private var pipController: AVPictureInPictureController?
-    private var initialVideoDataForPipReceived: Bool = false
 
     public init(channelExpress: PhenixChannelExpress) {
         self.channelExpress = channelExpress
@@ -49,19 +48,21 @@ public final class PhenixChannelViewer: NSObject {
             return
         }
 
-        if !(renderer?.isPictureInPictureAvailable ?? false) {
-            return
-        }
+        renderer?.setPictureInPictureContentSourceChangedCallback { [weak self] pipContentSource in
+            guard let self = self else {
+                return
+            }
 
-        guard let pipContentSource = renderer?.pictureInPictureContentSource else {
-            return
-        }
+            guard let pipContentSource = pipContentSource else {
+                return
+            }
 
-        if let pipController = pipController {
-            pipController.contentSource = pipContentSource
-        } else {
-            pipController = AVPictureInPictureController(contentSource: pipContentSource)
-            pipController?.delegate = self
+            if let pipController = pipController {
+                pipController.contentSource = pipContentSource
+            } else {
+                pipController = AVPictureInPictureController(contentSource: pipContentSource)
+                pipController?.delegate = self
+            }
         }
     }
 
@@ -114,26 +115,8 @@ public final class PhenixChannelViewer: NSObject {
             self.renderer = renderer
             self.subscriber = subscriber
 
-            initialVideoDataForPipReceived = false
-
-            renderer.setDataQualityChangedCallback { [weak self] _, status, reason in
-                if status != .all {
-                    return
-                }
-
-                guard let self = self else {
-                    return
-                }
-
-                if initialVideoDataForPipReceived {
-                    return
-                }
-
-                initialVideoDataForPipReceived = true
-
-                DispatchQueue.main.async { [weak self] in
-                    self?.setupPictureInPictureOverlay()
-                }
+            DispatchQueue.main.async { [weak self] in
+                self?.setupPictureInPictureOverlay()
             }
 
             self.delegate?.channelViewer(self, didSubscribeWith: subscriber, renderer: renderer)

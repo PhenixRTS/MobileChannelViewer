@@ -1,5 +1,5 @@
 //
-//  Copyright 2023 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+//  Copyright 2024 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
 //
 
 import os.log
@@ -74,8 +74,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         if let delegate = UIApplication.shared.delegate as? AppDelegate,
-           let window = delegate.window,
-           let viewController = window.rootViewController as? ViewController {
+            let window = delegate.window,
+            let viewController = window.rootViewController as? ViewController {
 
             viewController.openDeepLink()
         }
