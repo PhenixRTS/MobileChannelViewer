@@ -5,16 +5,7 @@
 * [React Native](https://github.com/PhenixRTS/MobileChannelViewer/tree/master/ReactNative/ChannelViewer)
 
 ## Deep links
-The app is usable only through a deep link.
+The app is usable only through a deep link. This can be generated in the Web Control Center customer portal under the EdgeAuth tab by selecting "Viewing". The link will appear under "Web Permalink". Alternatively, a viewing token can be generated using the EdgeAuth SDK and inserted into the example link below.
 
-#### Examples
-- Basic deep links:
-    - https://phenixrts.com/channel/#channel
-    - https://stg.phenixrts.com/channel/#channel
-    - https://pcast.phenixrts.com/channel/#channel
-    - https://pcast-stg.phenixrts.com/channel/#channel
-    - https://phenixrts.com/channel/?channelAliases=channel
-
-- Custom params:
-    - https://pcast-stg.phenixrts.com/channel/?edgeToken=ENTER_TOKEN_HERE#channel
-    - https://pcast-stg.phenixrts.com/channel/?backend=BACKEND_URL&uri=PCAST_URL#channel
+### Example
+- https://pcast.phenixrts.com/channel/?token=ENTER_TOKEN_HERE
