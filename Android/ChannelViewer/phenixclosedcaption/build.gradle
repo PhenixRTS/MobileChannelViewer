@@ -62,18 +62,5 @@ android {
 }
 
 dependencies {
-    // Kotlin
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
-    api 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0'
-
-    // Android
-    api 'androidx.core:core-ktx:1.9.0'
-    api 'androidx.constraintlayout:constraintlayout:2.1.4'
-    api 'androidx.appcompat:appcompat:1.5.1'
-    api 'com.google.android.material:material:1.6.1'
-
-    // Timber
-    api 'com.jakewharton.timber:timber:5.0.1'
-
+    implementation project(":common")
 }
