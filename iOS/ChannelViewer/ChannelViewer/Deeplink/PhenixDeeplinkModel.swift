@@ -1,8 +1,9 @@
 //
-//  Copyright 2024 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+//  Copyright 2025 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
 //
 
 import PhenixDeeplink
+import Foundation
 
 public struct PhenixDeeplinkModel: PhenixDeeplinkModelProvider {
     var edgeToken: String?

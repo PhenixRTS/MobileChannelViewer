@@ -1,5 +1,5 @@
 //
-//  Copyright 2023 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+//  Copyright 2025 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
 //
 
 import PhenixSdk
@@ -14,7 +14,7 @@ public enum PhenixConfiguration {
         var pcastExpressOptionsBuilder = PhenixPCastExpressFactory.createPCastExpressOptionsBuilder { status, description in
             DispatchQueue.main.async {
                 AppDelegate.terminate(
-                    afterDisplayingAlertWithTitle: "Phenix SDK returned an unrecoverable error with status [\(status)] and description [\(description)].",
+                  afterDisplayingAlertWithTitle: "Phenix SDK returned an unrecoverable error with status [\(status)] and description [\(String(describing: description))].",
                     message: "Application will be terminated."
                 )
             }

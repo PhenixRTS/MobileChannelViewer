@@ -1,0 +1,15 @@
+{
+  "originHash" : "0d94da3dbce0f584b6edb120f03160b990095ff51336eef6d067efb9d3b4172d",
+  "pins" : [
+    {
+      "identity" : "swift-phenixrtssdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PhenixRTS/swift-phenixrtssdk",
+      "state" : {
+        "revision" : "749adcc179bfd18b2e7ff0ce2d9a1b911f60fa8c",
+        "version" : "2025.0.0-5db9bb8-20250117T110544222"
+      }
+    }
+  ],
+  "version" : 3
+}

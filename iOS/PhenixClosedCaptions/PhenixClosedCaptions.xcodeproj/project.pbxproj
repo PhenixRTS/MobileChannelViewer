@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B5069532252CB0720001EDF3 /* PhenixClosedCaptionsConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5069530252CB0720001EDF3 /* PhenixClosedCaptionsConfiguration.swift */; };
 		B5069533252CB0720001EDF3 /* PhenixClosedCaptionsMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5069531252CB0720001EDF3 /* PhenixClosedCaptionsMessage.swift */; };
 		B5069536252CB0810001EDF3 /* PhenixClosedCaptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5069535252CB0810001EDF3 /* PhenixClosedCaptionsView.swift */; };
 		B51D863C2521CA18005CE7B7 /* PhenixClosedCaptionsServiceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51D862B2521CA18005CE7B7 /* PhenixClosedCaptionsServiceDelegate.swift */; };
@@ -24,7 +23,6 @@
 
 /* Begin PBXFileReference section */
 		00C8926A543C0088BA33838F /* Pods_PhenixClosedCaptionsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PhenixClosedCaptionsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B5069530252CB0720001EDF3 /* PhenixClosedCaptionsConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhenixClosedCaptionsConfiguration.swift; sourceTree = "<group>"; };
 		B5069531252CB0720001EDF3 /* PhenixClosedCaptionsMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhenixClosedCaptionsMessage.swift; sourceTree = "<group>"; };
 		B5069535252CB0810001EDF3 /* PhenixClosedCaptionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhenixClosedCaptionsView.swift; sourceTree = "<group>"; };
 		B51D862B2521CA18005CE7B7 /* PhenixClosedCaptionsServiceDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhenixClosedCaptionsServiceDelegate.swift; sourceTree = "<group>"; };
@@ -86,7 +84,6 @@
 		B51D86312521CA18005CE7B7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				B5069530252CB0720001EDF3 /* PhenixClosedCaptionsConfiguration.swift */,
 				B5069531252CB0720001EDF3 /* PhenixClosedCaptionsMessage.swift */,
 				B51D86342521CA18005CE7B7 /* PhenixTextUpdate.swift */,
 				B51D86332521CA18005CE7B7 /* PhenixWindowUpdate.swift */,
@@ -214,7 +211,6 @@
 				B586C8AD25C81A8E00ED5757 /* PhenixWindowView.swift in Sources */,
 				B5069536252CB0810001EDF3 /* PhenixClosedCaptionsView.swift in Sources */,
 				B51D863D2521CA18005CE7B7 /* PhenixClosedCaptionsService.swift in Sources */,
-				B5069532252CB0720001EDF3 /* PhenixClosedCaptionsConfiguration.swift in Sources */,
 				B51D863E2521CA18005CE7B7 /* UIColor.swift in Sources */,
 				B5069533252CB0720001EDF3 /* PhenixClosedCaptionsMessage.swift in Sources */,
 				B51D86482521CA18005CE7B7 /* PhenixTextView.swift in Sources */,

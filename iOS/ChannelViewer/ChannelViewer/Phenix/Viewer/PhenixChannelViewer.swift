@@ -1,5 +1,5 @@
 //
-//  Copyright 2023 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+//  Copyright 2025 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
 //
 
 import AVKit
@@ -157,7 +157,7 @@ extension PhenixChannelViewer: AVPictureInPictureControllerDelegate {
 
     public func pictureInPictureControllerDidStartPictureInPicture(_: AVPictureInPictureController) {}
 
-    public func pictureInPictureController(_: AVPictureInPictureController, failedToStartPictureInPictureWithError _: Error) {}
+    public func pictureInPictureController(_: AVPictureInPictureController, failedToStartPictureInPictureWithError _: Swift.Error) {}
 
     public func pictureInPictureControllerWillStopPictureInPicture(_: AVPictureInPictureController) {
         disposeBandwidthLimit()

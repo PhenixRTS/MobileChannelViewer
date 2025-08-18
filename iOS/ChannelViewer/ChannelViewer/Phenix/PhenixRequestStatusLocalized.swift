@@ -1,10 +1,10 @@
 //
-//  Copyright 2023 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
+//  Copyright 2025 Phenix Real Time Solutions, Inc. Confidential and Proprietary. All rights reserved.
 //
 
 import PhenixSdk
 
-extension PhenixRequestStatus: CustomStringConvertible {
+extension PhenixRequestStatus: @retroactive CustomStringConvertible {
     public var description: String {
         switch self {
         case .ok:               return "PhenixRequestStatus.ok"
